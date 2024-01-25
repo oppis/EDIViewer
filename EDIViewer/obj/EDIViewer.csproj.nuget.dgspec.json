@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\philipp.omelzenko\\Source\\Repos\\oppis\\EDIParser\\EDIViewer\\EDIViewer.csproj": {}
+    "C:\\DATEN\\DEV\\repos\\EDIViewer\\EDIViewer\\EDIViewer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\philipp.omelzenko\\Source\\Repos\\oppis\\EDIParser\\EDIViewer\\EDIViewer.csproj": {
+    "C:\\DATEN\\DEV\\repos\\EDIViewer\\EDIViewer\\EDIViewer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\philipp.omelzenko\\Source\\Repos\\oppis\\EDIParser\\EDIViewer\\EDIViewer.csproj",
+        "projectUniqueName": "C:\\DATEN\\DEV\\repos\\EDIViewer\\EDIViewer\\EDIViewer.csproj",
         "projectName": "EDIViewer",
-        "projectPath": "C:\\Users\\philipp.omelzenko\\Source\\Repos\\oppis\\EDIParser\\EDIViewer\\EDIViewer.csproj",
+        "projectPath": "C:\\DATEN\\DEV\\repos\\EDIViewer\\EDIViewer\\EDIViewer.csproj",
         "packagesPath": "C:\\Users\\philipp.omelzenko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\philipp.omelzenko\\Source\\Repos\\oppis\\EDIParser\\EDIViewer\\obj\\",
+        "outputPath": "C:\\DATEN\\DEV\\repos\\EDIViewer\\EDIViewer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

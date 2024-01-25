@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "B+xRN0VviKvUzgcckqVuzvFSbxdP+osQ6XxRREYdpG3Vn95vAoxqSysK1jo3G8NBx3nGxEPMNmAQ3bznH4jY9w==",
+  "dgSpecHash": "bxUwQc8YKfHDeAttVOPw8hrMUInLGh76R9KDPos6tfoNtioTt118TEglqkwzK9sOQvNI9dNQ65nTX8G+ip88Ww==",
   "success": true,
-  "projectFilePath": "C:\\Users\\philipp.omelzenko\\Source\\Repos\\oppis\\EDIParser\\EDIViewer\\EDIViewer.csproj",
+  "projectFilePath": "C:\\DATEN\\DEV\\repos\\EDIViewer\\EDIViewer\\EDIViewer.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

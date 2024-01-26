@@ -13,7 +13,7 @@ namespace EDIViewer
     public partial class MainWindow : Window
     {
         public static string fileName = string.Empty;
-        private Brush _previousFill = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,41 +39,23 @@ namespace EDIViewer
             }
         }
 
-        //Drag and Drop einbauen : https://learn.microsoft.com/de-de/dotnet/desktop/wpf/advanced/drag-and-drop-overview?view=netframeworkdesktop-4.8
-        private void ellipse_MouseMove(object sender, MouseEventArgs e)
+        private void file_Drop(object sender, DragEventArgs e)
         {
-            Ellipse ellipse = sender as Ellipse;
-            if (ellipse != null && e.LeftButton == MouseButtonState.Pressed)
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                DragDrop.DoDragDrop(ellipse,
-                                     ellipse.Fill.ToString(),
-                                     DragDropEffects.Copy);
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // Assuming you have one file that you care about, pass it off to whatever
+                // handling code you have defined.
+                fileName = (files[0]);
+
+                //txtFilePath.Text = dialog.DefaultDirectory;
+                txtFileName.Text = fileName;
             }
         }
 
-        private void ellipse_DragEnter(object sender, DragEventArgs e)
-        {
-            Ellipse ellipse = sender as Ellipse;
-            if (ellipse != null)
-            {
-                // Save the current Fill brush so that you can revert back to this value in DragLeave.
-                _previousFill = ellipse.Fill;
-
-                // If the DataObject contains string data, extract it.
-                if (e.Data.GetDataPresent(DataFormats.StringFormat))
-                {
-                    string dataString = (string)e.Data.GetData(DataFormats.StringFormat);
-
-                    // If the string can be converted into a Brush, convert it.
-                    BrushConverter converter = new BrushConverter();
-                    if (converter.IsValid(dataString))
-                    {
-                        Brush newFill = (Brush)converter.ConvertFromString(dataString);
-                        ellipse.Fill = newFill;
-                    }
-                }
-            }
-        }
         #endregion
     }
 }

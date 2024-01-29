@@ -13,10 +13,24 @@ namespace EDIViewer
         public static string filePath = string.Empty;
         public static string fileName = string.Empty;
 
+        StreamReader originalFile = null;
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        private MessageBoxResult ShowMessageBox(string title, string message)
+        {
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBoxResult result;
+
+            result = MessageBox.Show(message, title, button, icon, MessageBoxResult.Yes);
+
+            return result;
+        }
+
 
         #region Load Files
         private void LoadFile_Click(object sender, RoutedEventArgs e)
@@ -34,6 +48,10 @@ namespace EDIViewer
 
                 txtFilePath.Text = filePath;
                 txtFileName.Text = fileName;
+
+                //TODO -> Check File Content -> Text
+
+                File_LoadView();
             }
         }
 
@@ -46,10 +64,31 @@ namespace EDIViewer
                 //read only the First File                
                 string filePathName = (files[0]);
 
-                txtFilePath.Text = Path.GetDirectoryName(filePathName);
-                txtFileName.Text = Path.GetFileName(filePathName);
+                filePath = Path.GetDirectoryName(filePathName);
+                fileName = Path.GetFileName(filePathName);
+
+                txtFilePath.Text = filePath;
+                txtFileName.Text = fileName;
+
+                //TODO -> Check File Content -> Text
+
+                File_LoadView();
             }
         }
         #endregion
+
+        private void File_LoadView()
+        {
+            try
+            {
+                originalFile = new(Path.Combine(filePath, fileName));
+
+                FileOriginalView.Text = originalFile.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Datei öffnen", "Fehler: " + ex.Message);
+            }
+        }
     }
 }

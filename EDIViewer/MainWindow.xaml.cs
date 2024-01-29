@@ -1,7 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using System.IO;
 using Microsoft.Win32;
 
 
@@ -12,6 +10,7 @@ namespace EDIViewer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static string filePath = string.Empty;
         public static string fileName = string.Empty;
 
         public MainWindow()
@@ -28,34 +27,29 @@ namespace EDIViewer
                 DefaultExt = ".txt",
             };
 
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
+            if (dialog.ShowDialog() == true)
             {
-                fileName = dialog.FileName;
+                filePath = Path.GetDirectoryName(dialog.FileName);
+                fileName = dialog.SafeFileName;
 
-                txtFilePath.Text = dialog.DefaultDirectory;
-                txtFileName.Text = dialog.SafeFileName;
-            }
-        }
-
-        private void file_Drop(object sender, DragEventArgs e)
-        {
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                // Assuming you have one file that you care about, pass it off to whatever
-                // handling code you have defined.
-                fileName = (files[0]);
-
-                //txtFilePath.Text = dialog.DefaultDirectory;
+                txtFilePath.Text = filePath;
                 txtFileName.Text = fileName;
             }
         }
 
+        private void File_Drop(object sender, DragEventArgs e)
+        {
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                //read only the First File                
+                string filePathName = (files[0]);
+
+                txtFilePath.Text = Path.GetDirectoryName(filePathName);
+                txtFileName.Text = Path.GetFileName(filePathName);
+            }
+        }
         #endregion
     }
 }

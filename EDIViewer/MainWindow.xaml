@@ -28,14 +28,17 @@
                 <RowDefinition Height="55"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Ellipse Grid.Column="0" Grid.Row="0" Height="50" Width="50" Fill="Green" AllowDrop="True" Drop="File_Drop"/>
+            <Rectangle Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Fill="BlueViolet" AllowDrop="True" Drop="File_Drop"/>
             <Button Grid.Column="1" Grid.Row="0" Height="20" Name="LoadFile" Content="Datei Laden" Margin="5,5,5,5" Click="LoadFile_Click"></Button>
             <TextBlock Grid.Column="2" Grid.Row="0" Name="txtFilePath" Text="Dateipfad" VerticalAlignment="Center"></TextBlock>
             <TextBlock Grid.Column="3" Grid.Row="0" Name="txtFileName" Text="Dateiname" VerticalAlignment="Center"></TextBlock>
+
+            <ComboBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="10,10,10,10"></ComboBox>
+            
         </Grid>
         <!--#endregion-->
         <!--#region File View-->
-        <Grid Grid.Column="0" Grid.Row="1">
+        <Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -43,10 +46,30 @@
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <ScrollViewer>
-                <TextBlock Name="FileOriginalView" Text="Dies ist der Datei Inhalt"/>
+            <ScrollViewer Grid.Row="0" Grid.Column="0">
+                <TextBox 
+                    Name="FileOriginalView" 
+                    Text="Dies ist der Datei Inhalt"
+                    BorderThickness="0"
+                    IsReadOnly="True"/>
             </ScrollViewer>
-            
+            <TabControl Grid.Row="0" Grid.Column="1">
+                <TabItem Header="Sendung 1">
+                    <TabControl>
+                        <TabItem Header="Sendung"></TabItem>
+                        <TabItem Header="Adresse"></TabItem>
+                        <TabItem Header="Position"></TabItem>
+                        <TabItem Header="Sonder"></TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="Sendung 2">
+                    <TabControl>
+                        <TabItem Header="Sendung"></TabItem>
+                        <TabItem Header="Adresse"></TabItem>
+                        <TabItem Header="Position"></TabItem>
+                    </TabControl>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

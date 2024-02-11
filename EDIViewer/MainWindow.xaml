@@ -18,9 +18,11 @@
         <!--#region Datei Auswahl-->
         <Grid Grid.Column="0" Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="55"></ColumnDefinition>
+                <ColumnDefinition Width="75"></ColumnDefinition>
                 <ColumnDefinition Width="85"></ColumnDefinition>
+                <ColumnDefinition Width="65"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="70"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -30,10 +32,15 @@
 
             <Rectangle Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Fill="BlueViolet" AllowDrop="True" Drop="File_Drop"/>
             <Button Grid.Column="1" Grid.Row="0" Height="20" Name="LoadFile" Content="Datei Laden" Margin="5,5,5,5" Click="LoadFile_Click"></Button>
-            <TextBlock Grid.Column="2" Grid.Row="0" Name="txtFilePath" Text="Dateipfad" VerticalAlignment="Center"></TextBlock>
-            <TextBlock Grid.Column="3" Grid.Row="0" Name="txtFileName" Text="Dateiname" VerticalAlignment="Center"></TextBlock>
+            <Label Grid.Column="2" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Content="Dateipfad: "></Label>
+            <TextBlock Grid.Column="3" Grid.Row="0" Name="txtFilePath" Text="Dateipfad" VerticalAlignment="Center"></TextBlock>
+            <Label Grid.Column="4" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Content="Dateiname: "></Label>
+            <TextBlock Grid.Column="5" Grid.Row="0" Name="txtFileName" Text="Dateiname" VerticalAlignment="Center"></TextBlock>
 
-            <ComboBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="10,10,10,10"></ComboBox>
+            <Label Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Content="Dateiformat: "></Label>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Margin="10,10,10,10">
+                <ComboBoxItem Content="TEST"></ComboBoxItem>
+            </ComboBox>
             
         </Grid>
         <!--#endregion-->
@@ -54,18 +61,86 @@
                     IsReadOnly="True"/>
             </ScrollViewer>
             <TabControl Grid.Row="0" Grid.Column="1">
-                <TabItem Header="Sendung 1">
+                <TabItem Header="Übertragung">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Datenart"
+                                Grid.Row="0" Grid.Column="0"
+                                />
+                        <Label Content="No Value!"
+                                Grid.Row="0" Grid.Column="1"
+                                />
+                        <Label Content="Datum"
+                                Grid.Row="1" Grid.Column="0"
+                                />
+                        <Label Content="No Value!"
+                                Grid.Row="1" Grid.Column="1"
+                                />
+                        <Label Content="Dateireferenz"
+                                Grid.Row="2" Grid.Column="0"
+                                />
+                        <Label Content="No Value!"
+                               Grid.Row="2" Grid.Column="1"
+                               />
+                        <Label Content="Versender ID"
+                                Grid.Row="3" Grid.Column="0"
+                                />
+                        <Label Content="No Value!"
+                                Grid.Row="3" Grid.Column="1"
+                                />
+                        <Label Content="Empfänger ID"
+                                Grid.Row="4" Grid.Column="0"
+                                />
+                        <Label Content="No Value!"
+                                Grid.Row="4" Grid.Column="1"
+                                />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Sendung ">
                     <TabControl>
-                        <TabItem Header="Sendung"></TabItem>
+                        <TabItem Header="Sendung">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Label Content=""
+                                       Grid.Row="0" Grid.Column="0"
+                                       />
+                                <Label Content="TEST"
+                                       Grid.Row="0" Grid.Column="1"
+                                       />
+                                <Label Content="TEST"
+                                       Grid.Row="0" Grid.Column="2"
+                                       />
+                            </Grid>
+                        </TabItem>
                         <TabItem Header="Adresse"></TabItem>
                         <TabItem Header="Position"></TabItem>
                         <TabItem Header="Sonder"></TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Header="Sendung 2">
+                <TabItem Header="Status">
                     <TabControl>
                         <TabItem Header="Sendung"></TabItem>
-                        <TabItem Header="Adresse"></TabItem>
                         <TabItem Header="Position"></TabItem>
                     </TabControl>
                 </TabItem>

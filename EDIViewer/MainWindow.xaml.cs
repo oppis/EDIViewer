@@ -13,14 +13,15 @@ namespace EDIViewer
         public static string filePath = string.Empty;
         public static string fileName = string.Empty;
 
-        StreamReader originalFile = null;
+        StreamReader originalFile;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private MessageBoxResult ShowMessageBox(string title, string message)
+        //Show Message Box for Messages for User
+        private static MessageBoxResult ShowMessageBox(string title, string message)
         {
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage icon = MessageBoxImage.Error;
@@ -31,6 +32,11 @@ namespace EDIViewer
             return result;
         }
 
+        private void OpenFormatManagement(object sender, RoutedEventArgs e)
+        {
+            FormatManagement window = new();
+            window.Show();
+        }
 
         #region Load Files
         private void LoadFile_Click(object sender, RoutedEventArgs e)
@@ -64,13 +70,14 @@ namespace EDIViewer
                 //read only the First File                
                 string filePathName = (files[0]);
 
-                filePath = Path.GetDirectoryName(filePathName);
-                fileName = Path.GetFileName(filePathName);
+                if (filePathName != null)//TODO -> Check File Content -> Text
+                {
+                    filePath = Path.GetDirectoryName(filePathName);
+                    fileName = Path.GetFileName(filePathName);
+                }
 
                 txtFilePath.Text = filePath;
                 txtFileName.Text = fileName;
-
-                //TODO -> Check File Content -> Text
 
                 File_LoadView();
             }

@@ -1,0 +1,88 @@
+﻿[
+  {
+    "Version": 1,
+    "Format": "Fortras100",
+    "Typ": [
+      {
+        "TypName": "ENTL",
+        "TypeLong": "Entladebericht",
+        "Field": [
+          {
+            "START": [
+              {
+                "place": 1,
+                "Name": "START",
+                "Start": 1,
+                "End": 3,
+                "DataType": "INT"
+              },
+              {
+                "place": 2,
+                "Name": "Nummer",
+                "Start": 3,
+                "End": 5,
+                "DataType": "INT"
+              }
+            ],
+            "END": [
+              {
+                "place": 1,
+                "Name": "START",
+                "Start": 1,
+                "End": 3,
+                "DataType": "INT"
+              },
+              {
+                "place": 2,
+                "Name": "Nummer",
+                "Start": 3,
+                "End": 5,
+                "DataType": "INT"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "TypName": "STAT",
+        "TypeLong": "Statusbericht",
+        "Field": [
+          {
+            "START": [
+              {
+                "place": 1,
+                "Name": "START",
+                "Start": 1,
+                "End": 3,
+                "DataType": "INT"
+              },
+              {
+                "place": 2,
+                "Name": "Nummer",
+                "Start": 3,
+                "End": 5,
+                "DataType": "INT"
+              }
+            ],
+            "END": [
+              {
+                "place": 1,
+                "Name": "START",
+                "Start": 1,
+                "End": 3,
+                "DataType": "INT"
+              },
+              {
+                "place": 2,
+                "Name": "Nummer",
+                "Start": 3,
+                "End": 5,
+                "DataType": "INT"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

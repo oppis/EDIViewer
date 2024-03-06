@@ -33,6 +33,23 @@
                     Margin="5,5,5,5" 
                     Content="Neues Format"/>
         </Grid>
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Canvas Name="myCanvas"
+                Grid.Row="0" Grid.Column="0">
+
+            </Canvas>
+            <Canvas Name="myCanvas2"
+                Grid.Row="0" Grid.Column="1">
+
+            </Canvas>
+        </Grid>
         <!--Close Buttons-->
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>

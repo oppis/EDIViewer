@@ -1,39 +1,46 @@
 ﻿[
   {
     "Version": 1,
-    "Format": "Fortras100",
-    "Typ": [
+    "FormatName": "Fortras100",
+    "Separator": "",
+    "FormatType": [
       {
-        "TypName": "ENTL",
-        "TypeLong": "Entladebericht",
-        "Field": [
+        "Name": "ENTL",
+        "Description": "Entladebericht",
+        "RecordType": [
           {
-            "START": [
+            "Position": 1,
+            "Name": "START",
+            "FieldDefination": [
               {
-                "place": 1,
+                "Position": 1,
                 "Name": "START",
                 "Start": 1,
                 "End": 3,
                 "DataType": "INT"
               },
               {
-                "place": 2,
+                "Position": 2,
                 "Name": "Nummer",
                 "Start": 3,
                 "End": 5,
                 "DataType": "INT"
               }
-            ],
-            "END": [
+            ]
+          },
+          {
+            "Position": 2,
+            "Name": "END",
+            "FieldDefination": [
               {
-                "place": 1,
+                "Position": 1,
                 "Name": "START",
                 "Start": 1,
                 "End": 3,
                 "DataType": "INT"
               },
               {
-                "place": 2,
+                "Position": 2,
                 "Name": "Nummer",
                 "Start": 3,
                 "End": 5,
@@ -46,35 +53,41 @@
       {
         "TypName": "STAT",
         "TypeLong": "Statusbericht",
-        "Field": [
+        "RecordType": [
           {
-            "START": [
+            "Position": 1,
+            "Name": "START",
+            "FieldDefination": [
               {
-                "place": 1,
+                "Position": 1,
                 "Name": "START",
                 "Start": 1,
                 "End": 3,
                 "DataType": "INT"
               },
               {
-                "place": 2,
+                "Position": 2,
                 "Name": "Nummer",
                 "Start": 3,
                 "End": 5,
                 "DataType": "INT"
               }
-            ],
-            "END": [
+            ]
+          },
+          {
+            "Position": 2,
+            "Name": "END",
+            "FieldDefination": [
               {
-                "place": 1,
+                "Position": 1,
                 "Name": "START",
                 "Start": 1,
                 "End": 3,
                 "DataType": "INT"
               },
               {
-                "place": 2,
-                "Name": "Nummer",
+                "Position": 2,
+                "Name": "last",
                 "Start": 3,
                 "End": 5,
                 "DataType": "INT"

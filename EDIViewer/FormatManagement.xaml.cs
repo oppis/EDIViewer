@@ -1,10 +1,9 @@
 ﻿using System.Data;
 using System.IO;
-using System.IO.Enumeration;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-
+using EDIViewer.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -23,9 +22,6 @@ namespace EDIViewer
 
             string json = File.ReadAllText(fileName);
 
-            //ParseTestJson(json);
-            //ParseTestJson2(json);
-            //JsonToDataTable(json);
             ParseTestJson3(json);
         }
 
@@ -37,125 +33,92 @@ namespace EDIViewer
         {
             this.Close();
         }
-
-        private void ParseTestJson(string json)
-        {
-            DataTable dt = (DataTable)JsonConvert.DeserializeObject(json, (typeof(DataTable)));
-
-            DataGrid myDataGrid = new()
-            {
-                AutoGenerateColumns = true,
-                Width = 300,
-                Height = 300,
-
-                ItemsSource = dt.AsDataView()
-            };
-
-            myCanvas.Children.Add(myDataGrid);
-        }
-        private void ParseTestJson2(string json)
-        {
-            // Deserialize the JSON into a JArray
-            JArray jsonArray = JArray.Parse(json);
-
-            // Create DataTables for each "Type"
-            foreach (JToken item in jsonArray)
-            {
-                string type = item["Typ"].ToString();
-                DataTable dt = (DataTable)JsonConvert.DeserializeObject(type, (typeof(DataTable)));
-
-                foreach (var item2 in item["Typ"])
-                {
-                    foreach (var item3 in item2["Field"])
-                    {
-                        foreach (var item4 in item3["START"])
-                        {
-                            string test = item4["1"].ToString();
-                            DataTable dt3 = (DataTable)JsonConvert.DeserializeObject(test, (typeof(DataTable)));
-
-                            DataGrid myDataGrid = new()
-                            {
-                                AutoGenerateColumns = true,
-                                Width = 300,
-                                Height = 300,
-
-                                ItemsSource = dt3.AsDataView()
-                            };
-
-                            myCanvas.Children.Add(myDataGrid);
-                        }
-                    }
-                }
-            }
-        }
-        public void JsonToDataTable(string jsonString)
-        {
-            var jsonLinq = JObject.Parse(jsonString);
-
-            // Find the first array using Linq  
-            var srcArray = jsonLinq.Descendants().Where(d => d is JArray).First();
-            var trgArray = new JArray();
-            foreach (JObject row in srcArray.Children<JObject>())
-            {
-                var cleanRow = new JObject();
-                foreach (JProperty column in row.Properties())
-                {
-                    // Only include JValue types  
-                    if (column.Value is JValue)
-                    {
-                        cleanRow.Add(column.Name, column.Value);
-                    }
-                }
-                trgArray.Add(cleanRow);
-            }
-
-            DataTable test = JsonConvert.DeserializeObject<DataTable>(trgArray.ToString());
-
-            DataGrid myDataGrid = new()
-            {
-                AutoGenerateColumns = true,
-                Width = 300,
-                Height = 300,
-
-                ItemsSource = test.AsDataView()
-            };
-            myCanvas.Children.Add(myDataGrid);
-
-
-
-            var srcArray2 = jsonLinq.Descendants().Where(d => d is JArray).Last();
-            var trgArray2 = new JArray();
-            foreach (JObject row in srcArray2.Children<JObject>())
-            {
-                var cleanRow = new JObject();
-                foreach (JProperty column in row.Properties())
-                {
-                    // Only include JValue types  
-                    if (column.Value is JValue)
-                    {
-                        cleanRow.Add(column.Name, column.Value);
-                    }
-                }
-                trgArray2.Add(cleanRow);
-            }
-
-            DataTable test2 = JsonConvert.DeserializeObject<DataTable>(trgArray2.ToString());
-
-            DataGrid myDataGrid2 = new()
-            {
-                AutoGenerateColumns = true,
-                Width = 300,
-                Height = 300,
-
-                ItemsSource = test2.AsDataView()
-            };
-            myCanvas2.Children.Add(myDataGrid2);
-        }
         public void ParseTestJson3(string json)
         {
-            JObject data =  JsonConvert.DeserializeObject<JObject>(json);
+            List<FileStructur> fileData =  JsonConvert.DeserializeObject<List<FileStructur>>(json);
 
-            var nodeList = data.Flatten(node => node.Children).ToList();
+            foreach (FileStructur file in fileData)
+            {
+                //Datei Struktur
+                VersionValue.Content = file.Version;
+                SeparatorValue.Content = file.Separator;
+                cbFormat.Items.Add(file.FormatName);                
+
+                //in Funktionen aufteilen nicht alles auf einmal laden
+                foreach (FormatType formatType in file.FormatType)
+                {
+                    //Information Format Typ -> Entl, Status, Sendung
+                    //item2.Description;
+                    cbFormatTyp.Items.Add(formatType.Name);
+
+                    //RecordType in Tabelle darstellen
+                    DataTable dataTable = new DataTable(typeof(RecordType).Name);
+                    //Get all the properties
+                    PropertyInfo[] Props = typeof(RecordType).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    foreach (PropertyInfo prop in Props)
+                    {
+                        //Setting column names as Property names
+                        dataTable.Columns.Add(prop.Name);
+                    }
+                    foreach (RecordType recordType in formatType.RecordType)
+                    {
+                        var values = new object[Props.Length];
+                        for (int i = 0; i < Props.Length; i++)
+                        {
+                            //inserting property values to datatable rows
+                            values[i] = Props[i].GetValue(recordType, null);
+                        }
+                        dataTable.Rows.Add(values);
+                    }
+
+                    DataGrid myDataGrid = new()
+                    {
+                        AutoGenerateColumns = true,
+                        Width = 300,
+                        Height = 175,
+
+                        ItemsSource = dataTable.AsDataView()
+                    };
+
+                    myCanvas.Children.Add(myDataGrid);
+
+                    foreach (RecordType recordType in formatType.RecordType)
+                    {
+                        //Satzarten -> werden schon in Tabelle angezeigt
+
+                        //Feld Informationen in Tabelle darstellen
+                        DataTable dataTable2 = new DataTable(typeof(FieldDefination).Name);
+                        //Get all the properties
+                        PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                        foreach (PropertyInfo prop in Props2)
+                        {
+                            //Setting column names as Property names
+                            dataTable2.Columns.Add(prop.Name);
+                        }
+                        foreach (FieldDefination item4 in recordType.FieldDefination)
+                        {
+                            var values = new object[Props2.Length];
+                            for (int i = 0; i < Props2.Length; i++)
+                            {
+                                //inserting property values to datatable rows
+                                values[i] = Props2[i].GetValue(item4, null);
+                            }
+                            dataTable2.Rows.Add(values);
+                        }
+
+                        DataGrid myDataGrid2 = new()
+                        {
+                            AutoGenerateColumns = true,
+                            Width = 300,
+                            Height = 175,
+
+                            ItemsSource = dataTable2.AsDataView()
+                        };
+
+                        myCanvas2.Children.Add(myDataGrid2);
+                    }
+                }
+            }  
         }
     }
 }

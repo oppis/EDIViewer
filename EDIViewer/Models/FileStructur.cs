@@ -20,6 +20,7 @@
     {
         public int Position { get; set; } //Satzart Name
         public string Name { get; set; } //Satzart Name
+        public string Description { get; set; }
         public List<FieldDefination> FieldDefination { get; set; }
     }
     public class FieldDefination //Felder im Satz

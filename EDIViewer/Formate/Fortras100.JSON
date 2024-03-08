@@ -2,7 +2,7 @@
   {
     "Version": 1,
     "FormatName": "Fortras100",
-    "Separator": "",
+    "Separator": "TEST",
     "FormatType": [
       {
         "Name": "ENTL",
@@ -11,6 +11,7 @@
           {
             "Position": 1,
             "Name": "START",
+            "Description": "Start Satz Entladebericht zum Datensatz",
             "FieldDefination": [
               {
                 "Position": 1,
@@ -31,6 +32,7 @@
           {
             "Position": 2,
             "Name": "END",
+            "Description": "Abschluss mit Summe",
             "FieldDefination": [
               {
                 "Position": 1,
@@ -41,7 +43,7 @@
               },
               {
                 "Position": 2,
-                "Name": "Nummer",
+                "Name": "Nummer_ENT",
                 "Start": 3,
                 "End": 5,
                 "DataType": "INT"
@@ -51,12 +53,13 @@
         ]
       },
       {
-        "TypName": "STAT",
-        "TypeLong": "Statusbericht",
+        "Name": "STAT",
+        "Description": "Statusbericht",
         "RecordType": [
           {
             "Position": 1,
             "Name": "START",
+            "Description": "Start Satz Statusbericht zum Datensatz",
             "FieldDefination": [
               {
                 "Position": 1,
@@ -67,7 +70,8 @@
               },
               {
                 "Position": 2,
-                "Name": "Nummer",
+                "Name": "Nummer_ST",
+                "Name": "Nummer_ST",
                 "Start": 3,
                 "End": 5,
                 "DataType": "INT"
@@ -77,6 +81,7 @@
           {
             "Position": 2,
             "Name": "END",
+            "Description": "Abschluss mit Summe",
             "FieldDefination": [
               {
                 "Position": 1,

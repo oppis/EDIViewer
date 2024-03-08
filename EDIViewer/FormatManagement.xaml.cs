@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using EDIViewer.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EDIViewer
 {
@@ -14,6 +13,10 @@ namespace EDIViewer
     /// </summary>
     public partial class FormatManagement : Window
     {
+        //Listen für Datei Inhalt
+        List<FileStructur> fileData;
+        List<FormatType> formatTypes;
+        List<RecordType> recordTypes;
         public FormatManagement()
         {
             InitializeComponent();
@@ -22,7 +25,7 @@ namespace EDIViewer
 
             string json = File.ReadAllText(fileName);
 
-            ParseTestJson3(json);
+            GetFileInfos(json);
         }
 
         private void SaveWindow(object sender, RoutedEventArgs e)
@@ -33,92 +36,138 @@ namespace EDIViewer
         {
             this.Close();
         }
-        public void ParseTestJson3(string json)
+
+        /// <summary>
+        /// Informationen zum Format Laden und Typen anzeigen
+        /// </summary>
+        /// <param name="json"></param>
+        private void GetFileInfos(string json)
         {
-            List<FileStructur> fileData =  JsonConvert.DeserializeObject<List<FileStructur>>(json);
+            fileData = JsonConvert.DeserializeObject<List<FileStructur>>(json);
 
-            foreach (FileStructur file in fileData)
+            foreach (FileStructur file in fileData) 
             {
-                //Datei Struktur
-                VersionValue.Content = file.Version;
-                SeparatorValue.Content = file.Separator;
-                cbFormat.Items.Add(file.FormatName);                
+                cbFormat.Items.Add(file.FormatName);
+            }            
+        }
+        /// <summary>
+        /// Reagieren auf auswahl der Datei Struktur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Inhalt zum ausgewählten Element finden
+            FileStructur currentFileStructur = fileData.Find(x => x.FormatName == cbFormat.SelectedItem.ToString());
+            SetCurrentFileFormat(currentFileStructur);
+        }
+        /// <summary>
+        /// Aktuelles Datei Format setzen und weiteres ComboBox füllen mit Items
+        /// </summary>
+        /// <param name="currentFileStructur"></param>
+        private void SetCurrentFileFormat(FileStructur currentFileStructur)
+        {
+            //Datei Struktur
+            VersionValue.Content = currentFileStructur.Version;
+            SeparatorValue.Content = currentFileStructur.Separator;
 
-                //in Funktionen aufteilen nicht alles auf einmal laden
-                foreach (FormatType formatType in file.FormatType)
+            formatTypes = currentFileStructur.FormatType;
+
+            //Format Typen ermitteln
+            foreach (FormatType formatType in formatTypes)
+            {
+                //ComboBox füllen mit Möglichen Typen
+                cbFormatTyp.Items.Add(formatType.Name);
+            }
+        }
+        /// <summary>
+        /// Reagieren auf Auswahl von Format Typ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbFormatTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FormatType currentFormatType = formatTypes.Find(x => x.Name == cbFormatTyp.SelectedItem.ToString());
+            setRecordInfos(currentFormatType);
+
+            //Leeren der Feld Definitionen
+            dgFieldDefination.ItemsSource = null;
+        }
+        /// <summary>
+        /// Aktuelle Format Typ Informationen setzen und Mögliche Satzarten füllen
+        /// </summary>
+        /// <param name="currentFormatType"></param>
+        private void setRecordInfos(FormatType currentFormatType)
+        {
+            //erst setzen wenn ein cb Item ausgewählt wird
+            formatTypeDescription.Content = currentFormatType.Description;
+
+            //Aktuellen Inhalt der RecordTypes setzen
+            recordTypes = currentFormatType.RecordType;
+
+            //Tabelle für Satzarten
+
+            //Inhalt des JSON in die Tabelle laden
+            DataTable dtRecordType = new(typeof(RecordType).Name);
+
+            //Tabellen Format erstellen
+            dtRecordType.Columns.Add("Position");
+            dtRecordType.Columns.Add("Name");
+            dtRecordType.Columns.Add("Beschreibung");
+
+            foreach (RecordType recordType in recordTypes)
+            {
+                var values = new object[3];
+                values[0] = recordType.Position;
+                values[1] = recordType.Name;
+                values[2] = recordType.Description;
+
+                dtRecordType.Rows.Add(values);
+            }
+
+            dgRecordType.ItemsSource = dtRecordType.AsDataView();
+        }
+        /// <summary>
+        /// Reagieren auf Auswahl von Satzart
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgRecordType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Prüfung ob noch keine Werte in der Tabelle sind -> Wechsel der Satzart
+            if (dgRecordType.SelectedItem != null)
+            {
+                RecordType currentRecordType = recordTypes.Find(x => x.Name == (dgRecordType.SelectedItem as DataRowView).Row["Name"]);
+                SetFieldDefinations(currentRecordType);               
+            }
+        }
+        /// <summary>
+        /// Aktuelle Feld Informationen laden
+        /// </summary>
+        /// <param name="json"></param>
+        private void SetFieldDefinations(RecordType currentRecordType)
+        {
+            //Inhalt des JSON in die Tabelle laden
+            DataTable dtFieldDefinations= new(typeof(FieldDefination).Name);
+
+            //Tabellen Format erstellen
+            PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props2)
+            {
+                //Setting column names as Property names
+                dtFieldDefinations.Columns.Add(prop.Name);
+            }
+            foreach (FieldDefination fieldDefination in currentRecordType.FieldDefination)
+            {
+                var values = new object[Props2.Length];
+                for (int i = 0; i < Props2.Length; i++)
                 {
-                    //Information Format Typ -> Entl, Status, Sendung
-                    //item2.Description;
-                    cbFormatTyp.Items.Add(formatType.Name);
-
-                    //RecordType in Tabelle darstellen
-                    DataTable dataTable = new DataTable(typeof(RecordType).Name);
-                    //Get all the properties
-                    PropertyInfo[] Props = typeof(RecordType).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                    foreach (PropertyInfo prop in Props)
-                    {
-                        //Setting column names as Property names
-                        dataTable.Columns.Add(prop.Name);
-                    }
-                    foreach (RecordType recordType in formatType.RecordType)
-                    {
-                        var values = new object[Props.Length];
-                        for (int i = 0; i < Props.Length; i++)
-                        {
-                            //inserting property values to datatable rows
-                            values[i] = Props[i].GetValue(recordType, null);
-                        }
-                        dataTable.Rows.Add(values);
-                    }
-
-                    DataGrid myDataGrid = new()
-                    {
-                        AutoGenerateColumns = true,
-                        Width = 300,
-                        Height = 175,
-
-                        ItemsSource = dataTable.AsDataView()
-                    };
-
-                    myCanvas.Children.Add(myDataGrid);
-
-                    foreach (RecordType recordType in formatType.RecordType)
-                    {
-                        //Satzarten -> werden schon in Tabelle angezeigt
-
-                        //Feld Informationen in Tabelle darstellen
-                        DataTable dataTable2 = new DataTable(typeof(FieldDefination).Name);
-                        //Get all the properties
-                        PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                        foreach (PropertyInfo prop in Props2)
-                        {
-                            //Setting column names as Property names
-                            dataTable2.Columns.Add(prop.Name);
-                        }
-                        foreach (FieldDefination item4 in recordType.FieldDefination)
-                        {
-                            var values = new object[Props2.Length];
-                            for (int i = 0; i < Props2.Length; i++)
-                            {
-                                //inserting property values to datatable rows
-                                values[i] = Props2[i].GetValue(item4, null);
-                            }
-                            dataTable2.Rows.Add(values);
-                        }
-
-                        DataGrid myDataGrid2 = new()
-                        {
-                            AutoGenerateColumns = true,
-                            Width = 300,
-                            Height = 175,
-
-                            ItemsSource = dataTable2.AsDataView()
-                        };
-
-                        myCanvas2.Children.Add(myDataGrid2);
-                    }
+                    values[i] = Props2[i].GetValue(fieldDefination, null);
                 }
-            }  
+                dtFieldDefinations.Rows.Add(values);
+            }
+
+            dgFieldDefination.ItemsSource = dtFieldDefinations.AsDataView();
         }
     }
 }

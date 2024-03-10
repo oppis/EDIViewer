@@ -1,33 +1,91 @@
-﻿[
-  {
-    "Version": 1,
-    "FormatName": "Fortras100",
-    "Separator": "TEST",
-    "FormatType": [
-      {
-        "Name": "ENTL",
-        "Description": "Entladebericht",
-        "RecordType": [
-          {
-            "Position": 1,
-            "Name": "START",
-            "Description": "Start Satz Entladebericht zum Datensatz",
-            "FieldDefination": [
-              {
-                "Position": 1,
-                "Name": "START",
-                "Start": 1,
-                "End": 3,
-                "DataType": "INT"
-              },
-              {
-                "Position": 2,
-                "Name": "Nummer",
-                "Start": 3,
-                "End": 5,
-                "DataType": "INT"
-              }
-            ]
+﻿{
+  "Version": 1,
+  "FormatName": "Fortras100",
+  "Separator": "",
+  "FormatDetection": "@@PH",
+  "FormatType": [
+    {
+      "Name": "BORD512",
+      "Description": "Bordero",
+      "RecordType": [
+        {
+          "Position": 1,
+          "Name": "Sendungsdaten",
+          "RecordDetection": "A00",
+          "Description": "Start Satz Entladebericht zum Datensatz",
+          "FieldDefination": [
+            {
+              "Position": 1,
+              "Name": "Satzbezeichnung",
+              "Start": 1,
+              "Length": 3,
+              "DataType": "INT"
+            },
+            {
+              "Position": 2,
+              "Name": "Qualifier Datenart",
+              "Start": 4,
+              "Length": 3,
+              "DataType": "INT"
+            },
+            {
+              "Position": 3,
+              "Name": "Release-Stand",
+              "Start": 7,
+              "Length": 3,
+              "DataType": "INT"
+            }
+          ]
+        },
+        {
+          "Position": 2,
+          "Name": "END",
+          "RecordDetection": "Z00",
+          "Description": "Abschluss mit Summe",
+          "FieldDefination": [
+            {
+              "Position": 1,
+              "Name": "Satzbezeichnung",
+              "Start": 1,
+              "Length": 3,
+              "DataType": "INT"
+            },
+            {
+              "Position": 2,
+              "Name": "Gesamt-Anzahl Datensätze",
+              "Start": 4,
+              "Length": 6,
+              "DataType": "INT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "ENTL",
+      "Description": "Entladebericht",
+      "RecordTypeDetection": "",
+      "RecordType": [
+        {
+          "Position": 1,
+          "Name": "START",
+          "Description": "Start Satz Entladebericht zum Datensatz",
+          "FieldDefination": [
+            {
+              "Position": 1,
+              "Name": "START",
+              "Start": 1,
+              "End": 3,
+              "DataType": "INT"
+            },
+            {
+              "Position": 2,
+              "Name": "Nummer",
+              "Start": 3,
+              "End": 5,
+              "DataType": "INT"
+            }
+          ]
           },
           {
             "Position": 2,
@@ -52,55 +110,54 @@
           }
         ]
       },
-      {
-        "Name": "STAT",
-        "Description": "Statusbericht",
-        "RecordType": [
-          {
-            "Position": 1,
-            "Name": "START",
-            "Description": "Start Satz Statusbericht zum Datensatz",
-            "FieldDefination": [
-              {
-                "Position": 1,
-                "Name": "START",
-                "Start": 1,
-                "End": 3,
-                "DataType": "INT"
-              },
-              {
-                "Position": 2,
-                "Name": "Nummer_ST",
-                "Name": "Nummer_ST",
-                "Start": 3,
-                "End": 5,
-                "DataType": "INT"
-              }
-            ]
-          },
-          {
-            "Position": 2,
-            "Name": "END",
-            "Description": "Abschluss mit Summe",
-            "FieldDefination": [
-              {
-                "Position": 1,
-                "Name": "START",
-                "Start": 1,
-                "End": 3,
-                "DataType": "INT"
-              },
-              {
-                "Position": 2,
-                "Name": "last",
-                "Start": 3,
-                "End": 5,
-                "DataType": "INT"
-              }
-            ]
-          }
-        ]
-      }
+    {
+      "Name": "STAT",
+      "Description": "Statusbericht",
+      "RecordType": [
+        {
+          "Position": 1,
+          "Name": "START",
+          "Description": "Start Satz Statusbericht zum Datensatz",
+          "FieldDefination": [
+            {
+              "Position": 1,
+              "Name": "START",
+              "Start": 1,
+              "End": 3,
+              "DataType": "INT"
+            },
+            {
+              "Position": 2,
+              "Name": "Nummer_ST",
+              "Name": "Nummer_ST",
+              "Start": 3,
+              "End": 5,
+              "DataType": "INT"
+            }
+          ]
+        },
+        {
+          "Position": 2,
+          "Name": "END",
+          "Description": "Abschluss mit Summe",
+          "FieldDefination": [
+            {
+              "Position": 1,
+              "Name": "START",
+              "Start": 1,
+              "End": 3,
+              "DataType": "INT"
+            },
+            {
+              "Position": 2,
+              "Name": "last",
+              "Start": 3,
+              "End": 5,
+              "DataType": "INT"
+            }
+          ]
+        }
+      ]
+    }
     ]
   }
-]

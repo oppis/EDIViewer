@@ -5,6 +5,7 @@
         public int Version { get; set; }
         public string FormatName { get; set; }
         public string Separator { get; set; } //Trennzeichen
+        public string FormatDetection { get; set; }
         public List<FormatType> FormatType { get; set; }
         public List<ArtDefination> ArtDefination { get; set; }
 
@@ -20,6 +21,7 @@
     {
         public int Position { get; set; } //Satzart Name
         public string Name { get; set; } //Satzart Name
+        public string RecordDetection { get; set; }
         public string Description { get; set; }
         public List<FieldDefination> FieldDefination { get; set; }
     }
@@ -28,8 +30,9 @@
         public int Position { get; set; }
         public string Name { get; set; }
         public int Start { get; set; }
-        public int End { get; set; }
+        public int Length { get; set; }
         public string DataType { get; set; }
+        public string MappingField {  get; set; }
     }
     public class ArtDefination //Angabe von Nummern Zuordnungen (DFÜ-Texte, TextArt)
     { 

@@ -3,8 +3,10 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using EDIViewer.Models;
 using Newtonsoft.Json;
+
+using EDIViewer.Models;
+using EDIViewer.Helper;
 
 namespace EDIViewer
 {
@@ -14,52 +16,73 @@ namespace EDIViewer
     public partial class FormatManagement : Window
     {
         //Listen für Datei Inhalt
-        List<FileStructur> fileData;
+        FileStructur fileData;
         List<FormatType> formatTypes;
         List<RecordType> recordTypes;
+
+        /// <summary>
+        /// Start des Fensters
+        /// </summary>
         public FormatManagement()
         {
             InitializeComponent();
 
-            string fileName = Path.Combine(Environment.CurrentDirectory, "Formate") + "\\" + "Fortras100.json";
+            //Aktuelle Formate laden
+            Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
 
-            string json = File.ReadAllText(fileName);
-
-            GetFileInfos(json);
+            //Aktuelle Formate in ComboBox laden und nur den Format Typ anzeigen
+            cbFormat.ItemsSource = currentFormatFiles;
+            cbFormat.DisplayMemberPath = "Key";
         }
-
+        #region Fenster Verwaltung
+        /// <summary>
+        /// Speichern der Informationen aus dem Fenster
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+        /// <summary>
+        /// Fenster schließen ohne Speichern
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ExitWindow(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
-        /// <summary>
-        /// Informationen zum Format Laden und Typen anzeigen
-        /// </summary>
-        /// <param name="json"></param>
-        private void GetFileInfos(string json)
-        {
-            fileData = JsonConvert.DeserializeObject<List<FileStructur>>(json);
-
-            foreach (FileStructur file in fileData) 
-            {
-                cbFormat.Items.Add(file.FormatName);
-            }            
-        }
+        #endregion
         /// <summary>
         /// Reagieren auf auswahl der Datei Struktur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Inhalt zum ausgewählten Element finden
-            FileStructur currentFileStructur = fileData.Find(x => x.FormatName == cbFormat.SelectedItem.ToString());
-            SetCurrentFileFormat(currentFileStructur);
+            //Aktuelle Werte FormatName und Pfad            
+            KeyValuePair<string, string> value = (KeyValuePair<string, string>)cbFormat.SelectedItem;
+
+            //Datei Infos in JSON lesen
+            GetFileInfos(value.Value);
+
+            //Alle Felder leeren
+            cbFormatTyp.Items.Clear();
+            dgRecordType.ItemsSource = null;
+            dgFieldDefination.ItemsSource = null;
+
+            SetCurrentFileFormat(fileData);
+        }
+        /// <summary>
+        /// Aktuelles Format laden
+        /// </summary>
+        /// <param name="json"></param>
+        private void GetFileInfos(string currentFile)
+        {
+            string json = File.ReadAllText(currentFile);
+
+            fileData = JsonConvert.DeserializeObject<FileStructur>(json);
         }
         /// <summary>
         /// Aktuelles Datei Format setzen und weiteres ComboBox füllen mit Items
@@ -67,13 +90,15 @@ namespace EDIViewer
         /// <param name="currentFileStructur"></param>
         private void SetCurrentFileFormat(FileStructur currentFileStructur)
         {
-            //Datei Struktur
+            //Datei Struktur Informationen
             VersionValue.Content = currentFileStructur.Version;
+            FormatDetection.Content = currentFileStructur.FormatDetection;
             SeparatorValue.Content = currentFileStructur.Separator;
 
+            //Aktuelle Format Typen speichern für weitern Zugriff
             formatTypes = currentFileStructur.FormatType;
-
-            //Format Typen ermitteln
+            
+            //Format Typen ermitteln und in ComboBox setzen
             foreach (FormatType formatType in formatTypes)
             {
                 //ComboBox füllen mit Möglichen Typen
@@ -85,21 +110,25 @@ namespace EDIViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cbFormatTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbFormatTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FormatType currentFormatType = formatTypes.Find(x => x.Name == cbFormatTyp.SelectedItem.ToString());
-            setRecordInfos(currentFormatType);
-
             //Leeren der Feld Definitionen
+            dgRecordType.ItemsSource = null;
             dgFieldDefination.ItemsSource = null;
+            
+            if (cbFormatTyp.SelectedItem != null)
+            {
+                FormatType currentFormatType = formatTypes.Find(x => x.Name == cbFormatTyp.SelectedItem.ToString());
+                SetRecordInfos(currentFormatType);
+            }
         }
         /// <summary>
         /// Aktuelle Format Typ Informationen setzen und Mögliche Satzarten füllen
         /// </summary>
         /// <param name="currentFormatType"></param>
-        private void setRecordInfos(FormatType currentFormatType)
+        private void SetRecordInfos(FormatType currentFormatType)
         {
-            //erst setzen wenn ein cb Item ausgewählt wird
+            //Informationen zum Format Typ setzen
             formatTypeDescription.Content = currentFormatType.Description;
 
             //Aktuellen Inhalt der RecordTypes setzen
@@ -132,13 +161,20 @@ namespace EDIViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dgRecordType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DgRecordType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Prüfung ob noch keine Werte in der Tabelle sind -> Wechsel der Satzart
-            if (dgRecordType.SelectedItem != null)
+            if (dgRecordType.SelectedIndex < dgRecordType.Items.Count - 1)
             {
-                RecordType currentRecordType = recordTypes.Find(x => x.Name == (dgRecordType.SelectedItem as DataRowView).Row["Name"]);
-                SetFieldDefinations(currentRecordType);               
+                if (dgRecordType.SelectedItem != null)
+                {
+                    RecordType currentRecordType = recordTypes.Find(x => x.Name == (dgRecordType.SelectedItem as DataRowView).Row["Name"]);
+                    SetFieldDefinations(currentRecordType);
+                }
+            }
+            else
+            {
+                dgFieldDefination.ItemsSource = null;
             }
         }
         /// <summary>
@@ -147,27 +183,35 @@ namespace EDIViewer
         /// <param name="json"></param>
         private void SetFieldDefinations(RecordType currentRecordType)
         {
-            //Inhalt des JSON in die Tabelle laden
-            DataTable dtFieldDefinations= new(typeof(FieldDefination).Name);
+            //Prüfen ob Feld Definitionen vorhanden sind
+            if (currentRecordType !=null)
+            {
+                //Inhalt des JSON in die Tabelle laden
+                DataTable dtFieldDefinations = new(typeof(FieldDefination).Name);
 
-            //Tabellen Format erstellen
-            PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo prop in Props2)
-            {
-                //Setting column names as Property names
-                dtFieldDefinations.Columns.Add(prop.Name);
-            }
-            foreach (FieldDefination fieldDefination in currentRecordType.FieldDefination)
-            {
-                var values = new object[Props2.Length];
-                for (int i = 0; i < Props2.Length; i++)
+                //Tabellen Format erstellen
+                PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (PropertyInfo prop in Props2)
                 {
-                    values[i] = Props2[i].GetValue(fieldDefination, null);
+                    //Setting column names as Property names
+                    dtFieldDefinations.Columns.Add(prop.Name);
                 }
-                dtFieldDefinations.Rows.Add(values);
-            }
+                foreach (FieldDefination fieldDefination in currentRecordType.FieldDefination)
+                {
+                    var values = new object[Props2.Length];
+                    for (int i = 0; i < Props2.Length; i++)
+                    {
+                        values[i] = Props2[i].GetValue(fieldDefination, null);
+                    }
+                    dtFieldDefinations.Rows.Add(values);
+                }
 
-            dgFieldDefination.ItemsSource = dtFieldDefinations.AsDataView();
+                dgFieldDefination.ItemsSource = dtFieldDefinations.AsDataView();
+            }
+            else
+            {
+                dgFieldDefination.ItemsSource = null;
+            }
         }
     }
 }

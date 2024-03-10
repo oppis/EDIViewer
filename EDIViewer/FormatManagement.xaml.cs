@@ -19,7 +19,8 @@ namespace EDIViewer
         FileStructur fileData;
         List<FormatType> formatTypes;
         List<RecordType> recordTypes;
-
+        List<FieldDefination> fieldDefs;
+        string currentRecordType;
         /// <summary>
         /// Start des Fensters
         /// </summary>
@@ -42,7 +43,7 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            //this.Close();
         }
         /// <summary>
         /// Fenster schließen ohne Speichern
@@ -163,6 +164,22 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void DgRecordType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            foreach (FormatType formatType in fileData.FormatType) 
+            { 
+                if (formatType.Name == cbFormatTyp.SelectedItem.ToString())
+                {
+                    foreach(RecordType recordType in formatType.RecordType)
+                    {
+                        if (recordType.Name == currentRecordType)
+                        {
+                            recordType.FieldDefination = fieldDefs;
+                        }
+                    }
+                }
+            }
+            
+            
+            
             //Prüfung ob noch keine Werte in der Tabelle sind -> Wechsel der Satzart
             if (dgRecordType.SelectedIndex < dgRecordType.Items.Count - 1)
             {
@@ -182,7 +199,7 @@ namespace EDIViewer
         /// </summary>
         /// <param name="json"></param>
         private void SetFieldDefinations(RecordType currentRecordType)
-        {
+        {          
             //Prüfen ob Feld Definitionen vorhanden sind
             if (currentRecordType !=null)
             {
@@ -196,17 +213,9 @@ namespace EDIViewer
                     //Setting column names as Property names
                     dtFieldDefinations.Columns.Add(prop.Name);
                 }
-                foreach (FieldDefination fieldDefination in currentRecordType.FieldDefination)
-                {
-                    var values = new object[Props2.Length];
-                    for (int i = 0; i < Props2.Length; i++)
-                    {
-                        values[i] = Props2[i].GetValue(fieldDefination, null);
-                    }
-                    dtFieldDefinations.Rows.Add(values);
-                }
+                fieldDefs = currentRecordType.FieldDefination;
 
-                dgFieldDefination.ItemsSource = dtFieldDefinations.AsDataView();
+                dgFieldDefination.ItemsSource = fieldDefs;
             }
             else
             {

@@ -44,6 +44,9 @@ namespace EDIViewer
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
             //this.Close();
+            string output = JsonConvert.SerializeObject(fileData);
+            string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", fileData.FormatName + ".JSON")); 
+            File.WriteAllText(formatFilePath, output);
         }
         /// <summary>
         /// Fenster schließen ohne Speichern
@@ -164,6 +167,7 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void DgRecordType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Objekt updaten -> Neue FieldWerte zwischen speichern
             foreach (FormatType formatType in fileData.FormatType) 
             { 
                 if (formatType.Name == cbFormatTyp.SelectedItem.ToString())
@@ -176,9 +180,7 @@ namespace EDIViewer
                         }
                     }
                 }
-            }
-            
-            
+            }       
             
             //Prüfung ob noch keine Werte in der Tabelle sind -> Wechsel der Satzart
             if (dgRecordType.SelectedIndex < dgRecordType.Items.Count - 1)

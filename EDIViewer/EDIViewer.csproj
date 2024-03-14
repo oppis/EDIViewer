@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <None Update="Formate\Fortras100.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

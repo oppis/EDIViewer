@@ -16,11 +16,17 @@ namespace EDIViewer
     public partial class FormatManagement : Window
     {
         //Listen für Datei Inhalt
-        FileStructur fileData;
-        List<FormatType> formatTypes;
-        List<RecordType> recordTypes;
-        List<FieldDefination> fieldDefs;
-        string currentRecordType;
+        FileStructur selectedFileStructur;
+
+        //Listen der Verfügbaren Felder
+        List<FormatType> availableFormatTypes;
+        List<RecordType> availableRecordTypes;
+        List<FieldDefination> availableFieldDefinations;
+
+        //Listen für aktuelle Format Struktur
+        FormatType selectedFormatType;
+        RecordType selectedRecordType;        
+
         /// <summary>
         /// Start des Fensters
         /// </summary>
@@ -43,10 +49,17 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
-            //this.Close();
-            string output = JsonConvert.SerializeObject(fileData);
-            string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", fileData.FormatName + ".JSON")); 
+            //Aktuell sichtbare Satzarten und Felder in das Objekt schreiben
+            //SaveFieldDefination();
+            //SaveRecordType();
+
+            string output = JsonConvert.SerializeObject(selectedFileStructur);
+            string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", selectedFileStructur.FormatName + ".JSON")); 
             File.WriteAllText(formatFilePath, output);
+
+            //TODO -> Ansicht aktualisieren davor -> Auch Update wenn Datei geändert wird.
+
+            this.Close();
         }
         /// <summary>
         /// Fenster schließen ohne Speichern
@@ -66,47 +79,47 @@ namespace EDIViewer
         private void CbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Aktuelle Werte FormatName und Pfad            
-            KeyValuePair<string, string> value = (KeyValuePair<string, string>)cbFormat.SelectedItem;
-
-            //Datei Infos in JSON lesen
-            GetFileInfos(value.Value);
+            KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
 
             //Alle Felder leeren
             cbFormatTyp.Items.Clear();
             dgRecordType.ItemsSource = null;
             dgFieldDefination.ItemsSource = null;
 
-            SetCurrentFileFormat(fileData);
+            //Datei Infos in JSON lesen
+            GetFileStructur(selectedPath.Value);
+
+            //DropDown füllen mit Format Typen
+            SetFileFormats();
+
+            //Datei Informationen in Felder schreiben
+            VersionValue.Content = selectedFileStructur.Version;
+            FormatDetection.Content = selectedFileStructur.FormatDetection;
+            SeparatorValue.Content = selectedFileStructur.Separator;
         }
         /// <summary>
         /// Aktuelles Format laden
         /// </summary>
         /// <param name="json"></param>
-        private void GetFileInfos(string currentFile)
+        private void GetFileStructur(string currentFile)
         {
             string json = File.ReadAllText(currentFile);
 
-            fileData = JsonConvert.DeserializeObject<FileStructur>(json);
+            selectedFileStructur = JsonConvert.DeserializeObject<FileStructur>(json);
         }
         /// <summary>
         /// Aktuelles Datei Format setzen und weiteres ComboBox füllen mit Items
         /// </summary>
-        /// <param name="currentFileStructur"></param>
-        private void SetCurrentFileFormat(FileStructur currentFileStructur)
+        private void SetFileFormats()
         {
-            //Datei Struktur Informationen
-            VersionValue.Content = currentFileStructur.Version;
-            FormatDetection.Content = currentFileStructur.FormatDetection;
-            SeparatorValue.Content = currentFileStructur.Separator;
-
             //Aktuelle Format Typen speichern für weitern Zugriff
-            formatTypes = currentFileStructur.FormatType;
+            availableFormatTypes = selectedFileStructur.FormatType;
             
             //Format Typen ermitteln und in ComboBox setzen
-            foreach (FormatType formatType in formatTypes)
+            foreach (FormatType availableFormatType in availableFormatTypes)
             {
                 //ComboBox füllen mit Möglichen Typen
-                cbFormatTyp.Items.Add(formatType.Name);
+                cbFormatTyp.Items.Add(availableFormatType.Name);
             }
         }
         /// <summary>
@@ -116,27 +129,30 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void CbFormatTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Leeren der Feld Definitionen
+            //Leeren der Satz und Feld Definitionen
             dgRecordType.ItemsSource = null;
             dgFieldDefination.ItemsSource = null;
             
+            //Ermitteln des ausgewählten Format Types und speichern
             if (cbFormatTyp.SelectedItem != null)
             {
-                FormatType currentFormatType = formatTypes.Find(x => x.Name == cbFormatTyp.SelectedItem.ToString());
-                SetRecordInfos(currentFormatType);
+                selectedFormatType = availableFormatTypes.Find(x => x.Name == cbFormatTyp.SelectedItem.ToString());
+
+                //Informationen zum Format Typ setzen
+                formatTypeDescription.Content = selectedFormatType.Description;
+
+                //Füllen der Satzart Definitionen
+                SetRecordInfos();
             }
         }
         /// <summary>
         /// Aktuelle Format Typ Informationen setzen und Mögliche Satzarten füllen
         /// </summary>
         /// <param name="currentFormatType"></param>
-        private void SetRecordInfos(FormatType currentFormatType)
+        private void SetRecordInfos()
         {
-            //Informationen zum Format Typ setzen
-            formatTypeDescription.Content = currentFormatType.Description;
-
             //Aktuellen Inhalt der RecordTypes setzen
-            recordTypes = currentFormatType.RecordType;
+            //availableRecordTypes = selectedFormatType.RecordType;
 
             //Tabelle für Satzarten
 
@@ -148,17 +164,9 @@ namespace EDIViewer
             dtRecordType.Columns.Add("Name");
             dtRecordType.Columns.Add("Beschreibung");
 
-            foreach (RecordType recordType in recordTypes)
-            {
-                var values = new object[3];
-                values[0] = recordType.Position;
-                values[1] = recordType.Name;
-                values[2] = recordType.Description;
+            availableRecordTypes = selectedFormatType.RecordType;
 
-                dtRecordType.Rows.Add(values);
-            }
-
-            dgRecordType.ItemsSource = dtRecordType.AsDataView();
+            dgRecordType.ItemsSource = availableRecordTypes;
         }
         /// <summary>
         /// Reagieren auf Auswahl von Satzart
@@ -167,28 +175,15 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void DgRecordType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Objekt updaten -> Neue FieldWerte zwischen speichern
-            foreach (FormatType formatType in fileData.FormatType) 
-            { 
-                if (formatType.Name == cbFormatTyp.SelectedItem.ToString())
-                {
-                    foreach(RecordType recordType in formatType.RecordType)
-                    {
-                        if (recordType.Name == currentRecordType)
-                        {
-                            recordType.FieldDefination = fieldDefs;
-                        }
-                    }
-                }
-            }       
-            
             //Prüfung ob noch keine Werte in der Tabelle sind -> Wechsel der Satzart
             if (dgRecordType.SelectedIndex < dgRecordType.Items.Count - 1)
             {
+                //Ausgeählten Satzart in aktuelle Liste schreiben
                 if (dgRecordType.SelectedItem != null)
                 {
-                    RecordType currentRecordType = recordTypes.Find(x => x.Name == (dgRecordType.SelectedItem as DataRowView).Row["Name"]);
-                    SetFieldDefinations(currentRecordType);
+                    selectedRecordType = availableRecordTypes.Find(x => x.Name == (dgRecordType.SelectedItem as RecordType).Name);
+                    //Füllen der Feld Definitionen
+                    SetFieldDefinations();
                 }
             }
             else
@@ -197,13 +192,13 @@ namespace EDIViewer
             }
         }
         /// <summary>
-        /// Aktuelle Feld Informationen laden
+        /// Aktuelle Felder Informationen laden
         /// </summary>
         /// <param name="json"></param>
-        private void SetFieldDefinations(RecordType currentRecordType)
+        private void SetFieldDefinations()
         {          
             //Prüfen ob Feld Definitionen vorhanden sind
-            if (currentRecordType !=null)
+            if (selectedRecordType != null)
             {
                 //Inhalt des JSON in die Tabelle laden
                 DataTable dtFieldDefinations = new(typeof(FieldDefination).Name);
@@ -215,9 +210,9 @@ namespace EDIViewer
                     //Setting column names as Property names
                     dtFieldDefinations.Columns.Add(prop.Name);
                 }
-                fieldDefs = currentRecordType.FieldDefination;
+                availableFieldDefinations = selectedRecordType.FieldDefination;
 
-                dgFieldDefination.ItemsSource = fieldDefs;
+                dgFieldDefination.ItemsSource = availableFieldDefinations;
             }
             else
             {

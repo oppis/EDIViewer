@@ -64,7 +64,6 @@
     {
       "Name": "ENTL",
       "Description": "Entladebericht",
-      "RecordTypeDetection": "",
       "RecordType": [
         {
           "Position": 1,

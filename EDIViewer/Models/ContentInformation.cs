@@ -64,6 +64,6 @@
         public string RecordTyp { get; set; }
         public string Field { get; set; }
         public string FieldContent { get; set; }
-        public int FileRow {  get; set; }
+        public int FileRow { get; set; }
     }
 }

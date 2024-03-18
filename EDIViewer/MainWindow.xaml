@@ -22,7 +22,8 @@
                 <ColumnDefinition Width="85"></ColumnDefinition>
                 <ColumnDefinition Width="65"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="70"></ColumnDefinition>
+                <ColumnDefinition Width="80"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -47,15 +48,19 @@
                     IsEnabled="False"
                     SelectionChanged="CbFileFormat_SelectionChanged"/>
             <Label Content="Zeichensatz: "
-                    Grid.Row="1" Grid.Column="3" 
+                    Grid.Row="1" Grid.Column="4" 
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
             <ComboBox x:Name="cbCharacterSet"
-                        Grid.Row="1" Grid.Column="4" 
+                        Grid.Row="1" Grid.Column="5" 
                         Margin="10,10,10,10"
                         IsEnabled="False"
-                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                        SelectionChanged="CbCharacterSet_SelectionChanged"/>
             
-            <Button Content="Verwaltung Formate" Grid.Column="5" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="OpenFormatManagement"/>
+            <Button Content="Verwaltung Formate" 
+                    Grid.Column="6" Grid.Row="1" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center" 
+                    Click="OpenFormatManagement"/>
 
         </Grid>
         <!--#endregion-->
@@ -69,9 +74,8 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <ScrollViewer Grid.Row="0" Grid.Column="0">
-                <TextBox 
+                <RichTextBox    
                     Name="FileOriginalView" 
-                    Text="Dies ist der Datei Inhalt"
                     BorderThickness="0"
                     IsReadOnly="True"/>
             </ScrollViewer>

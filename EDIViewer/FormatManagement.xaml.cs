@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
+using System.Windows.Input;
 
 namespace EDIViewer
 {
@@ -25,7 +26,9 @@ namespace EDIViewer
 
         //Listen für aktuelle Format Struktur
         FormatType selectedFormatType;
-        RecordType selectedRecordType;        
+        RecordType selectedRecordType;
+
+        DataTable dtFieldDefinations;
 
         /// <summary>
         /// Start des Fensters
@@ -151,9 +154,6 @@ namespace EDIViewer
         /// <param name="currentFormatType"></param>
         private void SetRecordInfos()
         {
-            //Aktuellen Inhalt der RecordTypes setzen
-            //availableRecordTypes = selectedFormatType.RecordType;
-
             //Tabelle für Satzarten
 
             //Inhalt des JSON in die Tabelle laden
@@ -194,14 +194,13 @@ namespace EDIViewer
         /// <summary>
         /// Aktuelle Felder Informationen laden
         /// </summary>
-        /// <param name="json"></param>
         private void SetFieldDefinations()
         {          
             //Prüfen ob Feld Definitionen vorhanden sind
             if (selectedRecordType != null)
             {
                 //Inhalt des JSON in die Tabelle laden
-                DataTable dtFieldDefinations = new(typeof(FieldDefination).Name);
+                dtFieldDefinations = new(typeof(FieldDefination).Name);
 
                 //Tabellen Format erstellen
                 PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);

@@ -7,6 +7,8 @@ using Microsoft.Win32;
 using EDIViewer.Helper;
 using EDIViewer.Parser;
 using EDIViewer.Models;
+using System.Text;
+using System.Windows.Documents;
 
 
 namespace EDIViewer
@@ -16,9 +18,11 @@ namespace EDIViewer
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Datei Informationen
         static string filePath = string.Empty;
         static string fileName = string.Empty;
         string currentFileFormat = string.Empty;
+        Encoding fileEncodingSelected;
 
         StreamReader originalFile;
 
@@ -35,6 +39,21 @@ namespace EDIViewer
             //Aktuelle Formate in ComboBox laden und nur den Format Typ anzeigen
             cbFileFormat.ItemsSource = currentFormatFiles;
             cbFileFormat.DisplayMemberPath = "Key";
+
+            //Bereinigen der RichTextBox -> Beim erstellen wird ein Absatz erstellt
+            FileOriginalView.Document.Blocks.Clear();
+
+            //Mögliche Encodings in ComboBox laden
+            EncodingInfo[] availableEncodings = Encoding.GetEncodings();
+            cbCharacterSet.DisplayMemberPath = "DisplayName";
+            cbCharacterSet.ItemsSource = availableEncodings;
+            cbCharacterSet.SelectedValuePath = "Name";
+            cbCharacterSet.SelectedValue = "utf-8";
+
+            //Default Zeichensatz
+            fileEncodingSelected = Encoding.Default;
+
+            
         }
         /// <summary>
         /// Show Message Box for Messages for User
@@ -123,12 +142,13 @@ namespace EDIViewer
         {
             cbFileFormat.IsEnabled = true;
             cbCharacterSet.IsEnabled = true;
-            
+
             try
             {
-                originalFile = new(Path.Combine(filePath, fileName));
+                originalFile = new(Path.Combine(filePath, fileName), fileEncodingSelected);
 
-                FileOriginalView.Text = originalFile.ReadToEnd();
+                FileOriginalView.Document.Blocks.Clear();
+                FileOriginalView.Document.Blocks.Add(new Paragraph(new Run(originalFile.ReadToEnd())));
             }
             catch (Exception ex)
             {
@@ -140,10 +160,14 @@ namespace EDIViewer
         /// </summary>
         private void StartParsingFile()
         {
+            //Aktuellen Text auf RichTextBox holen
+            TextRange textRange = new(FileOriginalView.Document.ContentStart, FileOriginalView.Document.ContentEnd);
+            string[] viewLines = textRange.Text.Split(Environment.NewLine);
+            
             //Aktuelle Datei Parsen
             ParseFile parseFile = new();
             parseFile.GetFileStructur(currentFileFormat);
-            parseFile.ProcessCurrentFile(Path.Combine(filePath, fileName));
+            parseFile.ProcessCurrentFile(viewLines);
 
             //Informationen in Felder schreiben
             ContentInformation contentInformation = parseFile.contentInformation;
@@ -189,6 +213,22 @@ namespace EDIViewer
             currentFileFormat = value.Value;
 
             StartParsingFile();
+        }
+        /// <summary>
+        /// Reagieren auf Änderung des Zeichensatzes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CbCharacterSet_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            EncodingInfo fileEncodingChanged = (EncodingInfo)cbCharacterSet.SelectedItem;
+            fileEncodingSelected = Encoding.GetEncoding(fileEncodingChanged.Name);
+
+            //Inhalt der Datei neu laden bei Änderung Zeichensatz
+            if (!String.IsNullOrEmpty(new TextRange(FileOriginalView.Document.ContentStart, FileOriginalView.Document.ContentEnd).Text))
+            {
+                File_LoadView();
+            }
         }
     }
 }

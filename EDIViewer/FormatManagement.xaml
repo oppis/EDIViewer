@@ -117,7 +117,8 @@
                         Grid.Row="2" Grid.Column="3"
                         Grid.ColumnSpan="3"
                         Margin="5,5,5,5"
-                        AutoGenerateColumns="True"/>
+                        AutoGenerateColumns="True"
+                        ClipboardCopyMode="IncludeHeader"/>
         </Grid>
         <!--Close Buttons-->
         <Grid Grid.Row="2" Grid.Column="0">

@@ -218,5 +218,61 @@ namespace EDIViewer
                 dgFieldDefination.ItemsSource = null;
             }
         }
+        private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
+            {           
+                pasteClipboardIntoDataTable(true);
+            }
+
+        }
+
+        private void pasteClipboardIntoDataTable(Boolean createNewColumnsIfRequired)
+        {
+            if (!Clipboard.ContainsText())
+            {
+                Console.WriteLine("Clipboard does not containt any text to paste.");
+                return;
+            }
+
+            //Uses tab as the default separator, but if there's no tab, use the system's default
+
+            String textSeparator = (Clipboard.GetText().Contains("\t")) ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+
+            List<String> clipboardAsList = new List<String>(Clipboard.GetText().Split('\n'));
+
+            List<String[]> cleanLines = clipboardAsList
+             .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
+             .ToList<String[]>()
+             ;
+
+            foreach (String[] line in cleanLines)
+            {
+                if (createNewColumnsIfRequired && dgFieldDefination.Columns.Count < line.Length)
+                {
+                    for (int i = dgFieldDefination.Columns.Count; i < line.Length; i++)
+                    {
+                        dtFieldDefinations.Columns.Add();
+                    }
+                }
+
+                DataRow dataRow = dtFieldDefinations.NewRow();
+
+                //If the clipboard contains too many columns and createNewColumnsIfRequired is false
+
+                if (line.Length > dataRow.ItemArray.Length)
+                {
+                    Console.WriteLine("The clipboard contains the following " + line.Length + " colums: \n\n" + string.Join(", " + Environment.NewLine, line) + ".\n\nBut the Datagrid only contains " + dataRow.ItemArray.Length + " columns.");
+                    return;
+                }
+
+                for (int i = 0; i < line.Length; i++)
+                {
+                    dataRow[i] = line[i];
+                }
+
+                dtFieldDefinations.Rows.Add(dataRow);
+            }
+        }
     }
 }

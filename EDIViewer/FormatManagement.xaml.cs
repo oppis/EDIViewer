@@ -256,22 +256,24 @@ namespace EDIViewer
                     }
                 }
 
-                DataRow dataRow = dtFieldDefinations.NewRow();
-
                 //If the clipboard contains too many columns and createNewColumnsIfRequired is false
 
-                if (line.Length > dataRow.ItemArray.Length)
+                if (line.Length == 8)
                 {
-                    Console.WriteLine("The clipboard contains the following " + line.Length + " colums: \n\n" + string.Join(", " + Environment.NewLine, line) + ".\n\nBut the Datagrid only contains " + dataRow.ItemArray.Length + " columns.");
-                    return;
-                }
+                    FieldDefination fieldDefination = new();
 
-                for (int i = 0; i < line.Length; i++)
-                {
-                    dataRow[i] = line[i];
-                }
+                    fieldDefination.Position = Convert.ToInt16(line[0]);
+                    fieldDefination.Name = line[1];
+                    fieldDefination.Start = Convert.ToInt16(line[2]);
+                    fieldDefination.Length = Convert.ToInt16(line[3]);
+                    fieldDefination.Description = line[4];
+                    fieldDefination.DataType = line[5];
+                    fieldDefination.Mandatory = Convert.ToBoolean(line[6]);
+                    fieldDefination.MappingField = line[7];
 
-                dtFieldDefinations.Rows.Add(dataRow);
+                    availableFieldDefinations.Add(fieldDefination);
+                    dgFieldDefination.Items.Refresh();
+                }
             }
         }
     }

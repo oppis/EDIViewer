@@ -11,6 +11,9 @@ using System.Text;
 using System.Windows.Documents;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Runtime.InteropServices;
 
 
 namespace EDIViewer
@@ -27,6 +30,9 @@ namespace EDIViewer
         Encoding fileEncodingSelected;
 
         StreamReader originalFile;
+
+        //View Variables
+        private int SearchStart = -1;
 
         /// <summary>
         /// Start des Fensters
@@ -238,81 +244,91 @@ namespace EDIViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void bnt_Search_Click(object sender, RoutedEventArgs e)
+        private void searchTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            TextRange textRange = new TextRange(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
-
-            //clear up highlighted text before starting a new search
-            textRange.ClearAllProperties();
-            lbl_Status.Content = "";
-
-            //get the richtextbox text
-            string textBoxText = textRange.Text;
-
-            //get search text
-            string searchText = searchTextBox.Text;
-
-            if (string.IsNullOrWhiteSpace(textBoxText) || string.IsNullOrWhiteSpace(searchText))
+            if (e.Key == Key.Return)
             {
-                lbl_Status.Content = "Please provide search text or source text to search from";
-            }
+                TextRange textRange = new TextRange(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
 
-            else
-            {
+                //clear up highlighted text before starting a new search
+                textRange.ClearAllProperties();
 
-                //using regex to get the search count
-                //this will include search word even it is part of another word
-                //say we are searching "hi" in "hi, how are you Mahi?" --> match count will be 2 (hi in 'Mahi' also)
+                //get the richtextbox text
+                string textBoxText = textRange.Text;
 
-                Regex regex = new Regex(searchText);
-                int count_MatchFound = Regex.Matches(textBoxText, regex.ToString()).Count;
-
-                for (TextPointer startPointer = fileOriginalView.Document.ContentStart;
-                            startPointer.CompareTo(fileOriginalView.Document.ContentEnd) <= 0;
-                                startPointer = startPointer.GetNextContextPosition(LogicalDirection.Forward))
+                //get search text
+                string searchText = searchTextBox.Text;
+           
+                int Index = textRange.Text.IndexOf(searchText, SearchStart + 1);
+                if (Index != -1)
                 {
-                    //check if end of text
-                    if (startPointer.CompareTo(fileOriginalView.Document.ContentEnd) == 0)
-                    {
-                        break;
-                    }
-
-                    //get the adjacent string
-                    string parsedString = startPointer.GetTextInRun(LogicalDirection.Forward);
-
-                    //check if the search string present here
-                    int indexOfParseString = parsedString.IndexOf(searchText);
-
-                    if (indexOfParseString >= 0) //present
+                    TextPointer text = fileOriginalView.Document.ContentStart;
+                    
+                    if (Index >= 0) //present
                     {
                         //setting up the pointer here at this matched index
-                        startPointer = startPointer.GetPositionAtOffset(indexOfParseString);
+                        TextPointer startPointerMark = text.GetPositionAtOffset(Index + 2 );
+                        TextPointer nextPointerMark = startPointerMark.GetPositionAtOffset(searchText.Length);         
+                        
+                        //Suchtext einfärben
+                        TextRange searchedTextRange = new TextRange(startPointerMark, nextPointerMark);
+                        searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.OrangeRed));
 
-                        if (startPointer != null)
-                        {
-                            //next pointer will be the length of the search string
-                            TextPointer nextPointer = startPointer.GetPositionAtOffset(searchText.Length);
+                        //Zum Text springen
+                        fileOriginalView.Focus();
+                        fileOriginalView.Selection.Select(startPointerMark, nextPointerMark);
 
-                            //create the text range
-                            TextRange searchedTextRange = new TextRange(startPointer, nextPointer);
-
-                            //color up 
-                            searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Yellow));
-
-                            //add other setting property
-
-                        }
+                        SearchStart = Index;
                     }
-                }
-
-                //update the label text with count
-                if (count_MatchFound > 0)
-                {
-                    lbl_Status.Content = "Anzahl gefunden: " + count_MatchFound;
                 }
                 else
                 {
-                    lbl_Status.Content = "Nichts gefunden!";
+                    MessageBox.Show("Found all the instances of [" + searchText + "]", "End Search");
+                    SearchStart = -1;
+                }
+                txtOriginalMarkText(textBoxText, searchText);
+            }
+        }
+        private void txtOriginalMarkText(string textBoxText, string searchText)
+        { 
+            //using regex to get the search count
+            //this will include search word even it is part of another word
+            //say we are searching "hi" in "hi, how are you Mahi?" --> match count will be 2 (hi in 'Mahi' also)
+
+            Regex regex = new Regex(searchText);
+
+            for (TextPointer startPointer = fileOriginalView.Document.ContentStart;
+                        startPointer.CompareTo(fileOriginalView.Document.ContentEnd) <= 0;
+                            startPointer = startPointer.GetNextContextPosition(LogicalDirection.Forward))
+            {
+                //check if end of text
+                if (startPointer.CompareTo(fileOriginalView.Document.ContentEnd) == 0)
+                {
+                    break;
+                }
+
+                //get the adjacent string
+                string parsedString = startPointer.GetTextInRun(LogicalDirection.Forward);
+
+                //check if the search string present here
+                int indexOfParseString = parsedString.IndexOf(searchText);
+
+                if (indexOfParseString >= 0) //present
+                {
+                    //setting up the pointer here at this matched index
+                    startPointer = startPointer.GetPositionAtOffset(indexOfParseString);
+
+                    if (startPointer != null)
+                    {
+                        //next pointer will be the length of the search string
+                        TextPointer nextPointer = startPointer.GetPositionAtOffset(searchText.Length);
+
+                        //create the text range
+                        TextRange searchedTextRange = new TextRange(startPointer, nextPointer);
+
+                        //color up 
+                        searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Yellow));
+                    }
                 }
             }
         }

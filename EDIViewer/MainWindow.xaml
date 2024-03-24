@@ -76,34 +76,25 @@
             <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="100px"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35px"></RowDefinition>
                     <RowDefinition></RowDefinition>
-                    <RowDefinition Height="35px"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <TextBox x:Name="searchTextBox" 
-                         Grid.Row="0" Grid.Column="0"/>
-                <Button x:Name="seacrhButton" 
-                        Grid.Row="0" Grid.Column="1"
-                        Margin="5,5,5,5"
-                        Content="Suchen"
-                        Click="bnt_Search_Click"/>
+                         Grid.Row="0" Grid.Column="0" 
+                         VerticalContentAlignment="Center"
+                         Margin="0,5,5,5"
+                         KeyUp="searchTextBox_KeyUp"
+                         />
                 <ScrollViewer Grid.Row="1" Grid.Column="0" 
-                              Grid.ColumnSpan="2"
                               Margin="5,5,5,5">
                     <RichTextBox    
                         Name="fileOriginalView" 
                         BorderThickness="0"
                         IsReadOnly="True"/>
                 </ScrollViewer>
-                <Label Name="lbl_Status" 
-                       Grid.Row="2" Grid.Column="0"
-                       Content="Status" 
-                       Foreground="Blue" 
-                       FontWeight="Bold"/>
             </Grid>
 
             <TabControl Grid.Row="0" Grid.Column="1">

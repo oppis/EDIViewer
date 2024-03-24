@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EDIViewer"
-        Title="EDI-Viewer" Height="450" Width="800" WindowStyle="ToolWindow" ResizeMode="NoResize">
+        Title="EDI-Viewer" Height="450" Width="800" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResizeWithGrip">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"></RowDefinition>

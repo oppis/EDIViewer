@@ -31,7 +31,7 @@ namespace EDIViewer.Parser
         {
             string[] currentRecord = null;
 
-            List<TransferInformation> transferInformations = [];
+            TransferInformation transferInformation = new();
             List<RawInformation> rawInformations = [];
 
             //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
@@ -44,11 +44,10 @@ namespace EDIViewer.Parser
                     fileRecordTypes = formatType.RecordType;
 
                     //Speichern der Übertragung Informationen
-                    TransferInformation transferInformation = new()
+                    transferInformation = new()
                     {
                         DataType = formatType.Description
                     };
-                    transferInformations.Add(transferInformation);
                 }
             }
 
@@ -64,9 +63,14 @@ namespace EDIViewer.Parser
             }
             else
             {
+                //Aktuelle Zeile 
+                int fileRowIndex = 0;
+
                 //Weitere Zielen ermitteln und prüfen
                 foreach (string fileRow in file)
                 {
+                    fileRowIndex++;
+
                     //Jede Satzart durchgehen
                     foreach (RecordType recordType in fileRecordTypes)
                     {
@@ -79,14 +83,32 @@ namespace EDIViewer.Parser
                             //Alle Felder Definitionen durchgehen
                             foreach (FieldDefination fieldDefination in fieldDefs)
                             {
-                                RawInformation currentRawInformation = new()
+                                //Prüfen ob Start noch in der Zeile vorhanden ist
+                                if ((fieldDefination.Start - 1) <= fileRow.Length)
                                 {
-                                    RecordTyp = recordType.Name,
-                                    Field = fieldDefination.Name,
-                                    FieldContent = fileRow.Substring(fieldDefination.Start - 1, fieldDefination.Length)
-                                };
+                                    //Aktuelle Länge speichern
+                                    int end = fieldDefination.Length;
+                                    
+                                    //Position vom Ende bestimmen
+                                    int position = (fieldDefination.Start - 1) + fieldDefination.Length;
 
-                                rawInformations.Add(currentRawInformation);
+                                    //Prüfen ob die End Position über die Zeile hinaus geht
+                                    if (position >= fileRow.Length)
+                                    {
+                                        //Bis zum Zeilen Ende gehen   
+                                        end = fileRow.Length - (fieldDefination.Start - 1);
+                                    }
+
+                                    RawInformation currentRawInformation = new()
+                                    {
+                                        RecordTyp = recordType.Name,
+                                        Field = fieldDefination.Name,
+                                        FieldContent = fileRow.Substring(fieldDefination.Start - 1, end),
+                                        FileRow = fileRowIndex
+                                    };
+
+                                    rawInformations.Add(currentRawInformation);
+                                }
                             }
                         }
                     }
@@ -96,7 +118,7 @@ namespace EDIViewer.Parser
             //Gefundene Informationen in übergabe Objekt speichern
             contentInformation = new()
             {
-                TransferInformation = transferInformations,
+                TransferInformation = transferInformation,
                 RawInformation = rawInformations
             };  
         }

@@ -239,7 +239,7 @@ namespace EDIViewer
 
             String textSeparator = (Clipboard.GetText().Contains("\t")) ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 
-            List<String> clipboardAsList = new List<String>(Clipboard.GetText().Split('\n'));
+            List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
 
             List<String[]> cleanLines = clipboardAsList
              .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
@@ -260,16 +260,17 @@ namespace EDIViewer
 
                 if (line.Length == 8)
                 {
-                    FieldDefination fieldDefination = new();
-
-                    fieldDefination.Position = Convert.ToInt16(line[0]);
-                    fieldDefination.Name = line[1];
-                    fieldDefination.Start = Convert.ToInt16(line[2]);
-                    fieldDefination.Length = Convert.ToInt16(line[3]);
-                    fieldDefination.Description = line[4];
-                    fieldDefination.DataType = line[5];
-                    fieldDefination.Mandatory = Convert.ToBoolean(line[6]);
-                    fieldDefination.MappingField = line[7];
+                    FieldDefination fieldDefination = new()
+                    {
+                        Position = Convert.ToInt16(line[0]),
+                        Name = line[1],
+                        Start = Convert.ToInt16(line[2]),
+                        Length = Convert.ToInt16(line[3]),
+                        Description = line[4],
+                        DataType = line[5],
+                        Mandatory = Convert.ToBoolean(line[6]),
+                        MappingField = line[7]
+                    };
 
                     availableFieldDefinations.Add(fieldDefination);
                     dgFieldDefination.Items.Refresh();

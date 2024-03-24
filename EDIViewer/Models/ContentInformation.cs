@@ -7,7 +7,7 @@
     {
         //Für Tabelle mit allen Informationen -> Satzart, Feld, Inhalt -> Mehere Tabellen nach Satzart getrennt -> foreach -> Flexibel
         public List<RawInformation> RawInformation { get; set; }
-        public List<TransferInformation> TransferInformation { get; set; }
+        public TransferInformation TransferInformation { get; set; }
         public List<OrderInformation> OrderInformation { get; set; }
         public List<StatusInformation> StatusInformation { get; set; }
     }

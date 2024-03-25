@@ -1,13 +1,13 @@
 ﻿using System.Data;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Newtonsoft.Json;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
-using System.Windows.Input;
+
 
 namespace EDIViewer
 {
@@ -29,6 +29,9 @@ namespace EDIViewer
         RecordType selectedRecordType;
 
         DataTable dtFieldDefinations;
+        
+        //Für Anlage neuer Recodtyp
+        bool DgRecordTypNewItem = false;
 
         /// <summary>
         /// Start des Fensters
@@ -192,6 +195,18 @@ namespace EDIViewer
             }
         }
         /// <summary>
+        /// Anlegen eine neuen Feld Definitionsarray mit auswahl
+        /// </summary>
+        private void CreateNewFieldDefinationTable()
+        {          
+            //Neue Feld Definitionen
+            selectedRecordType.FieldDefination = [];
+            
+            //Neue Felder auswählen und als Quelle hinterlegen
+            availableFieldDefinations = selectedRecordType.FieldDefination;
+            dgFieldDefination.ItemsSource = availableFieldDefinations;
+        }
+        /// <summary>
         /// Aktuelle Felder Informationen laden
         /// </summary>
         private void SetFieldDefinations()
@@ -199,16 +214,6 @@ namespace EDIViewer
             //Prüfen ob Feld Definitionen vorhanden sind
             if (selectedRecordType != null)
             {
-                //Inhalt des JSON in die Tabelle laden
-                dtFieldDefinations = new(typeof(FieldDefination).Name);
-
-                //Tabellen Format erstellen
-                PropertyInfo[] Props2 = typeof(FieldDefination).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (PropertyInfo prop in Props2)
-                {
-                    //Setting column names as Property names
-                    dtFieldDefinations.Columns.Add(prop.Name);
-                }
                 availableFieldDefinations = selectedRecordType.FieldDefination;
 
                 dgFieldDefination.ItemsSource = availableFieldDefinations;
@@ -218,64 +223,95 @@ namespace EDIViewer
                 dgFieldDefination.ItemsSource = null;
             }
         }
-        private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
+        /// <summary>
+        /// Einfügen aus Zwischenablage für Feld Definitionen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridView1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
-            {           
-                pasteClipboardIntoDataTable(true);
-            }
-
-        }
-
-        private void pasteClipboardIntoDataTable(Boolean createNewColumnsIfRequired)
-        {
-            if (!Clipboard.ContainsText())
             {
-                Console.WriteLine("Clipboard does not containt any text to paste.");
-                return;
-            }
-
-            //Uses tab as the default separator, but if there's no tab, use the system's default
-
-            String textSeparator = (Clipboard.GetText().Contains("\t")) ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-
-            List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
-
-            List<String[]> cleanLines = clipboardAsList
-             .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
-             .ToList<String[]>()
-             ;
-
-            foreach (String[] line in cleanLines)
-            {
-                if (createNewColumnsIfRequired && dgFieldDefination.Columns.Count < line.Length)
+                if (!Clipboard.ContainsText())
                 {
-                    for (int i = dgFieldDefination.Columns.Count; i < line.Length; i++)
+                    Console.WriteLine("Clipboard does not containt any text to paste.");
+                    return;
+                }
+
+                //Uses tab as the default separator, but if there's no tab, use the system's default
+
+                String textSeparator = (Clipboard.GetText().Contains("\t")) ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+
+                List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
+
+                List<String[]> cleanLines = clipboardAsList
+                 .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
+                 .ToList<String[]>()
+                 ;
+
+                foreach (String[] line in cleanLines)
+                {
+                    if (dgFieldDefination.Columns.Count < line.Length)
                     {
-                        dtFieldDefinations.Columns.Add();
+                        for (int i = dgFieldDefination.Columns.Count; i < line.Length; i++)
+                        {
+                            dtFieldDefinations.Columns.Add();
+                        }
+                    }
+
+                    //If the clipboard contains too many columns and createNewColumnsIfRequired is false
+
+                    if (line.Length == 8)
+                    {
+                        FieldDefination fieldDefination = new()
+                        {
+                            Position = Convert.ToInt16(line[0]),
+                            Name = line[1],
+                            Start = Convert.ToInt16(line[2]),
+                            Length = Convert.ToInt16(line[3]),
+                            Description = line[4],
+                            DataType = line[5],
+                            Mandatory = Convert.ToBoolean(line[6]),
+                            MappingField = line[7]
+                        };
+
+                        availableFieldDefinations.Add(fieldDefination);
+                        dgFieldDefination.Items.Refresh();
                     }
                 }
-
-                //If the clipboard contains too many columns and createNewColumnsIfRequired is false
-
-                if (line.Length == 8)
-                {
-                    FieldDefination fieldDefination = new()
-                    {
-                        Position = Convert.ToInt16(line[0]),
-                        Name = line[1],
-                        Start = Convert.ToInt16(line[2]),
-                        Length = Convert.ToInt16(line[3]),
-                        Description = line[4],
-                        DataType = line[5],
-                        Mandatory = Convert.ToBoolean(line[6]),
-                        MappingField = line[7]
-                    };
-
-                    availableFieldDefinations.Add(fieldDefination);
-                    dgFieldDefination.Items.Refresh();
-                }
             }
+        }
+        /// <summary>
+        /// RecordTyp Edit Ending Prüfung  neues Item -> auslösen anlegen erste Fielddefination
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgRecordType_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            if ((e.EditAction == DataGridEditAction.Commit) && DgRecordTypNewItem)
+            {
+                CreateNewFieldDefinationTable();
+
+                //Wenn neues Item Fertig Variable zurücksetzen
+                DgRecordTypNewItem = false;
+            }
+        }
+        /// <summary>
+        /// RecordTyp bei neue Zeile Variable setzen für Prüfung
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgRecordType_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            DgRecordTypNewItem = true;
+        }
+
+
+
+        private void OpenDBNewRecordType(object sender, RoutedEventArgs e)
+        {
+            DialogBox_NewRecordType window = new();
+            window.Show();
         }
     }
 }

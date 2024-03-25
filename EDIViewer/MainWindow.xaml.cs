@@ -30,7 +30,7 @@ namespace EDIViewer
         Encoding fileEncodingSelected;
 
         StreamReader originalFile;
-
+        
         //View Variables
         private int SearchStart = -1;
 
@@ -248,6 +248,11 @@ namespace EDIViewer
         {
             if (e.Key == Key.Return)
             {
+                //TODO -> nicht aus dem Suchfeld springen
+                //TODO -> Liste erstellen um Parameter zum springen zu nutzen
+                //TODO -> Alle Markieren und erstes auswählen in einer Funktion packen
+                //TODO -> Beim tippen liste erstellen mit enter andere Funktion und Liste durchgehen
+
                 TextRange textRange = new TextRange(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
 
                 //clear up highlighted text before starting a new search

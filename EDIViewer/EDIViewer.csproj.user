@@ -7,7 +7,7 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="DialogBox_NewRecordType.xaml.cs">
+    <Compile Update="DialogBox_NewFormatFile.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="FormatManagement.xaml.cs">
@@ -15,7 +15,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="DialogBox_NewRecordType.xaml">
+    <Page Update="DialogBox_NewFormatFile.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="FormatManagement.xaml">

@@ -8,6 +8,7 @@ namespace EDIViewer.Models
         public string FormatName { get; set; }
         public string Separator { get; set; } //Trennzeichen
         public string FormatDetection { get; set; }
+        public string FormatVariation { get; set; } //Abwandelungen
         public List<FormatType> FormatType { get; set; }
         public List<ArtDefination> ArtDefination { get; set; }
     }

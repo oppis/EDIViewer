@@ -7,7 +7,7 @@
         Title="EDI-Viewer" Height="450" Width="800" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResizeWithGrip">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="125px"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="35"></RowDefinition>
         </Grid.RowDefinitions>
@@ -17,6 +17,7 @@
         <!--Toolbar-->
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -39,32 +40,41 @@
                         Grid.RowSpan="3"
                         Margin="5,5,5,5"
                         SelectionChanged="CbFormat_SelectionChanged"/>
-            <Button Grid.Row="0" Grid.Column="2" 
+            <Button x:Name="NewFormatButton"
+                    Grid.Row="0" Grid.Column="2" 
                     Margin="5,5,5,5" 
                     Grid.RowSpan="3"
-                    Content="Neues Format"/>
+                    Content="Neues Format"
+                    Click="NewFile_Click"/>
             <!---->
             <Label Content="Version: "
                    Grid.Row="0" Grid.Column="3"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="No Value!"
-                   Name="VersionValue"
+            <TextBox Name="VersionValue"
                    Grid.Row="0" Grid.Column="4"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                     Margin="5,5,5,5"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
             <Label Content="Erkennung: "
                    Grid.Row="1" Grid.Column="3"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="No Value!"
-                   Name="FormatDetection"
+            <TextBox Name="FormatDetection"
                    Grid.Row="1" Grid.Column="4"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    Margin="5,5,5,5"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
             <Label Content="Trennzeichen: "
                    Grid.Row="2" Grid.Column="3"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="No Value!"
-                   Name="SeparatorValue"
-                   Grid.Row="2" Grid.Column="4"
+            <TextBox Name="SeparatorValue"
+                    Grid.Row="2" Grid.Column="4"
+                    Margin="5,5,5,5"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            <Label Content="Anpassung: "
+                   Grid.Row="3" Grid.Column="3"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Name="FormatVariationValue"
+                   Grid.Row="3" Grid.Column="4"
+                     Margin="5,5,5,5"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </Grid>
         <!--Inhalt-->
         <Grid Grid.Row="1" Grid.Column="0">
@@ -102,11 +112,6 @@
             <Label Content="Satzart"                   
                    Grid.Row="1" Grid.Column="1"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button x:Name="CreateNewRecord"
-                    Content="Neue Satzart"
-                    Grid.Row="1" Grid.Column="2"
-                    Margin="5,5,5,5" Click="OpenDBNewRecordType"
-                    />
             <DataGrid x:Name="dgRecordType"
                         Grid.Row="2" Grid.Column="0"
                         Grid.ColumnSpan="3"
@@ -126,7 +131,7 @@
                         Margin="5,5,5,5"
                         AutoGenerateColumns="True"
                         ClipboardCopyMode="IncludeHeader"
-                        KeyUp="dataGridView1_KeyUp"/>
+                        KeyUp="DataGridView1_KeyUp"/>
         </Grid>
         <!--Close Buttons-->
         <Grid Grid.Row="2" Grid.Column="0">

@@ -63,7 +63,7 @@ namespace EDIViewer
             string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", selectedFileStructur.FormatName + ".JSON")); 
             File.WriteAllText(formatFilePath, output);
 
-            //TODO -> Ansicht aktualisieren davor -> Auch Update wenn Datei geändert wird.
+            //TODO -> Ansicht aktualisieren in MainWindow davor -> Auch Update wenn Datei geändert wird.
 
             this.Close();
         }
@@ -99,9 +99,10 @@ namespace EDIViewer
             SetFileFormats();
 
             //Datei Informationen in Felder schreiben
-            VersionValue.Content = selectedFileStructur.Version;
-            FormatDetection.Content = selectedFileStructur.FormatDetection;
-            SeparatorValue.Content = selectedFileStructur.Separator;
+            VersionValue.Text = selectedFileStructur.Version.ToString();
+            FormatDetection.Text = selectedFileStructur.FormatDetection;
+            SeparatorValue.Text = selectedFileStructur.Separator;
+            FormatVariationValue.Text = selectedFileStructur.FormatVariation;
         }
         /// <summary>
         /// Aktuelles Format laden
@@ -305,13 +306,17 @@ namespace EDIViewer
         {
             DgRecordTypNewItem = true;
         }
-
-
-
-        private void OpenDBNewRecordType(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Öffnen des Fensters zur Anlage einer neuen Datei
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewFile_Click(object sender, RoutedEventArgs e)
         {
-            DialogBox_NewRecordType window = new();
+            DialogBox_NewFormatFile window = new();
             window.Show();
+
+            //TODO -> Neu Laden nach Erstellung Datei
         }
     }
 }

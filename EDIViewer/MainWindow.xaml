@@ -75,7 +75,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35px"></RowDefinition>
@@ -88,13 +88,18 @@
                          Margin="0,5,5,5"
                          KeyUp="searchTextBox_KeyUp"
                          />
-                <ScrollViewer Grid.Row="1" Grid.Column="0" 
-                              Margin="5,5,5,5">
-                    <RichTextBox    
-                        Name="fileOriginalView" 
-                        BorderThickness="0"
-                        IsReadOnly="True"/>
+                <ScrollViewer Grid.Row="1" Grid.Column="0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto">
+                    <RichTextBox Name="fileOriginalView"
+                                 Width="1250px" 
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                BorderThickness="0"
+                                IsReadOnly="True"/>
                 </ScrollViewer>
+                    
+
+                
             </Grid>
 
             <TabControl Grid.Row="0" Grid.Column="1">

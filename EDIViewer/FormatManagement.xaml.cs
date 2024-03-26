@@ -41,6 +41,13 @@ namespace EDIViewer
             InitializeComponent();
 
             //Aktuelle Formate laden
+            LoadFormatFiles();
+        }
+        /// <summary>
+        /// Laden der vorhanden Format Definitionen
+        /// </summary>
+        private void LoadFormatFiles()
+        {
             Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
 
             //Aktuelle Formate in ComboBox laden und nur den Format Typ anzeigen
@@ -56,8 +63,12 @@ namespace EDIViewer
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
             //Aktuell sichtbare Satzarten und Felder in das Objekt schreiben
-            //SaveFieldDefination();
-            //SaveRecordType();
+
+            //Speichern der Textboxen
+            selectedFileStructur.Version = Convert.ToInt16(VersionValue.Text);
+            selectedFileStructur.FormatDetection = FormatDetectionValue.Text;
+            selectedFileStructur.Separator = SeparatorValue.Text;
+            selectedFileStructur.FormatVariation = FormatVariationValue.Text;
 
             string output = JsonConvert.SerializeObject(selectedFileStructur);
             string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", selectedFileStructur.FormatName + ".JSON")); 
@@ -100,7 +111,7 @@ namespace EDIViewer
 
             //Datei Informationen in Felder schreiben
             VersionValue.Text = selectedFileStructur.Version.ToString();
-            FormatDetection.Text = selectedFileStructur.FormatDetection;
+            FormatDetectionValue.Text = selectedFileStructur.FormatDetection;
             SeparatorValue.Text = selectedFileStructur.Separator;
             FormatVariationValue.Text = selectedFileStructur.FormatVariation;
         }
@@ -313,9 +324,14 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void NewFile_Click(object sender, RoutedEventArgs e)
         {
-            DialogBox_NewFormatFile window = new();
-            window.Show();
+            DialogBox_NewFormatFile windowDialogBoxNewFormatFile = new();
+            windowDialogBoxNewFormatFile.Owner = this;
+            bool? status = windowDialogBoxNewFormatFile.ShowDialog();
 
+            if ((bool)status)
+            {
+                LoadFormatFiles();
+            }
             //TODO -> Neu Laden nach Erstellung Datei
         }
     }

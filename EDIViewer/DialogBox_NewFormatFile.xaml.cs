@@ -37,6 +37,7 @@ namespace EDIViewer
             string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", formatNameValue.Text + ".JSON"));
             File.WriteAllText(formatFilePath, output);
 
+            DialogResult = true;
             this.Close();
         }
 
@@ -47,6 +48,7 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
+            DialogResult = false;
             this.Close();
         }
     }

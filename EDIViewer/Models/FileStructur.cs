@@ -23,6 +23,7 @@ namespace EDIViewer.Models
     {
         public int Position { get; set; } //Satzart Name
         public string Name { get; set; } //Satzart Name
+        public bool Mandatory { get; set; }
         public string RecordDetection { get; set; }
         public string Description { get; set; }
         public List<FieldDefination> FieldDefination { get; set; }

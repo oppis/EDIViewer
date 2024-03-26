@@ -155,7 +155,17 @@ namespace EDIViewer
             {
                 originalFile = new(Path.Combine(filePath, fileName), fileEncodingSelected);
 
-                fileOriginalView.Document.Blocks.Clear();
+                //fileOriginalView.Document.Blocks.Clear();
+
+                //TextBlock tb = new();
+                //tb.TextWrapping = TextWrapping.NoWrap;
+                //tb.Text = originalFile.ReadToEnd();
+
+                //Paragraph p = new();
+                //p.Inlines.Add(tb);
+
+                //fileOriginalView.Document.Blocks.Add(p);
+
                 fileOriginalView.Document.Blocks.Add(new Paragraph(new Run(originalFile.ReadToEnd())));
             }
             catch (Exception ex)
@@ -253,13 +263,10 @@ namespace EDIViewer
                 //TODO -> Alle Markieren und erstes auswählen in einer Funktion packen
                 //TODO -> Beim tippen liste erstellen mit enter andere Funktion und Liste durchgehen
 
-                TextRange textRange = new TextRange(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
+                TextRange textRange = new(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
 
                 //clear up highlighted text before starting a new search
                 textRange.ClearAllProperties();
-
-                //get the richtextbox text
-                string textBoxText = textRange.Text;
 
                 //get search text
                 string searchText = searchTextBox.Text;
@@ -276,7 +283,7 @@ namespace EDIViewer
                         TextPointer nextPointerMark = startPointerMark.GetPositionAtOffset(searchText.Length);         
                         
                         //Suchtext einfärben
-                        TextRange searchedTextRange = new TextRange(startPointerMark, nextPointerMark);
+                        TextRange searchedTextRange = new(startPointerMark, nextPointerMark);
                         searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.OrangeRed));
 
                         //Zum Text springen
@@ -291,10 +298,10 @@ namespace EDIViewer
                     MessageBox.Show("Found all the instances of [" + searchText + "]", "End Search");
                     SearchStart = -1;
                 }
-                txtOriginalMarkText(textBoxText, searchText);
+                txtOriginalMarkText(searchText);
             }
         }
-        private void txtOriginalMarkText(string textBoxText, string searchText)
+        private void txtOriginalMarkText(string searchText)
         { 
             //using regex to get the search count
             //this will include search word even it is part of another word
@@ -329,7 +336,7 @@ namespace EDIViewer
                         TextPointer nextPointer = startPointer.GetPositionAtOffset(searchText.Length);
 
                         //create the text range
-                        TextRange searchedTextRange = new TextRange(startPointer, nextPointer);
+                        TextRange searchedTextRange = new(startPointer, nextPointer);
 
                         //color up 
                         searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Yellow));

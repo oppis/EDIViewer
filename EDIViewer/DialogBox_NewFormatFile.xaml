@@ -9,9 +9,7 @@
         MinWidth="300"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
-        ShowInTaskbar="False"
-        WindowStartupLocation="CenterOwner" 
-        FocusManager.FocusedElement="{Binding ElementName=leftMarginTextBox}">
+        ShowInTaskbar="False">
     <!--Closing="Window_Closing"-->
     <Grid Margin="10">
         <Grid.Resources>

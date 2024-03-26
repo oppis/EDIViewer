@@ -74,8 +74,7 @@ namespace EDIViewer
             string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", selectedFileStructur.FormatName + ".JSON")); 
             File.WriteAllText(formatFilePath, output);
 
-            //TODO -> Ansicht aktualisieren in MainWindow davor -> Auch Update wenn Datei geändert wird.
-
+            DialogResult = true;
             this.Close();
         }
         /// <summary>
@@ -85,6 +84,7 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void ExitWindow(object sender, RoutedEventArgs e)
         {
+            DialogResult = false;
             this.Close();
         }
         #endregion
@@ -324,15 +324,18 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void NewFile_Click(object sender, RoutedEventArgs e)
         {
-            DialogBox_NewFormatFile windowDialogBoxNewFormatFile = new();
-            windowDialogBoxNewFormatFile.Owner = this;
+            DialogBox_NewFormatFile windowDialogBoxNewFormatFile = new()
+            {
+                Owner = this
+            };
+
+            //Prüfen wie Fenster geschlossen wurde
             bool? status = windowDialogBoxNewFormatFile.ShowDialog();
 
             if ((bool)status)
             {
                 LoadFormatFiles();
             }
-            //TODO -> Neu Laden nach Erstellung Datei
         }
     }
 }

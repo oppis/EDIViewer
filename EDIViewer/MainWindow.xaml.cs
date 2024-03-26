@@ -86,8 +86,19 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void OpenFormatManagement(object sender, RoutedEventArgs e)
         {
-            FormatManagement window = new();
-            window.Show();
+            FormatManagement windowFormatManagement = new();
+            windowFormatManagement.Owner = this;
+            bool? windowStatus = windowFormatManagement.ShowDialog();
+
+            //Prüfen wie Fenster geschlossen wurde
+            if ((bool)windowStatus)
+            {
+                //Neu Laden der Field Definitionen wenn Änderung bei FieldDefinitionenen vorgenommen wurde
+                if (cbFileFormat.SelectedIndex != -1)
+                {
+                    StartParsingFile();
+                }
+            }
         }
         #region Load Files
         /// <summary>
@@ -148,6 +159,7 @@ namespace EDIViewer
         /// </summary>
         private void File_LoadView()
         {
+            //TODO -> Parsing neu machen wenn neue Datei ausgewählt
             cbFileFormat.IsEnabled = true;
             cbCharacterSet.IsEnabled = true;
 

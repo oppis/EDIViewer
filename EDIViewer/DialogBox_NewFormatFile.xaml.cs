@@ -23,22 +23,37 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
-            FileStructur fileStructur = new()
+            //Prüfung ob Inhalt der Felder leer sind
+            bool checkSave = false;
+
+            if (!String.IsNullOrEmpty(formatNameValue.Text) && !String.IsNullOrEmpty(formatSeparatorValue.Text) && !String.IsNullOrEmpty(formatDetectionValue.Text) && !String.IsNullOrEmpty(formationVariationValue.Text))
             {
-                Version = 1,
-                FormatName = formatNameValue.Text,
-                Separator = formatSeparatorValue.Text,
-                FormatDetection = formatDetectionValue.Text,
-                FormatVariation = formationVariationValue.Text,
-                FormatType = new()
+                checkSave = true;
             };
 
-            string output = JsonConvert.SerializeObject(fileStructur);
-            string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", formatNameValue.Text + ".JSON"));
-            File.WriteAllText(formatFilePath, output);
+            if (checkSave)
+            {
+                FileStructur fileStructur = new()
+                {
+                    Version = 1,
+                    FormatName = formatNameValue.Text,
+                    Separator = formatSeparatorValue.Text,
+                    FormatDetection = formatDetectionValue.Text,
+                    FormatVariation = formationVariationValue.Text,
+                    FormatType = new()
+                };
 
-            DialogResult = true;
-            this.Close();
+                string output = JsonConvert.SerializeObject(fileStructur);
+                string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", formatNameValue.Text + ".JSON"));
+                File.WriteAllText(formatFilePath, output);
+
+                DialogResult = true;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Es müssen alle Felder gefüllt sein!", "Anlegen neues Format");
+            }
         }
 
         /// <summary>

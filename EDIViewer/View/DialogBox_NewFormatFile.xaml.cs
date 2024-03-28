@@ -35,12 +35,12 @@ namespace EDIViewer
             {
                 FileStructur fileStructur = new()
                 {
-                    Version = 1,
+                    FormatVersion = 1,
                     FormatName = formatNameValue.Text,
-                    Separator = formatSeparatorValue.Text,
+                    FormatSeparator = formatSeparatorValue.Text,
                     FormatDetection = formatDetectionValue.Text,
                     FormatVariation = formationVariationValue.Text,
-                    FormatType = new()
+                    FormatTypes = new()
                 };
 
                 string output = JsonConvert.SerializeObject(fileStructur);

@@ -3,17 +3,17 @@
   "FormatName": "Fortras100",
   "Separator": "",
   "FormatDetection": "@@PH",
-  "FormatType": [
+  "FormatTypes": [
     {
       "Name": "BORD512",
       "Description": "Bordero",
-      "RecordType": [
+      "RecordTypes": [
         {
           "Position": 1,
           "Name": "Sendungsdaten",
           "RecordDetection": "A00",
           "Description": "Start Satz Entladebericht zum Datensatz",
-          "FieldDefination": [
+          "FieldDefinations": [
             {
               "Position": 1,
               "Name": "Satzbezeichnung",
@@ -42,7 +42,7 @@
           "Name": "END",
           "RecordDetection": "Z00",
           "Description": "Abschluss mit Summe",
-          "FieldDefination": [
+          "FieldDefinations": [
             {
               "Position": 1,
               "Name": "Satzbezeichnung",
@@ -64,12 +64,12 @@
     {
       "Name": "ENTL",
       "Description": "Entladebericht",
-      "RecordType": [
+      "RecordTypes": [
         {
           "Position": 1,
           "Name": "START",
           "Description": "Start Satz Entladebericht zum Datensatz",
-          "FieldDefination": [
+          "FieldDefinations": [
             {
               "Position": 1,
               "Name": "START",
@@ -90,7 +90,7 @@
             "Position": 2,
             "Name": "END",
             "Description": "Abschluss mit Summe",
-            "FieldDefination": [
+            "FieldDefinations": [
               {
                 "Position": 1,
                 "Name": "START",
@@ -112,12 +112,12 @@
     {
       "Name": "STAT",
       "Description": "Statusbericht",
-      "RecordType": [
+      "RecordTypes": [
         {
           "Position": 1,
           "Name": "START",
           "Description": "Start Satz Statusbericht zum Datensatz",
-          "FieldDefination": [
+          "FieldDefinations": [
             {
               "Position": 1,
               "Name": "START",
@@ -139,7 +139,7 @@
           "Position": 2,
           "Name": "END",
           "Description": "Abschluss mit Summe",
-          "FieldDefination": [
+          "FieldDefinations": [
             {
               "Position": 1,
               "Name": "START",

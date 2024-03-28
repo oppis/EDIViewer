@@ -7,21 +7,21 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="DialogBox_NewFormatFile.xaml.cs">
+    <Compile Update="View\DialogBox_NewFormatFile.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="FormatManagement.xaml.cs">
+    <Compile Update="View\FormatManagement.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="DialogBox_NewFormatFile.xaml">
+    <Page Update="View\DialogBox_NewFormatFile.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="FormatManagement.xaml">
+    <Page Update="View\FormatManagement.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MainWindow.xaml">
+    <Page Update="View\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

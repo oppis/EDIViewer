@@ -1,22 +1,23 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace EDIViewer.Models
 {
     public class FileStructur //Format Informationen
     {
-        public int Version {  get; set; }
+        public int FormatVersion {  get; set; }
         public string FormatName { get; set; }
-        public string Separator { get; set; } //Trennzeichen
+        public string FormatSeparator { get; set; } //Trennzeichen
         public string FormatDetection { get; set; }
         public string FormatVariation { get; set; } //Abwandelungen
-        public List<FormatType> FormatType { get; set; }
-        public List<ArtDefination> ArtDefination { get; set; }
+        public List<FormatType> FormatTypes { get; set; }
+        public List<ArtDefination> ArtDefinations { get; set; }
     }
     public class FormatType //Format Typ -> Entl, Status, Sendung
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<RecordType> RecordType { get; set; }
+        public List<RecordType> RecordTypes { get; set; }
         
     }
     public class RecordType //Satzarten
@@ -26,7 +27,7 @@ namespace EDIViewer.Models
         public bool Mandatory { get; set; }
         public string RecordDetection { get; set; }
         public string Description { get; set; }
-        public List<FieldDefination> FieldDefination { get; set; }
+        public List<FieldDefination> FieldDefinations { get; set; }
     }
     public class FieldDefination //Felder im Satz
     {

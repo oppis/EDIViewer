@@ -40,7 +40,7 @@ namespace EDIViewer
                     FormatSeparator = formatSeparatorValue.Text,
                     FormatDetection = formatDetectionValue.Text,
                     FormatVariation = formationVariationValue.Text,
-                    FormatTypes = new()
+                    FormatTypes = []
                 };
 
                 string output = JsonConvert.SerializeObject(fileStructur);

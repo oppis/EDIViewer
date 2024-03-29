@@ -1,12 +1,11 @@
 ﻿using System.Data;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Newtonsoft.Json;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
+using EDIViewer.ViewModel;
 
 
 namespace EDIViewer
@@ -19,13 +18,10 @@ namespace EDIViewer
         List<FieldDefination> availableFieldDefinations;
 
         //Listen für aktuelle Format Struktur
-        DataTable dtFieldDefinations;
+        DataTable  dtFieldDefinations;
 
-        ViewModel.FileStructurVM fileStructurVM;
-        
-        //Für Anlage neuer Recodtyp
-        bool DgRecordTypNewItem = false;
-
+        FileStructurVM fileStructurVM;
+       
         /// <summary>
         /// Start des Fensters
         /// </summary>
@@ -56,7 +52,7 @@ namespace EDIViewer
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
             fileStructurVM.SaveFile();
-
+            
             DialogResult = true;
             this.Close();
         }
@@ -83,7 +79,7 @@ namespace EDIViewer
 
             //Datei Infos in JSON lesen
             fileStructurVM = new ViewModel.FileStructurVM(selectedPath.Value);
-
+            
             this.DataContext = fileStructurVM;
         }
         /// <summary>
@@ -163,6 +159,17 @@ namespace EDIViewer
             {
                 LoadFormatFiles();
             }
+        }
+        /// <summary>
+        /// Öffnen Dialog -> Erstellen neuen Format Typ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CreateNewFormatTyp_Click(object sender, RoutedEventArgs e)
+        {
+            //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
+            DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurVM)this.DataContext).FormatTypNewViewModel);
+            dialogBoxNewFormatTyp.ShowDialog();
         }
     }
 }

@@ -1,24 +1,40 @@
 ﻿using System.ComponentModel;
 using System.IO;
+using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 
 using EDIViewer.Models;
-using System.Collections.ObjectModel;
-using System;
-using Microsoft.Win32;
 
 namespace EDIViewer.ViewModel
 {
     public class FileStructurVM : INotifyPropertyChanged
     {
         public static FileStructur fileStructurModel;
+        public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
         public FileStructurVM(string currentFileFormat)
         {
             //string currentFileFormat = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", "Fortras100.JSON"));
             string json = File.ReadAllText(currentFileFormat);
 
             fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(json);
+
+            //Anlage neuer Format Typ
+            FormatTypNewViewModel = new FormatTypNewViewModel();
+            FormatTypNewViewModel.Save += FormatTypeNewOnSave;
         }
+        private void FormatTypeNewOnSave(object sender, EventArgs eventArgs)
+        {
+            //Neuen Format Typ in Liste hinzufügen
+            FormatTypes.Add(new FormatType()
+            {
+                Name = FormatTypNewViewModel.Name,
+                Description = FormatTypNewViewModel.Description
+            });
+
+            //Leeren der Felder in der View zur Anlage vom Format Typ
+            FormatTypNewViewModel.Reset();
+        }
+        //Speichern der Anpassungen ins JSON Datei
         public void SaveFile()
         {
             string output = JsonConvert.SerializeObject(fileStructurModel);
@@ -69,34 +85,39 @@ namespace EDIViewer.ViewModel
                 OnPropertyChanged(nameof(FormatVaritaion));
             }
         }
-
-        private FormatType selectedFormatType;
-        public List<FormatType> FormatTypes
+        //Inhalt darstellen
+        public ObservableCollection<FormatType> FormatTypes
         {
-            get
-            {
-                return fileStructurModel.FormatTypes;
-            }
+            get => fileStructurModel.FormatTypes;
             set
             {
                 fileStructurModel.FormatTypes = value;
                 OnPropertyChanged(nameof(FormatTypes));
             }
         }
-        
+        //reagieren auf das ausgewählten Typ
+        private FormatType selectedFormatType;
         public FormatType SelectedFormatType
         {
             get
             {
-                return this.selectedFormatType;
+                return selectedFormatType;
             }
             set
             {
-                this.selectedFormatType = value;
+                selectedFormatType = value;
                 OnPropertyChanged(nameof(SelectedFormatType));
+
+                //Wenn keine RecordTypes vorhanden sind dann ein Leeres anlegen
+                if (RecordTypes is null && selectedFormatType is not null)
+                {
+                    selectedFormatType.RecordTypes = [];
+                }
+                //Laden der Record Types
                 OnPropertyChanged(nameof(RecordTypes));
             }
         }
+        //Inhalt darstellen
         public List<RecordType> RecordTypes
         {
             get
@@ -116,24 +137,29 @@ namespace EDIViewer.ViewModel
                 OnPropertyChanged(nameof(RecordTypes));
             }
         }
+        //reagieren auf das ausgewählten Typ
         private RecordType selectedRecordType;
         public RecordType SelectedRecordType
         {
             get
             { 
-                return this.selectedRecordType; 
+                return selectedRecordType; 
             } 
             set 
             {
-                this.selectedRecordType = value;
+                selectedRecordType = value;
                 OnPropertyChanged(nameof(SelectedRecordType));
+
+                //Wenn keine Feld Definitionen vorhanden sind dann ein Leeres anlegen
                 if (FieldDefinations is null && selectedRecordType is not null) 
                 {
-                    selectedRecordType.FieldDefinations = new();
+                    selectedRecordType.FieldDefinations = [];
                 }
+                //Laden der Feld Definitionen
                 OnPropertyChanged(nameof(FieldDefinations));
             }
         }
+        //Inhalt darstellen
         public List<FieldDefination> FieldDefinations
         {
             get

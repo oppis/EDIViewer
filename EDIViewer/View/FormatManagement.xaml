@@ -111,9 +111,11 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Neuen Typen anlegen"
+            <Button x:Name="createNewFormatTyp"
+                    Content="Neuen Typen anlegen"
                     Grid.Row="0" Grid.Column="0"
-                    Margin="5,5,5,5"/>
+                    Margin="5,5,5,5"
+                    Click="CreateNewFormatTyp_Click"/>
             
             <Label Content="Beschreibung"
                    Grid.Row="0" Grid.Column="1"

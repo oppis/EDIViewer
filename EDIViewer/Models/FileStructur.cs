@@ -1,5 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿
+using System.Collections.ObjectModel;
 
 namespace EDIViewer.Models
 {
@@ -10,7 +10,7 @@ namespace EDIViewer.Models
         public string FormatSeparator { get; set; } //Trennzeichen
         public string FormatDetection { get; set; }
         public string FormatVariation { get; set; } //Abwandelungen
-        public List<FormatType> FormatTypes { get; set; }
+        public ObservableCollection<FormatType> FormatTypes { get; set; }
         public List<ArtDefination> ArtDefinations { get; set; }
     }
     public class FormatType //Format Typ -> Entl, Status, Sendung

@@ -19,8 +19,6 @@ namespace EDIViewer
         List<FieldDefination> availableFieldDefinations;
 
         //Listen für aktuelle Format Struktur
-        RecordType selectedRecordType;
-
         DataTable dtFieldDefinations;
 
         ViewModel.FileStructurVM fileStructurVM;
@@ -89,18 +87,6 @@ namespace EDIViewer
             this.DataContext = fileStructurVM;
         }
         /// <summary>
-        /// Anlegen eine neuen Feld Definitionsarray mit auswahl
-        /// </summary>
-        private void CreateNewFieldDefinationTable()
-        {          
-            //Neue Feld Definitionen
-            selectedRecordType.FieldDefinations = [];
-            
-            //Neue Felder auswählen und als Quelle hinterlegen
-            availableFieldDefinations = selectedRecordType.FieldDefinations;
-            dgFieldDefination.ItemsSource = availableFieldDefinations;
-        }
-        /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen
         /// </summary>
         /// <param name="sender"></param>
@@ -157,30 +143,6 @@ namespace EDIViewer
                     }
                 }
             }
-        }
-        /// <summary>
-        /// RecordTyp Edit Ending Prüfung  neues Item -> auslösen anlegen erste Fielddefination
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DgRecordType_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-            if ((e.EditAction == DataGridEditAction.Commit) && DgRecordTypNewItem)
-            {
-                CreateNewFieldDefinationTable();
-
-                //Wenn neues Item Fertig Variable zurücksetzen
-                DgRecordTypNewItem = false;
-            }
-        }
-        /// <summary>
-        /// RecordTyp bei neue Zeile Variable setzen für Prüfung
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DgRecordType_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            DgRecordTypNewItem = true;
         }
         /// <summary>
         /// Öffnen des Fensters zur Anlage einer neuen Datei

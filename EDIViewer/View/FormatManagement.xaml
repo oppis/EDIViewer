@@ -143,9 +143,7 @@
                         Margin="5,5,5,5"
                         AutoGenerateColumns="True"
                         ItemsSource="{Binding Path=RecordTypes}"
-                        SelectedItem="{Binding Path=SelectedRecordType}"
-                        AddingNewItem="DgRecordType_AddingNewItem"
-                        RowEditEnding="DgRecordType_RowEditEnding">
+                        SelectedItem="{Binding Path=SelectedRecordType}">
             </DataGrid>
 
             <Label  Content="Feld Definitionen"

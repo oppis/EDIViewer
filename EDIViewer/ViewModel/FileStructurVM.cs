@@ -127,6 +127,10 @@ namespace EDIViewer.ViewModel
             {
                 this.selectedRecordType = value;
                 OnPropertyChanged(nameof(SelectedRecordType));
+                if (FieldDefinations is null && selectedRecordType is not null) 
+                {
+                    selectedRecordType.FieldDefinations = new();
+                }
                 OnPropertyChanged(nameof(FieldDefinations));
             }
         }

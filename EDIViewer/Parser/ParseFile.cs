@@ -53,7 +53,7 @@ namespace EDIViewer.Parser
             }
 
             //Berücksichtigen ob Trennzeichen oder Feldlänge
-            if (fileStructur.FormatSeparator.Length > 0)
+            if (fileStructur.FormatSeparator is not null && fileStructur.FormatSeparator.Length > 0)
             {
                 char seperator = fileStructur.FormatSeparator[0];
                 foreach (string fileRow in file)

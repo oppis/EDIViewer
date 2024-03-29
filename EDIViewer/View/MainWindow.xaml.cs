@@ -60,8 +60,6 @@ namespace EDIViewer
 
             //Default Zeichensatz
             fileEncodingSelected = Encoding.Default;
-
-            
         }
         /// <summary>
         /// Show Message Box for Messages for User
@@ -166,17 +164,6 @@ namespace EDIViewer
             try
             {
                 originalFile = new(Path.Combine(filePath, fileName), fileEncodingSelected);
-
-                //fileOriginalView.Document.Blocks.Clear();
-
-                //TextBlock tb = new();
-                //tb.TextWrapping = TextWrapping.NoWrap;
-                //tb.Text = originalFile.ReadToEnd();
-
-                //Paragraph p = new();
-                //p.Inlines.Add(tb);
-
-                //fileOriginalView.Document.Blocks.Add(p);
 
                 fileOriginalView.Document.Blocks.Add(new Paragraph(new Run(originalFile.ReadToEnd())));
             }

@@ -77,6 +77,10 @@ namespace EDIViewer
             fileStructurVM = new ViewModel.FileStructurVM(selectedPath.Value);
             
             DataContext = fileStructurVM;
+
+            //Felder aktivieren
+            cbFormatTyp.IsEnabled = true;
+            createNewFormatTyp.IsEnabled = true;
         }
         /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen

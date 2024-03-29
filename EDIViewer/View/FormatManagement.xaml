@@ -59,6 +59,7 @@
             <ComboBox   x:Name="cbFormatTyp"
                         Grid.Row="2" Grid.Column="0" 
                         Margin="5,5,5,5"
+                        IsEnabled="False"
                         ItemsSource="{Binding Path=FormatTypes}"
                         SelectedItem="{Binding Path=SelectedFormatType}"
                         DisplayMemberPath="Name">
@@ -115,6 +116,7 @@
                     Content="Neuen Typen anlegen"
                     Grid.Row="0" Grid.Column="0"
                     Margin="5,5,5,5"
+                    IsEnabled="False"
                     Click="CreateNewFormatTyp_Click"/>
             
             <Label Content="Beschreibung"

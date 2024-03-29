@@ -11,13 +11,13 @@ namespace EDIViewer.Models
         public string FormatDetection { get; set; }
         public string FormatVariation { get; set; } //Abwandelungen
         public ObservableCollection<FormatType> FormatTypes { get; set; }
-        public List<ArtDefination> ArtDefinations { get; set; }
+        public ObservableCollection<ArtDefination> ArtDefinations { get; set; }
     }
     public class FormatType //Format Typ -> Entl, Status, Sendung
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<RecordType> RecordTypes { get; set; }
+        public ObservableCollection<RecordType> RecordTypes { get; set; }
         
     }
     public class RecordType //Satzarten
@@ -27,7 +27,7 @@ namespace EDIViewer.Models
         public bool Mandatory { get; set; }
         public string RecordDetection { get; set; }
         public string Description { get; set; }
-        public List<FieldDefination> FieldDefinations { get; set; }
+        public ObservableCollection<FieldDefination> FieldDefinations { get; set; }
     }
     public class FieldDefination //Felder im Satz
     {

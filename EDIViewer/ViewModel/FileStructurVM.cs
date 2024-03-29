@@ -118,7 +118,7 @@ namespace EDIViewer.ViewModel
             }
         }
         //Inhalt darstellen
-        public List<RecordType> RecordTypes
+        public ObservableCollection<RecordType> RecordTypes
         {
             get
             {
@@ -160,7 +160,7 @@ namespace EDIViewer.ViewModel
             }
         }
         //Inhalt darstellen
-        public List<FieldDefination> FieldDefinations
+        public ObservableCollection<FieldDefination> FieldDefinations
         {
             get
             {

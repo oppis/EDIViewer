@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 using EDIViewer.Models;
+using System.Collections.ObjectModel;
 
 namespace EDIViewer.Parser
 {
@@ -9,9 +10,9 @@ namespace EDIViewer.Parser
         //Datei Struktur für aktuelles Format
         FileStructur fileStructur;
         //Aktuelle Satzart zwischen speichern
-        List<RecordType> fileRecordTypes;
+        ObservableCollection<RecordType> fileRecordTypes;
         //Aktuelle Felder zwischen speichern
-        List<FieldDefination> fieldDefs;
+        ObservableCollection<FieldDefination> fieldDefs;
         //Ausgabe Objekt
         public ContentInformation contentInformation;
         /// <summary>

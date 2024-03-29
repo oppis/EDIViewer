@@ -133,9 +133,7 @@ namespace EDIViewer
                             Mandatory = Convert.ToBoolean(line[6]),
                             MappingField = line[7]
                         };
-
-                        availableFieldDefinations.Add(fieldDefination);
-                        dgFieldDefination.Items.Refresh();
+                        fileStructurVM.SelectedRecordType.FieldDefinations.Add(fieldDefination);
                     }
                 }
             }

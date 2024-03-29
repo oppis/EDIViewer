@@ -9,7 +9,7 @@ namespace EDIViewer.ViewModel
 {
     public class FileStructurVM : INotifyPropertyChanged
     {
-        public static FileStructur fileStructurModel;
+        private static FileStructur fileStructurModel;
         public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
         public FileStructurVM(string currentFileFormat)
         {

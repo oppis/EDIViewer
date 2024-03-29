@@ -15,11 +15,7 @@ namespace EDIViewer
     /// </summary>
     public partial class FormatManagement : Window
     {
-        List<FieldDefination> availableFieldDefinations;
-
-        //Listen für aktuelle Format Struktur
-        DataTable  dtFieldDefinations;
-
+        //ViewModel für Daten Kontext
         FileStructurVM fileStructurVM;
        
         /// <summary>
@@ -80,7 +76,7 @@ namespace EDIViewer
             //Datei Infos in JSON lesen
             fileStructurVM = new ViewModel.FileStructurVM(selectedPath.Value);
             
-            this.DataContext = fileStructurVM;
+            DataContext = fileStructurVM;
         }
         /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen
@@ -110,16 +106,6 @@ namespace EDIViewer
 
                 foreach (String[] line in cleanLines)
                 {
-                    if (dgFieldDefination.Columns.Count < line.Length)
-                    {
-                        for (int i = dgFieldDefination.Columns.Count; i < line.Length; i++)
-                        {
-                            dtFieldDefinations.Columns.Add();
-                        }
-                    }
-
-                    //If the clipboard contains too many columns and createNewColumnsIfRequired is false
-
                     if (line.Length == 8)
                     {
                         FieldDefination fieldDefination = new()

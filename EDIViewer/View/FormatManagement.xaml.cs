@@ -74,8 +74,7 @@ namespace EDIViewer
             KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
 
             //Datei Infos in JSON lesen
-            fileStructurVM = new ViewModel.FileStructurVM(selectedPath.Value);
-            
+            fileStructurVM = new FileStructurVM(selectedPath.Value);
             DataContext = fileStructurVM;
 
             //Felder aktivieren

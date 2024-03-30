@@ -1,4 +1,6 @@
-﻿namespace EDIViewer.Models
+﻿using System.Collections.ObjectModel;
+
+namespace EDIViewer.Models
 {
     /// <summary>
     /// Aufbau des Objekts
@@ -6,10 +8,10 @@
     public class ContentInformation
     {
         //Für Tabelle mit allen Informationen -> Satzart, Feld, Inhalt -> Mehere Tabellen nach Satzart getrennt -> foreach -> Flexibel
-        public List<RawInformation> RawInformation { get; set; }
+        public ObservableCollection<RawInformation> RawInformations { get; set; }
         public TransferInformation TransferInformation { get; set; }
-        public List<OrderInformation> OrderInformation { get; set; }
-        public List<StatusInformation> StatusInformation { get; set; }
+        public ObservableCollection<OrderInformation> OrderInformations { get; set; }
+        public ObservableCollection<StatusInformation> StatusInformations { get; set; }
     }
     /// <summary>
     /// Information welche Tabs aktiviert werden

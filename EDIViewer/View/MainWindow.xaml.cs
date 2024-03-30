@@ -11,6 +11,9 @@ using Microsoft.Win32;
 using EDIViewer.Helper;
 using EDIViewer.Parser;
 using EDIViewer.Models;
+using EDIViewer.ViewModel;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 
 namespace EDIViewer
@@ -24,13 +27,15 @@ namespace EDIViewer
         static string filePath = string.Empty;
         static string fileName = string.Empty;
         string currentFileFormat = string.Empty;
+        
+        //Datei Konvertierung
         Encoding fileEncodingSelected;
 
         StreamReader originalFile;
         
         //View Variables
         private int SearchStart = -1;
-
+        ContentInformationViewModel contentInformationViewModel;
         /// <summary>
         /// Start des Fensters
         /// </summary>
@@ -156,7 +161,6 @@ namespace EDIViewer
         /// </summary>
         private void File_LoadView()
         {
-            //TODO -> Parsing neu machen wenn neue Datei ausgewählt
             cbFileFormat.IsEnabled = true;
             cbCharacterSet.IsEnabled = true;
 
@@ -165,6 +169,8 @@ namespace EDIViewer
                 originalFile = new(Path.Combine(filePath, fileName), fileEncodingSelected);
 
                 fileOriginalView.Document.Blocks.Add(new Paragraph(new Run(originalFile.ReadToEnd())));
+
+               //StartParsingFile();
             }
             catch (Exception ex)
             {
@@ -179,7 +185,11 @@ namespace EDIViewer
             //Aktuellen Text auf RichTextBox holen
             TextRange textRange = new(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
             string[] viewLines = textRange.Text.Split(Environment.NewLine);
-            
+
+            //DataContext -> RawInformations
+            contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
+            DataContext = contentInformationViewModel;
+
             //Aktuelle Datei Parsen
             ParseFile parseFile = new();
             parseFile.GetFileStructur(currentFileFormat);
@@ -193,27 +203,10 @@ namespace EDIViewer
             RecipientIDValue.Content = transferInformation.RecipientID;
             DataReferenceValue.Content = transferInformation.DataReference;
             DataTypeValue.Content = transferInformation.DataType;
-            
-            //Inhalt des JSON in die Tabelle laden
-            DataTable dtRawInformation = new(typeof(RawInformation).Name);
-
-            //Tabellen Format erstellen
-            PropertyInfo[] Props2 = typeof(RawInformation).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo prop in Props2)
-            {
-                //Setting column names as Property names
-                dtRawInformation.Columns.Add(prop.Name);
-            }         
-            foreach (RawInformation rawInformation in contentInformation.RawInformation)
-            {
-                var values = new object[Props2.Length];
-                for (int i = 0; i < Props2.Length; i++)
-                {
-                    values[i] = Props2[i].GetValue(rawInformation, null);
-                }
-                dtRawInformation.Rows.Add(values);
-            }
-            dgRawInformation.ItemsSource = dtRawInformation.AsDataView();
+        }
+        public class Tasks : ObservableCollection<Task>
+        {
+            // Creating the Tasks collection in this way enables data binding from XAML.
         }
         /// <summary>
         /// Reagieren auf File Format Änderung

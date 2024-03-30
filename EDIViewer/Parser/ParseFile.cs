@@ -33,7 +33,7 @@ namespace EDIViewer.Parser
             string[] currentRecord = null;
 
             TransferInformation transferInformation = new();
-            List<RawInformation> rawInformations = [];
+            ObservableCollection<RawInformation> rawInformations = [];
 
             //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
             //Prüfung was für ein Format Typ
@@ -146,7 +146,7 @@ namespace EDIViewer.Parser
             contentInformation = new()
             {
                 TransferInformation = transferInformation,
-                RawInformation = rawInformations
+                RawInformations = rawInformations
             };  
         }
         /// <summary>
@@ -158,7 +158,7 @@ namespace EDIViewer.Parser
         }
         /// <summary>
         /// Aktuellen RecordType ermitteln
-        /// </summary>
+        /// </summary>ObservableCollection
         private void ProcessCurrentRecord()
         {
 

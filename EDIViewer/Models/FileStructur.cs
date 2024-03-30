@@ -17,6 +17,7 @@ namespace EDIViewer.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Detection { get; set; }
         public ObservableCollection<RecordType> RecordTypes { get; set; }
         
     }

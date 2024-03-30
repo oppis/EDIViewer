@@ -6,6 +6,7 @@ namespace EDIViewer.ViewModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Detection { get; set; }
 
         public event EventHandler Save;
         public SimpleRelayCommand SaveCommand { get; set; }
@@ -17,7 +18,8 @@ namespace EDIViewer.ViewModel
         public void Reset()
         {
             this.Name = string.Empty;
-            this.Description = string.Empty;                
+            this.Description = string.Empty;     
+            this.Detection = string.Empty;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace EDIViewer.Parser
             //Prüfung was für ein Format Typ
             foreach (FormatType formatType in fileStructur.FormatTypes)
             {
-                if (file[0].Contains(formatType.Name))
+                if (file[0].Contains(formatType.Detection))
                 {
                     //Speichern des aktuellen FormatTyp
                     fileRecordTypes = formatType.RecordTypes;
@@ -56,10 +56,36 @@ namespace EDIViewer.Parser
             if (fileStructur.FormatSeparator is not null && fileStructur.FormatSeparator.Length > 0)
             {
                 char seperator = fileStructur.FormatSeparator[0];
+
+                //Aktuelle Zeile 
+                int fileRowIndex = 0;
+
                 foreach (string fileRow in file)
                 {
+                    fileRowIndex++;
+
                     // Es handelt sich um eine CSV Datei
                     currentRecord = fileRow.Split([seperator]);
+                    foreach (RecordType recordType in fileRecordTypes)
+                    {
+                        if (currentRecord[0].StartsWith(recordType.RecordDetection))
+                        {
+                            fieldDefs = recordType.FieldDefinations;
+
+                            for (int i = 0; i < currentRecord.Length; i++)
+                            {
+                                RawInformation currentRawInformation = new()
+                                {
+                                    RecordTyp = recordType.Name,
+                                    Field = fieldDefs[i].Name,
+                                    FieldContent = currentRecord[i],
+                                    FileRow = fileRowIndex
+                                };
+
+                                rawInformations.Add(currentRawInformation);
+                            }
+                        }
+                    }
                 }
             }
             else

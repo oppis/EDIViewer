@@ -110,6 +110,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Button x:Name="createNewFormatTyp"
@@ -118,14 +120,22 @@
                     Margin="5,5,5,5"
                     IsEnabled="False"
                     Click="CreateNewFormatTyp_Click"/>
-            
-            <Label Content="Beschreibung"
+
+            <Label Content="Erkennung"
                    Grid.Row="0" Grid.Column="1"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label  x:Name="formatTypeDescription"
-                    Content="{Binding SelectedFormatType.Description}"
+            <TextBox  x:Name="formatTypeDetection"
+                    Text="{Binding SelectedFormatType.Detection}"
                     Grid.Row="0" Grid.Column="2"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+            <Label Content="Beschreibung"
+                   Grid.Row="0" Grid.Column="3"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox  x:Name="formatTypeDescription"
+                    Text="{Binding SelectedFormatType.Description}"
+                    Grid.Row="0" Grid.Column="4"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
         </Grid>
         <!--Inhalt-->

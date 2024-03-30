@@ -84,8 +84,10 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void OpenFormatManagement(object sender, RoutedEventArgs e)
         {
-            FormatManagement windowFormatManagement = new();
-            windowFormatManagement.Owner = this;
+            FormatManagement windowFormatManagement = new()
+            {
+                Owner = this
+            };
             bool? windowStatus = windowFormatManagement.ShowDialog();
 
             //Prüfen wie Fenster geschlossen wurde
@@ -302,12 +304,6 @@ namespace EDIViewer
         }
         private void txtOriginalMarkText(string searchText)
         { 
-            //using regex to get the search count
-            //this will include search word even it is part of another word
-            //say we are searching "hi" in "hi, how are you Mahi?" --> match count will be 2 (hi in 'Mahi' also)
-
-            Regex regex = new Regex(searchText);
-
             for (TextPointer startPointer = fileOriginalView.Document.ContentStart;
                         startPointer.CompareTo(fileOriginalView.Document.ContentEnd) <= 0;
                             startPointer = startPointer.GetNextContextPosition(LogicalDirection.Forward))

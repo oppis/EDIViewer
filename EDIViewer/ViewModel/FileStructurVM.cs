@@ -28,7 +28,8 @@ namespace EDIViewer.ViewModel
             FormatTypes.Add(new FormatType()
             {
                 Name = FormatTypNewViewModel.Name,
-                Description = FormatTypNewViewModel.Description
+                Description = FormatTypNewViewModel.Description,
+                Detection = FormatTypNewViewModel.Detection
             });
 
             //Leeren der Felder in der View zur Anlage vom Format Typ

@@ -2,18 +2,15 @@
 using System.Data;
 using System.Reflection;
 using System.Windows;
+using System.Text;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Input;
 using Microsoft.Win32;
 
 using EDIViewer.Helper;
 using EDIViewer.Parser;
 using EDIViewer.Models;
-using System.Text;
-using System.Windows.Documents;
-using System.Text.RegularExpressions;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Runtime.InteropServices;
 
 
 namespace EDIViewer

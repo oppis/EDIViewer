@@ -46,6 +46,7 @@
                     Grid.ColumnSpan="2"
                     Margin="10,10,10,10"
                     IsEnabled="False"
+                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                     SelectionChanged="CbFileFormat_SelectionChanged"/>
             <Label Content="Zeichensatz: "
                     Grid.Row="1" Grid.Column="4" 
@@ -67,8 +68,9 @@
         <!--#region File View-->
         <Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -102,7 +104,13 @@
                 
             </Grid>
 
-            <TabControl Grid.Row="0" Grid.Column="1">
+            <GridSplitter HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Grid.Column="1" 
+                          ResizeBehavior="PreviousAndNext"
+                          Width="2" Background="Black"/>
+
+            <TabControl Grid.Row="0" Grid.Column="2">
                 <TabItem Header="Übertragung">
                     <Grid>
                         <Grid.RowDefinitions>

@@ -33,7 +33,7 @@ namespace EDIViewer.Parser
             string[] currentRecord = null;
 
             TransferInformation transferInformation = new();
-            ObservableCollection<RawInformation> rawInformations = [];
+            ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweileis neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
 
             //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
             //Prüfung was für ein Format Typ

@@ -190,10 +190,6 @@ namespace EDIViewer
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
             DataContext = contentInformationViewModel;
         }
-        public class Tasks : ObservableCollection<Task>
-        {
-            // Creating the Tasks collection in this way enables data binding from XAML.
-        }
         /// <summary>
         /// Reagieren auf File Format Änderung
         /// </summary>
@@ -225,7 +221,6 @@ namespace EDIViewer
                 File_LoadView();
             }
         }
-
         /// <summary>
         /// Suche Starten und Text markieren
         /// </summary>

@@ -62,7 +62,8 @@
                         IsEnabled="False"
                         ItemsSource="{Binding Path=FormatTypes}"
                         SelectedItem="{Binding Path=SelectedFormatType}"
-                        DisplayMemberPath="Name">
+                        DisplayMemberPath="Name"
+                        SelectionChanged="CbFormatTyp_SelectionChanged">
             </ComboBox>
 
             <Label Content="Version: "
@@ -72,6 +73,7 @@
                     Grid.Row="1" Grid.Column="2"
                     Margin="5,5,5,5"
                     Text="{Binding FormatVersion}"
+                    IsEnabled="False"
                     HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
             
             <Label Content="Erkennung: "
@@ -81,6 +83,7 @@
                     Grid.Row="2" Grid.Column="2"
                     Margin="5,5,5,5"
                     Text="{Binding FormatDetection}"
+                     IsEnabled="False"
                     HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
             
             <Label Content="Trennzeichen: "
@@ -90,6 +93,7 @@
                     Grid.Row="1" Grid.Column="4"
                     Margin="5,5,5,5"
                     Text="{Binding FormatSeparator}"
+                    IsEnabled="False"
                     HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
             
             <Label Content="Anpassung: "
@@ -99,6 +103,7 @@
                     Grid.Row="2" Grid.Column="4"
                     Margin="5,5,5,5"
                     Text="{Binding FormatVaritaion}"
+                    IsEnabled="False"
                     HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </Grid>
         <!--Format Typen-->
@@ -127,26 +132,29 @@
                    Grid.Row="0" Grid.Column="1"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBox  x:Name="formatTypeDetection"
-                    Text="{Binding SelectedFormatType.Detection}"
                     Grid.Row="0" Grid.Column="2"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                    Text="{Binding SelectedFormatType.Detection}"
+                    IsEnabled="False"/>
+                    
             <Label Content="Beschreibung"
                    Grid.Row="0" Grid.Column="3"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBox  x:Name="formatTypeDescription"
-                    Text="{Binding SelectedFormatType.Description}"
-                    Grid.Row="0" Grid.Column="4"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-
+                      Grid.Row="0" Grid.Column="4"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                      Text="{Binding SelectedFormatType.Description}"
+                      IsEnabled="False"/>
+                    
             <Label Content="Einheit Trennung"
                    Grid.Row="0" Grid.Column="5"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBox  x:Name="formatTypeEntitySeparator"
-                    Text="{Binding SelectedFormatType.EntitySeparator}"
-                    Grid.Row="0" Grid.Column="6"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-
+                      Grid.Row="0" Grid.Column="6"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                      Text="{Binding SelectedFormatType.EntitySeparator}"
+                      IsEnabled="False"/>
+                     
         </Grid>
         <!--Inhalt-->
         <Grid Grid.Row="2" Grid.Column="0">

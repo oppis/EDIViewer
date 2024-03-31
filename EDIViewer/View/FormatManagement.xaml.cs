@@ -80,6 +80,15 @@ namespace EDIViewer
             //Felder aktivieren
             cbFormatTyp.IsEnabled = true;
             createNewFormatTyp.IsEnabled = true;
+            VersionValue.IsEnabled = true;
+            FormatDetectionValue.IsEnabled = true;
+            SeparatorValue.IsEnabled = true;
+            FormatVariationValue.IsEnabled = true;
+
+            //FormatType Felder deaktivieren
+            formatTypeDetection.IsEnabled = false;
+            formatTypeDescription.IsEnabled = false;
+            formatTypeEntitySeparator.IsEnabled = false;
         }
         /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen
@@ -157,6 +166,18 @@ namespace EDIViewer
             //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
             DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurVM)this.DataContext).FormatTypNewViewModel);
             dialogBoxNewFormatTyp.ShowDialog();
+        }
+        /// <summary>
+        /// Felder aktivieren wenn ein FormatTyp ausgewählt wird
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CbFormatTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Felder aktivieren
+            formatTypeDetection.IsEnabled = true;
+            formatTypeDescription.IsEnabled = true;
+            formatTypeEntitySeparator.IsEnabled = true;
         }
     }
 }

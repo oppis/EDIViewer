@@ -1,13 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows.Data;
-
 
 using EDIViewer.Models;
 using EDIViewer.Parser;
-
-using static EDIViewer.MainWindow;
 
 namespace EDIViewer.ViewModel
 {
@@ -34,6 +30,14 @@ namespace EDIViewer.ViewModel
             } 
         }
         public CollectionViewSource ViewSource { get; set; } = new CollectionViewSource();
+
+        public TransferInformation TransferInformation 
+        { 
+            get
+            {
+                return contentInformation.TransferInformation;
+            }
+        }
 
         //Event 
         public event PropertyChangedEventHandler PropertyChanged;

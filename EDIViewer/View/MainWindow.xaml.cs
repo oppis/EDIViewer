@@ -189,20 +189,6 @@ namespace EDIViewer
             //DataContext -> RawInformations
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
             DataContext = contentInformationViewModel;
-
-            //Aktuelle Datei Parsen
-            ParseFile parseFile = new();
-            parseFile.GetFileStructur(currentFileFormat);
-            parseFile.ProcessCurrentFile(viewLines);
-
-            //Informationen in Felder schreiben
-            ContentInformation contentInformation = parseFile.contentInformation;
-            TransferInformation transferInformation = contentInformation.TransferInformation;
-
-            SenderIDValue.Content = transferInformation.SenderID;
-            RecipientIDValue.Content = transferInformation.RecipientID;
-            DataReferenceValue.Content = transferInformation.DataReference;
-            DataTypeValue.Content = transferInformation.DataType;
         }
         public class Tasks : ObservableCollection<Task>
         {

@@ -128,34 +128,35 @@
                                 Grid.Row="0" Grid.Column="0"
                                 />
                         <Label  x:Name="DataTypeValue"
-                                Content="No Value!"
+                                Content="{Binding TransferInformation.DataType}"
                                 Grid.Row="0" Grid.Column="1"
                                 />
                         <Label Content="Datum"
                                 Grid.Row="1" Grid.Column="0"
                                 />
-                        <Label Content="No Value!"
+                        <Label x:Name="DataTime"
+                                Content="{Binding TransferInformation.DateTime}"
                                 Grid.Row="1" Grid.Column="1"
                                 />
                         <Label Content="Dateireferenz"
                                 Grid.Row="2" Grid.Column="0"
                                 />
                         <Label x:Name="DataReferenceValue"
-                                Content="No Value!"
+                                Content="{Binding TransferInformation.DataReference}"
                                Grid.Row="2" Grid.Column="1"
                                />
                         <Label Content="Versender ID"
                                 Grid.Row="3" Grid.Column="0"
                                 />
                         <Label x:Name="SenderIDValue"
-                                Content="No Value!"
+                                Content="{Binding TransferInformation.SenderID}"
                                 Grid.Row="3" Grid.Column="1"
                                 />
                         <Label Content="Empfänger ID"
                                 Grid.Row="4" Grid.Column="0"
                                 />
                         <Label x:Name="RecipientIDValue"
-                                Content="No Value!"
+                                Content="{Binding TransferInformation.RecipientID}"
                                 Grid.Row="4" Grid.Column="1"
                                 />
                     </Grid>

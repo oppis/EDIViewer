@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Data;
 
 using EDIViewer.Models;
 using EDIViewer.Parser;
@@ -17,9 +16,6 @@ namespace EDIViewer.ViewModel
             parseFile.ProcessCurrentFile(viewLines);
 
             contentInformation = parseFile.contentInformation;
-
-            ViewSource.Source = RawInformations;
-            ViewSource.GroupDescriptions.Add(new PropertyGroupDescription("RecordTyp"));
         }
 
         public ObservableCollection<RawInformation> RawInformations
@@ -29,8 +25,6 @@ namespace EDIViewer.ViewModel
                 return contentInformation.RawInformations;
             } 
         }
-        public CollectionViewSource ViewSource { get; set; } = new CollectionViewSource();
-
         public TransferInformation TransferInformation 
         { 
             get

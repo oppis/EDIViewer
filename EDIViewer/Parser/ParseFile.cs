@@ -2,6 +2,7 @@
 
 using EDIViewer.Models;
 using System.Collections.ObjectModel;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace EDIViewer.Parser
 {
@@ -25,6 +26,7 @@ namespace EDIViewer.Parser
 
             fileStructur = JsonConvert.DeserializeObject<FileStructur>(json);
         }
+
         /// <summary>
         /// Aktuelle Linie ermitteln
         /// </summary>
@@ -33,7 +35,13 @@ namespace EDIViewer.Parser
             string[] currentRecord = null;
 
             TransferInformation transferInformation = new();
+            
+            //Liste mit kompletten Inhalt erstellen
             ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweileis neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
+            ObservableCollection<RawInformation>[] rawInformationEntity = [];
+            ObservableCollection<RawInformation> rawInformationEntityTmp = [];
+            bool test_new = false;
+            FormatType currentFormatType = new();
 
             //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
             //Prüfung was für ein Format Typ
@@ -43,17 +51,18 @@ namespace EDIViewer.Parser
                 {
                     //Speichern des aktuellen FormatTyp
                     fileRecordTypes = formatType.RecordTypes;
-
+                    
                     //Speichern der Übertragung Informationen
                     transferInformation = new()
                     {
                         DataType = formatType.Description
                     };
+                    currentFormatType = formatType;
                 }
             }
 
             //Berücksichtigen ob Trennzeichen oder Feldlänge
-            if (fileStructur.FormatSeparator is not null && fileStructur.FormatSeparator.Length > 0)
+            if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))
             {
                 char seperator = fileStructur.FormatSeparator[0];
 
@@ -82,6 +91,7 @@ namespace EDIViewer.Parser
                                     FileRow = fileRowIndex
                                 };
 
+                                //Alle Einträge hinzufügen
                                 rawInformations.Add(currentRawInformation);
                             }
                         }
@@ -135,8 +145,23 @@ namespace EDIViewer.Parser
                                     };
 
                                     rawInformations.Add(currentRawInformation);
+                                    rawInformationEntityTmp.Add(currentRawInformation);
+
+                                    if (fileRow.Substring(fieldDefination.Start - 1, end).Contains("SHP") && fieldDefination.Position == 3)
+                                    {
+                                        test_new = true;
+                                    }
+
                                 }
                             }
+                        }
+
+                        //Liste erstellen mit einzelnen Inhalten
+                        if (test_new)
+                        {
+                            rawInformationEntity = rawInformationEntity.Append(rawInformationEntityTmp).ToArray();
+                            rawInformationEntityTmp.Clear();
+                            test_new = false;
                         }
                     }
                 }
@@ -146,8 +171,9 @@ namespace EDIViewer.Parser
             contentInformation = new()
             {
                 TransferInformation = transferInformation,
-                RawInformations = rawInformations
-            };  
+                RawInformations = rawInformations,
+                RawInformationEntity = rawInformationEntity
+            };
         }
         /// <summary>
         /// Aktuellen Format Typ ermitteln -> Verfügbar machen für Datei Load > Vorschlag

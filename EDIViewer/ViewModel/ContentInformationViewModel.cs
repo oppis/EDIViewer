@@ -29,6 +29,13 @@ namespace EDIViewer.ViewModel
                 return contentInformation.RawInformations;
             } 
         }
+        public ObservableCollection<RawInformation>[] RawInformationEntity
+        {
+            get
+            {
+                return contentInformation.RawInformationEntity;
+            }
+        }
         public CollectionViewSource ViewSource { get; set; } = new CollectionViewSource();
 
         public TransferInformation TransferInformation 

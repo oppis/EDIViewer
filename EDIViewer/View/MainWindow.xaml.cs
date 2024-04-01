@@ -14,6 +14,7 @@ using EDIViewer.Models;
 using EDIViewer.ViewModel;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
+using System.Windows.Controls;
 
 
 namespace EDIViewer
@@ -189,6 +190,7 @@ namespace EDIViewer
             //DataContext -> RawInformations
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
             DataContext = contentInformationViewModel;
+            test_entity();
         }
         /// <summary>
         /// Reagieren auf File Format Änderung
@@ -309,6 +311,28 @@ namespace EDIViewer
                     }
                 }
             }
+        }
+        private void test_entity()
+        {
+            int test_no = 0;
+            foreach (ObservableCollection<RawInformation> item in contentInformationViewModel.RawInformationEntity)
+            {
+                DataGrid dataGridEntity = new DataGrid();
+
+                dataGridEntity.ItemsSource = item;
+
+
+                TabItem newTabItem = new TabItem
+                {
+                    Header = test_no,
+                    Content = dataGridEntity,
+                };
+                test.Items.Add(newTabItem);
+
+                test_no = test_no + 1;
+            }
+            
+
         }
     }
 }

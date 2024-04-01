@@ -111,7 +111,12 @@
                           Width="2" Background="Black"/>
 
             <TabControl Grid.Row="0" Grid.Column="2">
-                <TabItem Header="Übertragung">
+                <TabItem Header="Test">
+                    <TabControl x:Name="test">
+                        
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="Übertragung" IsEnabled="False">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
@@ -161,7 +166,7 @@
                                 />
                     </Grid>
                 </TabItem>
-                <TabItem Header="Sendung ">
+                <TabItem Header="Sendung" IsEnabled="False">
                     <TabControl>
                         <TabItem Header="Sendung">
                             <Grid>
@@ -192,7 +197,7 @@
                         <TabItem Header="Sonder"></TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Header="Status">
+                <TabItem Header="Status" IsEnabled="False">
                     <TabControl>
                         <TabItem Header="Sendung"></TabItem>
                         <TabItem Header="Position"></TabItem>

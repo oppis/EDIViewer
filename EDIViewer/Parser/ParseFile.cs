@@ -16,6 +16,15 @@ namespace EDIViewer.Parser
         ObservableCollection<FieldDefination> fieldDefs;
         //Ausgabe Objekt
         public ContentInformation contentInformation;
+        //Aktueller Format Typ
+        FormatType currentFormatType;
+
+        //Original Datei
+        string[] origFile;
+
+        //Ausgabe Objekte
+        TransferInformation transferInformation = new();
+
         /// <summary>
         /// Prüfen aktuelle File Struktur
         /// </summary>
@@ -32,35 +41,19 @@ namespace EDIViewer.Parser
         /// </summary>
         public void ProcessCurrentFile(string[] file)
         {
-            string[] currentRecord = null;
+            origFile = file;   
 
-            TransferInformation transferInformation = new();
-            
+            //Aktuellen Formarmtyp bestimmen
+            GetFormatType();
+
+            string[] currentRecord = null;
+           
             //Liste mit kompletten Inhalt erstellen
-            ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweileis neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
+            ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweils neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
             ObservableCollection<RawInformation>[] rawInformationEntity = [];
             ObservableCollection<RawInformation> rawInformationEntityTmp = [];
             bool test_new = false;
-            FormatType currentFormatType = new();
-
-            //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
-            //Prüfung was für ein Format Typ
-            foreach (FormatType formatType in fileStructur.FormatTypes)
-            {
-                if (file[0].Contains(formatType.Detection))
-                {
-                    //Speichern des aktuellen FormatTyp
-                    fileRecordTypes = formatType.RecordTypes;
-                    
-                    //Speichern der Übertragung Informationen
-                    transferInformation = new()
-                    {
-                        DataType = formatType.Description
-                    };
-                    currentFormatType = formatType;
-                }
-            }
-
+            
             //Berücksichtigen ob Trennzeichen oder Feldlänge
             if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))
             {
@@ -179,8 +172,22 @@ namespace EDIViewer.Parser
         /// Aktuellen Format Typ ermitteln -> Verfügbar machen für Datei Load > Vorschlag
         /// </summary>
         public void GetFormatType()
-        { 
-        
+        {
+            //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
+            //Prüfung was für ein Format Typ
+            foreach (FormatType formatType in fileStructur.FormatTypes)
+            {
+                if (origFile[0].Contains(formatType.Detection)) //TODO -> Angabe im FormatManagement Wo die Information zu findne ist. -> Vielleicht in dem RecordType angeben.
+                {
+                    //Speichern des aktuellen RecordTypes
+                    fileRecordTypes = formatType.RecordTypes;
+
+                    //currentFormatType = formatType;
+
+                    //Speichern der Übertragung Informationen
+                    transferInformation.DataType = formatType.Description;
+                }
+            }
         }
         /// <summary>
         /// Aktuellen RecordType ermitteln

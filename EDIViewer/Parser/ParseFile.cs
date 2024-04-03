@@ -24,6 +24,9 @@ namespace EDIViewer.Parser
 
         //Ausgabe Objekte
         TransferInformation transferInformation = new();
+        ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweils neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
+        ObservableCollection<RawInformation>[] rawInformationEntity = [];
+        ObservableCollection<RawInformation> rawInformationEntityTmp = [];
 
         /// <summary>
         /// Prüfen aktuelle File Struktur
@@ -48,10 +51,7 @@ namespace EDIViewer.Parser
 
             string[] currentRecord = null;
            
-            //Liste mit kompletten Inhalt erstellen
-            ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweils neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
-            ObservableCollection<RawInformation>[] rawInformationEntity = [];
-            ObservableCollection<RawInformation> rawInformationEntityTmp = [];
+
             bool test_new = false;
             
             //Berücksichtigen ob Trennzeichen oder Feldlänge
@@ -160,13 +160,7 @@ namespace EDIViewer.Parser
                 }
             }
 
-            //Gefundene Informationen in übergabe Objekt speichern
-            contentInformation = new()
-            {
-                TransferInformation = transferInformation,
-                RawInformations = rawInformations,
-                RawInformationEntity = rawInformationEntity
-            };
+            BuildInfoObject();
         }
         /// <summary>
         /// Aktuellen Format Typ ermitteln -> Verfügbar machen für Datei Load > Vorschlag
@@ -189,12 +183,24 @@ namespace EDIViewer.Parser
                 }
             }
         }
+
         /// <summary>
         /// Aktuellen RecordType ermitteln
         /// </summary>ObservableCollection
         private void ProcessCurrentRecord()
         {
 
+        }
+        //Zusammenfassen der Informationen 
+        private void BuildInfoObject()
+        {
+            //Gefundene Informationen in übergabe Objekt speichern
+            contentInformation = new()
+            {
+                TransferInformation = transferInformation,
+                RawInformations = rawInformations,
+                RawInformationEntity = rawInformationEntity
+            };
         }
     }
 }

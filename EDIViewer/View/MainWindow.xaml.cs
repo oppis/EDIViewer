@@ -40,6 +40,8 @@ namespace EDIViewer
         {
             InitializeComponent();
 
+            //Aktuelle Einstellungen FormatsFolder
+
             //Aktuelle Formate laden
             Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
 

@@ -21,6 +21,7 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveCurrentFormatsFolder();
             this.Close();
         }
         /// <summary>
@@ -32,6 +33,22 @@ namespace EDIViewer
         {
             DialogResult = false;
             this.Close();
+        }
+        /// <summary>
+        /// Show Message Box for Messages for User
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private static MessageBoxResult ShowMessageBox(string title, string message)
+        {
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBoxResult result;
+
+            result = MessageBox.Show(message, title, button, icon, MessageBoxResult.Yes);
+
+            return result;
         }
         /// <summary>
         /// Öffnen eines File Dialog auswahl des Datei Pfads
@@ -48,6 +65,40 @@ namespace EDIViewer
 
                 formatPath.Text = formatFilesPath;
             }
+        }
+        private void LoadCurrentFormatFilePath()
+        {
+
+        }
+        /// <summary>
+        /// Speichern des aktuellen Format Ordner in Registry
+        /// </summary>
+        /// <returns></returns>
+        private bool SaveCurrentFormatsFolder()
+        {
+            //Status zurückgeben ob Erfolgreich gespeichert
+            bool saveStatus = false;
+
+            string currentFormatsFolder = formatPath.Text;
+
+            try
+            {
+                //Setzen Refitry Key
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
+                key.CreateSubKey("EDI-Viewer");
+                key = key.OpenSubKey("EDI-Viewer", true);
+
+                key.SetValue("FormatsFolder", currentFormatsFolder);
+
+                saveStatus = true;
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Einstellungen - Fehler", ex.Message);
+                throw;
+            }
+
+            return saveStatus;
         }
     }
 }

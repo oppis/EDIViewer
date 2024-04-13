@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="View\DialogBox_Settings.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\DialogBox_NewFormatTyp.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -32,11 +32,33 @@
             </Grid.RowDefinitions>
 
             <Rectangle Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Fill="BlueViolet" AllowDrop="True" Drop="File_Drop"/>
-            <Button Grid.Column="1" Grid.Row="0" Height="20" Name="LoadFile" Content="Datei Laden" Margin="5,5,5,5" Click="LoadFile_Click"></Button>
-            <Label Grid.Column="2" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Content="Dateipfad: "></Label>
-            <TextBlock Grid.Column="3" Grid.Row="0" Name="txtFilePath" Text="Dateipfad" VerticalAlignment="Center"></TextBlock>
-            <Label Grid.Column="4" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Content="Dateiname: "></Label>
-            <TextBlock Grid.Column="5" Grid.Row="0" Name="txtFileName" Text="Dateiname" VerticalAlignment="Center"></TextBlock>
+            <Button Name="LoadFile" 
+                    Content="Datei Laden"
+                    Grid.Column="1" Grid.Row="0" 
+                    Height="20" 
+                    Margin="5,5,5,5"
+                    Click="LoadFile_Click"></Button>
+            <Label Content="Dateipfad: "
+                   Grid.Column="2" Grid.Row="0" 
+                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            <TextBlock Name="txtFilePath" 
+                       Text="Dateipfad" 
+                       Grid.Column="3" Grid.Row="0" 
+                       VerticalAlignment="Center"/>
+            <Label Content="Dateiname: "
+                   Grid.Column="4" Grid.Row="0" 
+                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            <TextBlock Name="txtFileName" 
+                       Text="Dateiname" 
+                       VerticalAlignment="Center"
+                       Grid.Column="5" Grid.Row="0"/>
+
+            <Button Content="Einstellungen"
+                    Grid.Row="0" Grid.Column="6"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Height="20" 
+                    Margin="5,5,5,5"
+                    Click="OpenSettings"/>
 
             <Label Content="Dateiformat: "
                     Grid.Row="1" Grid.Column="0" 
@@ -48,6 +70,7 @@
                     IsEnabled="False"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                     SelectionChanged="CbFileFormat_SelectionChanged"/>
+
             <Label Content="Zeichensatz: "
                     Grid.Row="1" Grid.Column="4" 
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>

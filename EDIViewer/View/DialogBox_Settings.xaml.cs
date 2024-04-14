@@ -11,8 +11,11 @@ namespace EDIViewer
     public partial class DialogBox_Settings : Window
     {
         public DialogBox_Settings()
-        {
+        {           
             InitializeComponent();
+
+            //Laden der Aktuellen Einstellung für den Formats Pfad
+            LoadCurrentFormatFilePath();
         }
         /// <summary>
         /// Fenster schließen beim Speichern 
@@ -66,9 +69,21 @@ namespace EDIViewer
                 formatPath.Text = formatFilesPath;
             }
         }
+        /// <summary>
+        /// Aktuellen Wert aus der Datenbank holen
+        /// </summary>
         private void LoadCurrentFormatFilePath()
         {
-
+            try
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software");
+                key = key.OpenSubKey("EDI-Viewer");
+                formatPath.Text = key.GetValue("FormatsFolder").ToString();
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Einstellungen Fehler", ex.Message);
+            }
         }
         /// <summary>
         /// Speichern des aktuellen Format Ordner in Registry
@@ -83,11 +98,10 @@ namespace EDIViewer
 
             try
             {
-                //Setzen Refitry Key
+                //Setzen Registry Key
                 RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
                 key.CreateSubKey("EDI-Viewer");
                 key = key.OpenSubKey("EDI-Viewer", true);
-
                 key.SetValue("FormatsFolder", currentFormatsFolder);
 
                 saveStatus = true;

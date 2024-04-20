@@ -16,7 +16,7 @@ namespace EDIViewer
     public partial class FormatManagement : Window
     {
         //ViewModel für Daten Kontext
-        FileStructurVM fileStructurVM;
+        FileStructurViewModel fileStructurViewModel;
        
         /// <summary>
         /// Start des Fensters
@@ -47,7 +47,7 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
-            fileStructurVM.SaveFile();
+            fileStructurViewModel.SaveFile();
             
             DialogResult = true;
             this.Close();
@@ -74,8 +74,8 @@ namespace EDIViewer
             KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
 
             //Datei Infos in JSON lesen
-            fileStructurVM = new FileStructurVM(selectedPath.Value);
-            DataContext = fileStructurVM;
+            fileStructurViewModel = new FileStructurViewModel(selectedPath.Value);
+            DataContext = fileStructurViewModel;
 
             //Felder aktivieren
             cbFormatTyp.IsEnabled = true;
@@ -88,7 +88,8 @@ namespace EDIViewer
             //FormatType Felder deaktivieren
             formatTypeDetection.IsEnabled = false;
             formatTypeDescription.IsEnabled = false;
-            formatTypeEntitySeparator.IsEnabled = false;
+            formatTypeEntitySeparatorStart.IsEnabled = false;
+            formatTypeEntitySeparatorEnd.IsEnabled = false;
         }
         /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen
@@ -131,7 +132,7 @@ namespace EDIViewer
                             Mandatory = Convert.ToBoolean(line[6]),
                             MappingField = line[7]
                         };
-                        fileStructurVM.SelectedRecordType.FieldDefinations.Add(fieldDefination);
+                        fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
                     }
                 }
             }
@@ -164,7 +165,7 @@ namespace EDIViewer
         private void CreateNewFormatTyp_Click(object sender, RoutedEventArgs e)
         {
             //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
-            DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurVM)this.DataContext).FormatTypNewViewModel);
+            DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurViewModel)this.DataContext).FormatTypNewViewModel);
             dialogBoxNewFormatTyp.ShowDialog();
         }
         /// <summary>
@@ -177,7 +178,8 @@ namespace EDIViewer
             //Felder aktivieren
             formatTypeDetection.IsEnabled = true;
             formatTypeDescription.IsEnabled = true;
-            formatTypeEntitySeparator.IsEnabled = true;
+            formatTypeEntitySeparatorStart.IsEnabled = true;
+            formatTypeEntitySeparatorEnd.IsEnabled = true;
         }
     }
 }

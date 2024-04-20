@@ -7,11 +7,11 @@ using EDIViewer.Models;
 
 namespace EDIViewer.ViewModel
 {
-    public class FileStructurVM : INotifyPropertyChanged
+    public class FileStructurViewModel : INotifyPropertyChanged
     {
         private static FileStructur fileStructurModel;
         public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
-        public FileStructurVM(string currentFileFormat)
+        public FileStructurViewModel(string currentFileFormat)
         {
             //string currentFileFormat = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", "Fortras100.JSON"));
             string json = File.ReadAllText(currentFileFormat);

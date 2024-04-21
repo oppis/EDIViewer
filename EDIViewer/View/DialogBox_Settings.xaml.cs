@@ -17,6 +17,7 @@ namespace EDIViewer
             //Laden der Aktuellen Einstellung für den Formats Pfad
             LoadCurrentFormatFilePath();
         }
+        
         /// <summary>
         /// Fenster schließen beim Speichern 
         /// </summary>
@@ -25,9 +26,13 @@ namespace EDIViewer
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             SaveCurrentFormatsFolder();
+
+            DialogResult = true;
+
             this.Close();
         }
-        /// <summary>
+        
+        // <summary>
         /// Fenster schließen ohne Speichern
         /// </summary>
         /// <param name="sender"></param>
@@ -37,6 +42,7 @@ namespace EDIViewer
             DialogResult = false;
             this.Close();
         }
+        
         /// <summary>
         /// Show Message Box for Messages for User
         /// </summary>
@@ -53,6 +59,7 @@ namespace EDIViewer
 
             return result;
         }
+
         /// <summary>
         /// Öffnen eines File Dialog auswahl des Datei Pfads
         /// </summary>
@@ -69,6 +76,7 @@ namespace EDIViewer
                 formatPath.Text = formatFilesPath;
             }
         }
+
         /// <summary>
         /// Aktuellen Wert aus der Datenbank holen
         /// </summary>
@@ -85,6 +93,7 @@ namespace EDIViewer
                 ShowMessageBox("Einstellungen Fehler", ex.Message);
             }
         }
+
         /// <summary>
         /// Speichern des aktuellen Format Ordner in Registry
         /// </summary>

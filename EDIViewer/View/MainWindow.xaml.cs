@@ -4,7 +4,6 @@ using System.Text;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using Microsoft.Win32;
 
@@ -42,12 +41,7 @@ namespace EDIViewer
 
             //Aktuelle Einstellungen FormatsFolder
 
-            //Aktuelle Formate laden
-            Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
-
-            //Aktuelle Formate in ComboBox laden und nur den Format Typ anzeigen
-            cbFileFormat.ItemsSource = currentFormatFiles;
-            cbFileFormat.DisplayMemberPath = "Key";
+            SetFormatCb();
 
             //Bereinigen der RichTextBox -> Beim erstellen wird ein Absatz erstellt
             fileOriginalView.Document.Blocks.Clear();
@@ -62,6 +56,19 @@ namespace EDIViewer
             //Default Zeichensatz
             fileEncodingSelected = Encoding.Default;
         }
+
+        private void SetFormatCb()
+        {
+            cbFileFormat.ItemsSource = null;
+            
+            //Aktuelle Formate laden
+            Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
+
+            //Aktuelle Formate in ComboBox laden und nur den Format Typ anzeigen
+            cbFileFormat.ItemsSource = currentFormatFiles;
+            cbFileFormat.DisplayMemberPath = "Key";
+        }
+
         /// <summary>
         /// Show Message Box for Messages for User
         /// </summary>
@@ -78,6 +85,7 @@ namespace EDIViewer
 
             return result;
         }
+
         /// <summary>
         /// Öffnen der Verwaltung Formate
         /// </summary>
@@ -101,6 +109,7 @@ namespace EDIViewer
                 }
             }
         }
+        
         /// <summary>
         /// Öffnen der Einstellungen
         /// </summary>
@@ -117,7 +126,7 @@ namespace EDIViewer
             //Aktion wenn Fenster geschlossen wurde
             if ((bool)windowStatus)
             {
-                //Mit Ok geschlossen
+                SetFormatCb();
             }
         }
         #region Load Files
@@ -147,6 +156,7 @@ namespace EDIViewer
                 File_LoadView();
             }
         }    
+        
         /// <summary>
         /// Reagieren auf File Drop
         /// </summary>
@@ -173,6 +183,7 @@ namespace EDIViewer
             }
         }
         #endregion
+        
         /// <summary>
         /// Laden der Datei Ansicht
         /// </summary>
@@ -194,6 +205,7 @@ namespace EDIViewer
                 ShowMessageBox("Datei öffnen", "Fehler: " + ex.Message);
             }
         }
+        
         /// <summary>
         /// Starten des Parsen der Datei
         /// </summary>
@@ -208,6 +220,7 @@ namespace EDIViewer
             DataContext = contentInformationViewModel;
             test_entity();
         }
+        
         /// <summary>
         /// Reagieren auf File Format Änderung
         /// </summary>
@@ -223,6 +236,7 @@ namespace EDIViewer
 
             StartParsingFile();
         }
+        
         /// <summary>
         /// Reagieren auf Änderung des Zeichensatzes
         /// </summary>
@@ -239,6 +253,7 @@ namespace EDIViewer
                 File_LoadView();
             }
         }
+        
         /// <summary>
         /// Suche Starten und Text markieren
         /// </summary>

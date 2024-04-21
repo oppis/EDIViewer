@@ -1,20 +1,16 @@
 ﻿using System.IO;
-using System.Data;
-using System.Reflection;
 using System.Windows;
 using System.Text;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using Microsoft.Win32;
 
 using EDIViewer.Helper;
-using EDIViewer.Parser;
 using EDIViewer.Models;
 using EDIViewer.ViewModel;
-using System.Collections.ObjectModel;
-using System.Windows.Data;
-
 
 namespace EDIViewer
 {
@@ -36,12 +32,15 @@ namespace EDIViewer
         //View Variables
         private int SearchStart = -1;
         ContentInformationViewModel contentInformationViewModel;
+
         /// <summary>
-        /// Start des Fensters
+        /// Start des Fensters  
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+
+            //Aktuelle Einstellungen FormatsFolder
 
             //Aktuelle Formate laden
             Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
@@ -102,6 +101,25 @@ namespace EDIViewer
                 }
             }
         }
+        /// <summary>
+        /// Öffnen der Einstellungen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenSettings(object sender, RoutedEventArgs e)
+        {
+            DialogBox_Settings windowSettings = new()
+            {
+                Owner = this
+            };
+            bool? windowStatus = windowSettings.ShowDialog();
+
+            //Aktion wenn Fenster geschlossen wurde
+            if ((bool)windowStatus)
+            {
+                //Mit Ok geschlossen
+            }
+        }
         #region Load Files
         /// <summary>
         /// Datei Explorer Starten
@@ -136,7 +154,6 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void File_Drop(object sender, DragEventArgs e)
         {
-
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -189,6 +206,7 @@ namespace EDIViewer
             //DataContext -> RawInformations
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
             DataContext = contentInformationViewModel;
+            test_entity();
         }
         /// <summary>
         /// Reagieren auf File Format Änderung
@@ -308,6 +326,26 @@ namespace EDIViewer
                         searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Yellow));
                     }
                 }
+            }
+        }
+        private void test_entity()
+        {
+            int test_no = 0;
+            foreach (List<RawInformation> item in contentInformationViewModel.RawInformationEntity)
+            {
+                DataGrid dataGridEntity = new()
+                {
+                    ItemsSource = item
+                };
+
+                TabItem newTabItem = new()
+                {
+                    Header = test_no,
+                    Content = dataGridEntity,
+                };
+                test.Items.Add(newTabItem);
+
+                test_no++;
             }
         }
     }

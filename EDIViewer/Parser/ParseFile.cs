@@ -1,22 +1,35 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
-using System.Collections.ObjectModel;
 
 namespace EDIViewer.Parser
 {
     class ParseFile
     {
-        //Datei Struktur für aktuelles Format
+        //Datei Inahlt
+        string[] origFile;
+        string[] currentFileRowArray;
+        string currentAufNr = string.Empty;
+
+        //Datei Struktur für ausgewähltes Format
         FileStructur fileStructur;
-        //Aktuelle Satzart zwischen speichern
-        ObservableCollection<RecordType> fileRecordTypes;
-        //Aktuelle Felder zwischen speichern
-        ObservableCollection<FieldDefination> fieldDefs;
-        //Ausgabe Objekt
+
+        //Aktuelle Definitionen zwischen Speichern
+        FormatType currentFormatType;
+        ObservableCollection<RecordType> currentRecordTypes;
+        RecordType currentRecordType;
+        ObservableCollection<FieldDefination> currentFieldDefiniations;
+
+        //Ausgabe Objekte
         public ContentInformation contentInformation;
+        readonly TransferInformation transferInformation = new();
+        readonly ObservableCollection<RawInformation> rawInformations = [];
+        readonly List<List<RawInformation>> rawInformationEntity = [];
+        List<RawInformation> rawInformationEntityTmp = [];
+
         /// <summary>
-        /// Prüfen aktuelle File Struktur
+        /// Aktuelle File Struktur als Objekt laden aus JSON Datei
         /// </summary>
         public void GetFileStructur(string currentFileStructur)
         {
@@ -25,97 +38,163 @@ namespace EDIViewer.Parser
 
             fileStructur = JsonConvert.DeserializeObject<FileStructur>(json);
         }
+
         /// <summary>
-        /// Aktuelle Linie ermitteln
+        /// Aktuellen Formattyp und Recordtypes ermitteln //TODO -> Verfügbar machen für Datei Load > Vorschlag
         /// </summary>
-        public void ProcessCurrentFile(string[] file)
+        private bool GetFormatType()
         {
-            string[] currentRecord = null;
-
-            TransferInformation transferInformation = new();
-            ObservableCollection<RawInformation> rawInformations = []; //TODO -> Liste für jeweileis neuen Datensatz -> Neuer Auftrag / Statusmeldung -> Markierung  in FormatManagement
-
+            bool status = false;
+            
             //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
-            //Prüfung was für ein Format Typ
             foreach (FormatType formatType in fileStructur.FormatTypes)
             {
-                if (file[0].Contains(formatType.Detection))
+                if (origFile[0].Contains(formatType.Detection))
                 {
-                    //Speichern des aktuellen FormatTyp
-                    fileRecordTypes = formatType.RecordTypes;
+                    //Setzen des aktuellen Format Typs
+                    currentFormatType = formatType;
+
+                    //Setzen der aktuellen RecordTypes
+                    currentRecordTypes = formatType.RecordTypes;
 
                     //Speichern der Übertragung Informationen
-                    transferInformation = new()
-                    {
-                        DataType = formatType.Description
-                    };
+                    transferInformation.DataType = formatType.Description;
+
+                    status = true;
                 }
             }
 
-            //Berücksichtigen ob Trennzeichen oder Feldlänge
-            if (fileStructur.FormatSeparator is not null && fileStructur.FormatSeparator.Length > 0)
+            return status;
+        }
+        
+        /// <summary>
+        /// Aktuelle Feld Defition zum aktuellen Record Typ erhalten
+        /// </summary>
+        /// <param name="currentFileRow">Aktuelle Zeile</param>
+        private bool GetCurrentFieldDefinations(string currentFileRow)
+        {
+            bool status = false;
+            
+            if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))// Es handelt sich um eine CSV Datei
             {
-                char seperator = fileStructur.FormatSeparator[0];
-
-                //Aktuelle Zeile 
-                int fileRowIndex = 0;
-
-                foreach (string fileRow in file)
+                foreach (RecordType recordType in currentRecordTypes)
                 {
-                    fileRowIndex++;
+                    currentFileRowArray = currentFileRow.Split([fileStructur.FormatSeparator[0]]);
 
-                    // Es handelt sich um eine CSV Datei
-                    currentRecord = fileRow.Split([seperator]);
-                    foreach (RecordType recordType in fileRecordTypes)
+                    if (currentFileRowArray[0].StartsWith(recordType.RecordDetection))
                     {
-                        if (currentRecord[0].StartsWith(recordType.RecordDetection))
-                        {
-                            fieldDefs = recordType.FieldDefinations;
+                        currentRecordType = recordType;
+                        currentFieldDefiniations = recordType.FieldDefinations;
 
-                            for (int i = 0; i < currentRecord.Length; i++)
+                        status = true;
+                    }
+                }
+            }
+            else //Datei mit Feldlänge
+            {
+                foreach (RecordType recordType in currentRecordTypes)
+                {
+                    //Prüfen welcher Record Typ genutzt wird
+                    if (currentFileRow.StartsWith(recordType.RecordDetection))
+                    {
+                        //Setzen der aktuellen Felder
+                        currentRecordType = recordType;
+                        currentFieldDefiniations = recordType.FieldDefinations;
+                        
+                        status = true;
+                    }
+                }
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// Parsen der Datei
+        /// </summary>
+        /// <param name="file">Datei -> Array -> Je Zeile</param>
+        public void ProcessCurrentFile(string[] file)
+        {
+            origFile = file;   
+
+            //Aktuellen Formarmtyp bestimmen
+            bool status = GetFormatType();
+   
+            if (status) 
+            {
+                //Berücksichtigen ob Trennzeichen oder Feldlänge
+                if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))
+                {
+                    //Aktuelle Zeile 
+                    int fileRowIndex = 0;
+
+                    foreach (string fileRow in file)
+                    {
+                        fileRowIndex++;
+
+                        //Prüfung ob Field Definitionen gefunden wurden
+                        bool returnStatus = GetCurrentFieldDefinations(fileRow);
+                        if (returnStatus)
+                        {
+                            for (int i = 0; i < currentFileRowArray.Length; i++)
                             {
+                                string oldAufNr = currentAufNr;
+                                //Ermitteln der aktuellen Auftragsnummer
+                                currentAufNr = currentFileRowArray[currentFormatType.EntitySeparatorStart]; 
+
+                                //Neue Liste erstellen wenn neue Einheit kommt
+                                if (oldAufNr != currentAufNr)
+                                {
+                                    rawInformationEntityTmp = [];
+                                }
+
                                 RawInformation currentRawInformation = new()
                                 {
-                                    RecordTyp = recordType.Name,
-                                    Field = fieldDefs[i].Name,
-                                    FieldContent = currentRecord[i],
-                                    FileRow = fileRowIndex
+                                    RecordTyp = currentRecordType.Name,
+                                    Field = currentFieldDefiniations[i].Name,
+                                    FieldContent = currentFileRowArray[i],
+                                    FileRow = fileRowIndex,
+                                    AufNr = currentAufNr,
                                 };
 
+                                //Alle Einträge hinzufügen
                                 rawInformations.Add(currentRawInformation);
+
+                                //Listen mit Gruppierung nach AufNr erstellen
+                                rawInformationEntityTmp.Add(currentRawInformation);
+
+                                //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
+                                if (oldAufNr != currentAufNr)
+                                {
+                                    rawInformationEntity.Add(rawInformationEntityTmp);
+                                }
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                //Aktuelle Zeile 
-                int fileRowIndex = 0;
-
-                //Weitere Zielen ermitteln und prüfen
-                foreach (string fileRow in file)
+                //Parsen mit Feldlänge
+                else 
                 {
-                    fileRowIndex++;
+                    //Aktuelle Zeile 
+                    int fileRowIndex = 0;
 
-                    //Jede Satzart durchgehen
-                    foreach (RecordType recordType in fileRecordTypes)
+                    //Weitere Zielen ermitteln und prüfen
+                    foreach (string fileRow in file)
                     {
-                        //Prüfen welcher Record Typ genutzt wird
-                        if (fileRow.StartsWith(recordType.RecordDetection))
-                        {
-                            //Setzen der aktuellen Felder
-                            fieldDefs = recordType.FieldDefinations;
+                        fileRowIndex++;
 
+                        bool returnstatus = GetCurrentFieldDefinations(fileRow);
+                        if (returnstatus)
+                        {
                             //Alle Felder Definitionen durchgehen
-                            foreach (FieldDefination fieldDefination in fieldDefs)
+                            foreach (FieldDefination fieldDefination in currentFieldDefiniations)
                             {
-                                //Prüfen ob Start noch in der Zeile vorhanden ist
+                                //Prüfen ob Feld noch in der Zeile vorhanden ist
                                 if ((fieldDefination.Start - 1) <= fileRow.Length)
                                 {
                                     //Aktuelle Länge speichern
                                     int end = fieldDefination.Length;
-                                    
+
                                     //Position vom Ende bestimmen
                                     int position = (fieldDefination.Start - 1) + fieldDefination.Length;
 
@@ -126,42 +205,59 @@ namespace EDIViewer.Parser
                                         end = fileRow.Length - (fieldDefination.Start - 1);
                                     }
 
+                                    string oldAufNr = currentAufNr;
+                                    //Ermitteln der aktuellen Auftragsnummer
+                                    currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
+
+                                    //Neue Liste erstellen wenn neue Einheit kommt
+                                    if (oldAufNr != currentAufNr)
+                                    {
+                                        rawInformationEntityTmp = [];
+                                    }
+
+                                    //Ausgabe in Rein Form erstellen
                                     RawInformation currentRawInformation = new()
                                     {
-                                        RecordTyp = recordType.Name,
+                                        RecordTyp = currentRecordType.Name,
                                         Field = fieldDefination.Name,
                                         FieldContent = fileRow.Substring(fieldDefination.Start - 1, end),
-                                        FileRow = fileRowIndex
+                                        FileRow = fileRowIndex,
+                                        AufNr = currentAufNr,
                                     };
 
+                                    //Alle Informationen sammeln
                                     rawInformations.Add(currentRawInformation);
+
+                                    //Listen mit Gruppierung nach AufNr erstellen
+                                    rawInformationEntityTmp.Add(currentRawInformation);
+
+                                    //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
+                                    if (oldAufNr != currentAufNr)
+                                    {
+                                        rawInformationEntity.Add(rawInformationEntityTmp);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
+                BuildInfoObject();
+            }
+        }
+
+        /// <summary>
+        /// Erstellen des Rückgabe Objekt
+        /// </summary>
+        private void BuildInfoObject()
+        {
             //Gefundene Informationen in übergabe Objekt speichern
             contentInformation = new()
             {
                 TransferInformation = transferInformation,
-                RawInformations = rawInformations
-            };  
-        }
-        /// <summary>
-        /// Aktuellen Format Typ ermitteln -> Verfügbar machen für Datei Load > Vorschlag
-        /// </summary>
-        public void GetFormatType()
-        { 
-        
-        }
-        /// <summary>
-        /// Aktuellen RecordType ermitteln
-        /// </summary>ObservableCollection
-        private void ProcessCurrentRecord()
-        {
-
+                RawInformations = rawInformations,
+                RawInformationEntity = rawInformationEntity
+            };
         }
     }
 }

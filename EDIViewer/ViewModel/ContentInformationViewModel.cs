@@ -25,6 +25,13 @@ namespace EDIViewer.ViewModel
                 return contentInformation.RawInformations;
             } 
         }
+        public List<List<RawInformation>> RawInformationEntity
+        {
+            get
+            {
+                return contentInformation.RawInformationEntity;
+            }
+        }
         public TransferInformation TransferInformation 
         { 
             get

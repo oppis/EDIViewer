@@ -34,19 +34,7 @@ namespace EDIViewer.Helper
             Dictionary<string, string> currentFormatFiles = [];
 
             //Datei Speicherort
-
-            string formatFileFolderReg = LoadCurrentFormatFilePath();
-            string formatFileFolderFail = Path.Combine(Environment.CurrentDirectory, "Formate");
-            string formatFileLocation;
-            if (string.IsNullOrEmpty(formatFileFolderReg))
-            {
-                //Wenn kein Verzeichnis in Registry
-                 formatFileLocation = formatFileFolderFail;
-            }
-            else
-            {
-                formatFileLocation = formatFileFolderReg;
-            }
+            string formatFileLocation = LoadCurrentFormatFolderPath();
 
             try
             {
@@ -68,12 +56,43 @@ namespace EDIViewer.Helper
         }
 
         /// <summary>
-        /// Ordner Pfad aus der Registry ermitteln
+        /// Ordner Pfad mit Fallback ermitteln
         /// </summary>
-        private static string LoadCurrentFormatFilePath()
+        public static string LoadCurrentFormatFolderPath()
         {
             string folderPath = string.Empty;
             
+            try
+            {
+                string formatFileFolderReg = LoadCurrentFormatFolderPathReg();
+                string formatFileFolderFail = Path.Combine(Environment.CurrentDirectory, "Formate");
+
+                if (string.IsNullOrEmpty(formatFileFolderReg))
+                {
+                    //Wenn kein Verzeichnis in Registry
+                    folderPath = formatFileFolderFail;
+                }
+                else
+                {
+                    folderPath = formatFileFolderReg;
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Einstellungen Fehler", ex.Message);
+            }
+
+            return folderPath;
+        }
+
+        /// <summary>
+        /// Format Folder Path aus der Registry ermitteln
+        /// </summary>
+        /// <returns></returns>
+        private static string LoadCurrentFormatFolderPathReg()
+        {
+            string folderPath = string.Empty;
+         
             try
             {
                 RegistryKey key = Registry.CurrentUser.OpenSubKey("Software");

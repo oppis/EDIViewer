@@ -44,6 +44,8 @@
                 Grid.Column="0" Grid.Row="0"
                 Grid.ColumnSpan="2"
                 Margin="5,5,5,5"
+                Width="150"
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                 HorizontalAlignment="Center" VerticalAlignment="Center" 
                 Click="ClickLoadFileFormatPath"/>
 

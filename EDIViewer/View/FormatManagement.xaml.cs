@@ -67,7 +67,17 @@ namespace EDIViewer
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
             fileStructurViewModel.SaveFile();
-            
+        }
+
+        /// <summary>
+        /// Speichern der Informationen aus dem Fenster und Schließen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            fileStructurViewModel.SaveFile();
+
             DialogResult = true;
             this.Close();
         }

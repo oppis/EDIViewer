@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 
 using EDIViewer.Models;
+using EDIViewer.Helper;
 
 namespace EDIViewer.ViewModel
 {
@@ -39,7 +40,8 @@ namespace EDIViewer.ViewModel
         public void SaveFile()
         {
             string output = JsonConvert.SerializeObject(fileStructurModel);
-            string formatFilePath = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", fileStructurModel.FormatName + ".JSON"));
+
+            string formatFilePath = Path.Combine(FormatFiles.LoadCurrentFormatFolderPath(), fileStructurModel.FormatName + "_" +  fileStructurModel.FormatVariation + ".JSON");
             File.WriteAllText(formatFilePath, output);
         }
         public int FormatVersion

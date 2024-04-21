@@ -28,6 +28,24 @@ namespace EDIViewer
             //Aktuelle Formate laden
             LoadFormatFiles();
         }
+
+        /// <summary>
+        /// Show Message Box for Messages for User
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private static MessageBoxResult ShowMessageBox(string title, string message)
+        {
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBoxResult result;
+
+            result = MessageBox.Show(message, title, button, icon, MessageBoxResult.Yes);
+
+            return result;
+        }
+
         /// <summary>
         /// Laden der vorhanden Format Definitionen
         /// </summary>
@@ -40,6 +58,7 @@ namespace EDIViewer
             cbFormat.DisplayMemberPath = "Key";
         }
         #region Fenster Verwaltung
+
         /// <summary>
         /// Speichern der Informationen aus dem Fenster
         /// </summary>
@@ -52,6 +71,7 @@ namespace EDIViewer
             DialogResult = true;
             this.Close();
         }
+
         /// <summary>
         /// Fenster schließen ohne Speichern
         /// </summary>
@@ -62,6 +82,7 @@ namespace EDIViewer
             DialogResult = false;
             this.Close();
         }
+
         #endregion
         /// <summary>
         /// Reagieren auf auswahl der Datei Struktur
@@ -91,6 +112,7 @@ namespace EDIViewer
             formatTypeEntitySeparatorStart.IsEnabled = false;
             formatTypeEntitySeparatorLength.IsEnabled = false;
         }
+
         /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen
         /// </summary>
@@ -98,43 +120,50 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void DataGridView1_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
+            try
             {
-                if (!Clipboard.ContainsText())
+                if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
                 {
-                    Console.WriteLine("Clipboard does not containt any text to paste.");
-                    return;
-                }
-
-                //Uses tab as the default separator, but if there's no tab, use the system's default
-
-                String textSeparator = (Clipboard.GetText().Contains("\t")) ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-
-                List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
-
-                List<String[]> cleanLines = clipboardAsList
-                 .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
-                 .ToList<String[]>()
-                 ;
-
-                foreach (String[] line in cleanLines)
-                {
-                    if (line.Length == 8)
+                    if (!Clipboard.ContainsText())
                     {
-                        FieldDefination fieldDefination = new()
+                        Console.WriteLine("Clipboard does not containt any text to paste.");
+                        return;
+                    }
+
+                    //Uses tab as the default separator, but if there's no tab, use the system's default
+
+                    String textSeparator = Clipboard.GetText().Contains('\t') ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+
+                    List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
+
+                    List<String[]> cleanLines = clipboardAsList
+                     .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
+                     .ToList<String[]>()
+                     ;
+
+                    foreach (String[] line in cleanLines)
+                    {
+                        if (line.Length == 8)
                         {
-                            Position = Convert.ToInt16(line[0]),
-                            Name = line[1],
-                            Start = Convert.ToInt16(line[2]),
-                            Length = Convert.ToInt16(line[3]),
-                            Description = line[4],
-                            DataType = line[5],
-                            Mandatory = Convert.ToBoolean(line[6]),
-                            MappingField = line[7]
-                        };
-                        fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
+                            FieldDefination fieldDefination = new()
+                            {
+                                Position = Convert.ToInt16(line[0]),
+                                Name = line[1],
+                                Start = Convert.ToInt16(line[2]),
+                                Length = Convert.ToInt16(line[3]),
+                                Description = line[4],
+                                DataType = line[5],
+                                Mandatory = Convert.ToBoolean(line[6]),
+                                MappingField = line[7]
+                            };
+                            fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
             }
         }
         /// <summary>

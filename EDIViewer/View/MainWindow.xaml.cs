@@ -333,9 +333,10 @@ namespace EDIViewer
             int test_no = 0;
             foreach (List<RawInformation> item in contentInformationViewModel.RawInformationEntity)
             {
-                DataGrid dataGridEntity = new();
-
-                dataGridEntity.ItemsSource = item;
+                DataGrid dataGridEntity = new()
+                {
+                    ItemsSource = item
+                };
 
                 TabItem newTabItem = new()
                 {

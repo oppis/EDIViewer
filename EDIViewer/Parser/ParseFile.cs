@@ -2,8 +2,6 @@
 using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
-using System.Windows.Controls;
-using System.Linq;
 
 namespace EDIViewer.Parser
 {
@@ -25,12 +23,10 @@ namespace EDIViewer.Parser
 
         //Ausgabe Objekte
         public ContentInformation contentInformation;
-        TransferInformation transferInformation = new();
-
-
-        ObservableCollection<RawInformation> rawInformations = [];
-        List<List<RawInformation>> rawInformationEntity = [];
-        List<RawInformation> rawInformationEntityTmp;
+        readonly TransferInformation transferInformation = new();
+        readonly ObservableCollection<RawInformation> rawInformations = [];
+        readonly List<List<RawInformation>> rawInformationEntity = [];
+        List<RawInformation> rawInformationEntityTmp = [];
 
         /// <summary>
         /// Aktuelle File Struktur als Objekt laden aus JSON Datei
@@ -53,7 +49,7 @@ namespace EDIViewer.Parser
             //Erste Zeile einlesen -> Prüfen welcher Formattyp genutzt wird
             foreach (FormatType formatType in fileStructur.FormatTypes)
             {
-                if (origFile[0].Contains(formatType.Detection)) //TODO -> Angabe im FormatManagement Wo die Information zu finden ist. -> Vielleicht in dem RecordType angeben.
+                if (origFile[0].Contains(formatType.Detection))
                 {
                     //Setzen des aktuellen Format Typs
                     currentFormatType = formatType;
@@ -144,7 +140,7 @@ namespace EDIViewer.Parser
                             {
                                 string oldAufNr = currentAufNr;
                                 //Ermitteln der aktuellen Auftragsnummer
-                                currentAufNr = fileRow[currentFormatType.EntitySeparatorStart].ToString(); 
+                                currentAufNr = currentFileRowArray[currentFormatType.EntitySeparatorStart]; 
 
                                 //Neue Liste erstellen wenn neue Einheit kommt
                                 if (oldAufNr != currentAufNr)
@@ -176,7 +172,8 @@ namespace EDIViewer.Parser
                         }
                     }
                 }
-                else //Parsen mit Feldlänge
+                //Parsen mit Feldlänge
+                else 
                 {
                     //Aktuelle Zeile 
                     int fileRowIndex = 0;

@@ -112,19 +112,16 @@
                          VerticalContentAlignment="Center"
                          Margin="0,5,5,5"
                          KeyUp="searchTextBox_KeyUp"
-                         />
+                />
                 <ScrollViewer Grid.Row="1" Grid.Column="0"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Auto">
+                                VerticalScrollBarVisibility="Auto"
+                                HorizontalScrollBarVisibility="Auto">
                     <RichTextBox Name="fileOriginalView"
-                                 Width="1250px" 
-                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    Width="1250px" 
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                 BorderThickness="0"
                                 IsReadOnly="True"/>
                 </ScrollViewer>
-                    
-
-                
             </Grid>
 
             <GridSplitter HorizontalAlignment="Stretch"
@@ -232,45 +229,7 @@
                                 Grid.ColumnSpan="3"
                                 Margin="5,5,5,5"
                                 AutoGenerateColumns="True"
-                                ItemsSource="{Binding ViewSource.View}">
-                        <DataGrid.GroupStyle>
-                            <!-- Style for groups at top level. -->
-                            <GroupStyle>
-                                <GroupStyle.ContainerStyle>
-                                    <Style TargetType="{x:Type GroupItem}">
-                                        <Setter Property="Margin" Value="0,0,0,5"/>
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <Expander IsExpanded="True" Background="#FF112255" BorderBrush="#FF002255" Foreground="Black" BorderThickness="1,1,1,5">
-                                                        <Expander.Header>
-                                                            <DockPanel>
-                                                                <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
-                                                                <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"/>
-                                                            </DockPanel>
-                                                        </Expander.Header>
-                                                        <Expander.Content>
-                                                            <ItemsPresenter />
-                                                        </Expander.Content>
-                                                    </Expander>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </GroupStyle.ContainerStyle>
-                            </GroupStyle>
-                            <!-- Style for groups under the top level. -->
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <DockPanel Background="LightBlue">
-                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource completeConverter}}" Foreground="Blue" Margin="30,0,0,0" Width="100"/>
-                                            <TextBlock Text="{Binding Path=ItemCount}" Foreground="Blue"/>
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                            </GroupStyle>
-                        </DataGrid.GroupStyle>
+                                ItemsSource="{Binding RawInformations}">
                     </DataGrid>
                 </TabItem>
             </TabControl>

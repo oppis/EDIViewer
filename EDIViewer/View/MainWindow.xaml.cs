@@ -331,7 +331,7 @@ namespace EDIViewer
         private void test_entity()
         {
             int test_no = 0;
-            foreach (ObservableCollection<RawInformation> item in contentInformationViewModel.RawInformationEntity)
+            foreach (List<RawInformation> item in contentInformationViewModel.RawInformationEntity)
             {
                 DataGrid dataGridEntity = new();
 

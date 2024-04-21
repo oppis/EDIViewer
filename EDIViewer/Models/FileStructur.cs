@@ -19,7 +19,7 @@ namespace EDIViewer.Models
         public string Description { get; set; }
         public string Detection { get; set; }
         public int EntitySeparatorStart { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Anfang in Zeile
-        public int EntitySeparatorEnde { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Ende in Zeile
+        public int EntitySeparatorLength { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Länge
         public ObservableCollection<RecordType> RecordTypes { get; set; }
         
     }

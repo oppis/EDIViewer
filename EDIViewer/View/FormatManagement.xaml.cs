@@ -89,7 +89,7 @@ namespace EDIViewer
             formatTypeDetection.IsEnabled = false;
             formatTypeDescription.IsEnabled = false;
             formatTypeEntitySeparatorStart.IsEnabled = false;
-            formatTypeEntitySeparatorEnd.IsEnabled = false;
+            formatTypeEntitySeparatorLength.IsEnabled = false;
         }
         /// <summary>
         /// Einfügen aus Zwischenablage für Feld Definitionen
@@ -179,7 +179,7 @@ namespace EDIViewer
             formatTypeDetection.IsEnabled = true;
             formatTypeDescription.IsEnabled = true;
             formatTypeEntitySeparatorStart.IsEnabled = true;
-            formatTypeEntitySeparatorEnd.IsEnabled = true;
+            formatTypeEntitySeparatorLength.IsEnabled = true;
         }
     }
 }

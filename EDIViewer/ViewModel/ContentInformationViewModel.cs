@@ -17,9 +17,6 @@ namespace EDIViewer.ViewModel
             parseFile.ProcessCurrentFile(viewLines);
 
             contentInformation = parseFile.contentInformation;
-
-            ViewSource.Source = RawInformations;
-            ViewSource.GroupDescriptions.Add(new PropertyGroupDescription("RecordTyp"));
         }
 
         public ObservableCollection<RawInformation> RawInformations
@@ -29,15 +26,13 @@ namespace EDIViewer.ViewModel
                 return contentInformation.RawInformations;
             } 
         }
-        public ObservableCollection<RawInformation>[] RawInformationEntity
+        public List<List<RawInformation>> RawInformationEntity
         {
             get
             {
                 return contentInformation.RawInformationEntity;
             }
         }
-        public CollectionViewSource ViewSource { get; set; } = new CollectionViewSource();
-
         public TransferInformation TransferInformation 
         { 
             get

@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Data;
 
 using EDIViewer.Models;
 using EDIViewer.Parser;

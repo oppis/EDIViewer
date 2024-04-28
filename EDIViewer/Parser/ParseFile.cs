@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
+using System.Security.RightsManagement;
+using EDIViewer.Helper;
 
 namespace EDIViewer.Parser
 {
@@ -119,130 +121,154 @@ namespace EDIViewer.Parser
 
             //Aktuellen Formarmtyp bestimmen
             bool status = GetFormatType();
-   
-            if (status) 
+
+            try
             {
-                //Berücksichtigen ob Trennzeichen oder Feldlänge
-                if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))
+
+                if (status)
                 {
-                    //Aktuelle Zeile 
-                    int fileRowIndex = 0;
-
-                    foreach (string fileRow in file)
+                    //Berücksichtigen ob Trennzeichen oder Feldlänge
+                    if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))
                     {
-                        fileRowIndex++;
+                        //Aktuelle Zeile 
+                        int fileRowIndex = 0;
 
-                        //Prüfung ob Field Definitionen gefunden wurden
-                        bool returnStatus = GetCurrentFieldDefinations(fileRow);
-                        if (returnStatus)
+                        foreach (string fileRow in file)
                         {
-                            for (int i = 0; i < currentFileRowArray.Length; i++)
+                            fileRowIndex++;
+
+                            //Prüfung ob Field Definitionen gefunden wurden
+                            bool returnStatus = GetCurrentFieldDefinations(fileRow);
+                            if (returnStatus)
                             {
-                                string oldAufNr = currentAufNr;
-                                //Ermitteln der aktuellen Auftragsnummer
-                                currentAufNr = currentFileRowArray[currentFormatType.EntitySeparatorStart]; 
+                                string currentFieldContent = string.Empty;
 
-                                //Neue Liste erstellen wenn neue Einheit kommt
-                                if (oldAufNr != currentAufNr)
+                                try
                                 {
-                                    rawInformationEntityTmp = [];
+                                    for (int i = 0; i < (currentFileRowArray.Length - 1); i++)
+                                    {
+                                        currentFieldContent = currentFileRowArray[i];
+
+                                        string oldAufNr = currentAufNr;
+                                        //Ermitteln der aktuellen Auftragsnummer
+                                        currentAufNr = currentFileRowArray[currentFormatType.EntitySeparatorStart];
+
+                                        //Neue Liste erstellen wenn neue Einheit kommt
+                                        if (oldAufNr != currentAufNr)
+                                        {
+                                            rawInformationEntityTmp = [];
+                                        }
+
+                                        RawInformation currentRawInformation = new()
+                                        {
+                                            RecordTyp = currentRecordType.Name,
+                                            Field = currentFieldDefiniations[i].Name,
+                                            FieldContent = currentFileRowArray[i],
+                                            FileRow = fileRowIndex,
+                                            AufNr = currentAufNr,
+                                        };
+
+                                        //Alle Einträge hinzufügen
+                                        rawInformations.Add(currentRawInformation);
+
+                                        //Listen mit Gruppierung nach AufNr erstellen
+                                        rawInformationEntityTmp.Add(currentRawInformation);
+
+                                        //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
+                                        if (oldAufNr != currentAufNr)
+                                        {
+                                            rawInformationEntity.Add(rawInformationEntityTmp);
+                                        }
+                                    }
                                 }
-
-                                RawInformation currentRawInformation = new()
+                                catch (ArgumentOutOfRangeException ex)
                                 {
-                                    RecordTyp = currentRecordType.Name,
-                                    Field = currentFieldDefiniations[i].Name,
-                                    FieldContent = currentFileRowArray[i],
-                                    FileRow = fileRowIndex,
-                                    AufNr = currentAufNr,
-                                };
-
-                                //Alle Einträge hinzufügen
-                                rawInformations.Add(currentRawInformation);
-
-                                //Listen mit Gruppierung nach AufNr erstellen
-                                rawInformationEntityTmp.Add(currentRawInformation);
-
-                                //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
-                                if (oldAufNr != currentAufNr)
+                                    UserMessageHelper.ShowMessageBox("Parsen", $"Es wurde die Feld Definition nicht gefunden! \nAktueller Record: {currentRecordType.Name} \nFeld Inhalt: {currentFieldContent}");
+                                }
+                                catch (Exception ex)
                                 {
-                                    rawInformationEntity.Add(rawInformationEntityTmp);
+                                    UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: " + ex.Message);
                                 }
                             }
                         }
                     }
-                }
-                //Parsen mit Feldlänge
-                else 
-                {
-                    //Aktuelle Zeile 
-                    int fileRowIndex = 0;
-
-                    //Weitere Zielen ermitteln und prüfen
-                    foreach (string fileRow in file)
+                    //Parsen mit Feldlänge
+                    else
                     {
-                        fileRowIndex++;
+                        //Aktuelle Zeile 
+                        int fileRowIndex = 0;
 
-                        bool returnstatus = GetCurrentFieldDefinations(fileRow);
-                        if (returnstatus)
+                        //Weitere Zielen ermitteln und prüfen
+                        foreach (string fileRow in file)
                         {
-                            //Alle Felder Definitionen durchgehen
-                            foreach (FieldDefination fieldDefination in currentFieldDefiniations)
+                            fileRowIndex++;
+
+                            bool returnstatus = GetCurrentFieldDefinations(fileRow);
+                            if (returnstatus)
                             {
-                                //Prüfen ob Feld noch in der Zeile vorhanden ist
-                                if ((fieldDefination.Start - 1) <= fileRow.Length)
+                                //Alle Felder Definitionen durchgehen
+                                foreach (FieldDefination fieldDefination in currentFieldDefiniations)
                                 {
-                                    //Aktuelle Länge speichern
-                                    int end = fieldDefination.Length;
-
-                                    //Position vom Ende bestimmen
-                                    int position = (fieldDefination.Start - 1) + fieldDefination.Length;
-
-                                    //Prüfen ob die End Position über die Zeile hinaus geht
-                                    if (position >= fileRow.Length)
+                                    //Prüfen ob Feld noch in der Zeile vorhanden ist
+                                    if ((fieldDefination.Start - 1) <= fileRow.Length)
                                     {
-                                        //Bis zum Zeilen Ende gehen   
-                                        end = fileRow.Length - (fieldDefination.Start - 1);
-                                    }
+                                        //Aktuelle Länge speichern
+                                        int end = fieldDefination.Length;
 
-                                    string oldAufNr = currentAufNr;
-                                    //Ermitteln der aktuellen Auftragsnummer
-                                    currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
+                                        //Position vom Ende bestimmen
+                                        int position = (fieldDefination.Start - 1) + fieldDefination.Length;
 
-                                    //Neue Liste erstellen wenn neue Einheit kommt
-                                    if (oldAufNr != currentAufNr)
-                                    {
-                                        rawInformationEntityTmp = [];
-                                    }
+                                        //Prüfen ob die End Position über die Zeile hinaus geht
+                                        if (position >= fileRow.Length)
+                                        {
+                                            //Bis zum Zeilen Ende gehen   
+                                            end = fileRow.Length - (fieldDefination.Start - 1);
+                                        }
 
-                                    //Ausgabe in Rein Form erstellen
-                                    RawInformation currentRawInformation = new()
-                                    {
-                                        RecordTyp = currentRecordType.Name,
-                                        Field = fieldDefination.Name,
-                                        FieldContent = fileRow.Substring(fieldDefination.Start - 1, end),
-                                        FileRow = fileRowIndex,
-                                        AufNr = currentAufNr,
-                                    };
+                                        string oldAufNr = currentAufNr;
+                                        //Ermitteln der aktuellen Auftragsnummer
+                                        currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
 
-                                    //Alle Informationen sammeln
-                                    rawInformations.Add(currentRawInformation);
+                                        //Neue Liste erstellen wenn neue Einheit kommt
+                                        if (oldAufNr != currentAufNr)
+                                        {
+                                            rawInformationEntityTmp = [];
+                                        }
 
-                                    //Listen mit Gruppierung nach AufNr erstellen
-                                    rawInformationEntityTmp.Add(currentRawInformation);
+                                        //Ausgabe in Rein Form erstellen
+                                        RawInformation currentRawInformation = new()
+                                        {
+                                            RecordTyp = currentRecordType.Name,
+                                            Field = fieldDefination.Name,
+                                            FieldContent = fileRow.Substring(fieldDefination.Start - 1, end),
+                                            FileRow = fileRowIndex,
+                                            AufNr = currentAufNr,
+                                        };
 
-                                    //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
-                                    if (oldAufNr != currentAufNr)
-                                    {
-                                        rawInformationEntity.Add(rawInformationEntityTmp);
+                                        //Alle Informationen sammeln
+                                        rawInformations.Add(currentRawInformation);
+
+                                        //Listen mit Gruppierung nach AufNr erstellen
+                                        rawInformationEntityTmp.Add(currentRawInformation);
+
+                                        //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
+                                        if (oldAufNr != currentAufNr)
+                                        {
+                                            rawInformationEntity.Add(rawInformationEntityTmp);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
+                    BuildInfoObject();
                 }
 
-                BuildInfoObject();
+            }
+            catch (Exception ex)
+            {
+                UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: " + ex.Message);    
             }
         }
 

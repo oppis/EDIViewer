@@ -1,15 +1,16 @@
 ﻿using System.IO;
-using System.Windows;
 using System.Text;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Input;
+using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 
 using EDIViewer.Helper;
 using EDIViewer.Models;
 using EDIViewer.ViewModel;
+
+using Microsoft.Win32;
 
 namespace EDIViewer
 {
@@ -22,12 +23,12 @@ namespace EDIViewer
         static string filePath = string.Empty;
         static string fileName = string.Empty;
         string currentFileFormat = string.Empty;
-        
+
         //Datei Konvertierung
         Encoding fileEncodingSelected;
 
         StreamReader originalFile;
-        
+
         //View Variables
         private int SearchStart = -1;
         ContentInformationViewModel contentInformationViewModel;
@@ -39,13 +40,18 @@ namespace EDIViewer
         {
             InitializeComponent();
 
-            //Aktuelle Einstellungen FormatsFolder
-
-            SetFormatCb();
-
             //Bereinigen der RichTextBox -> Beim erstellen wird ein Absatz erstellt
             fileOriginalView.Document.Blocks.Clear();
 
+            SetFormatCb();
+            GetEncodingsCb();
+        }
+
+        /// <summary>
+        /// Mögliche Encodings in DropDown laden
+        /// </summary>
+        private void GetEncodingsCb()
+        {
             //Mögliche Encodings in ComboBox laden
             EncodingInfo[] availableEncodings = Encoding.GetEncodings();
             cbCharacterSet.DisplayMemberPath = "DisplayName";
@@ -57,10 +63,13 @@ namespace EDIViewer
             fileEncodingSelected = Encoding.Default;
         }
 
+        /// <summary>
+        /// Befüllen der Ausfall für die Format Typen
+        /// </summary>
         private void SetFormatCb()
         {
             cbFileFormat.ItemsSource = null;
-            
+
             //Aktuelle Formate laden
             Dictionary<string, string> currentFormatFiles = FormatFiles.GetCurrentFormatFiles();
 
@@ -109,7 +118,7 @@ namespace EDIViewer
                 }
             }
         }
-        
+
         /// <summary>
         /// Öffnen der Einstellungen
         /// </summary>
@@ -155,8 +164,8 @@ namespace EDIViewer
 
                 File_LoadView();
             }
-        }    
-        
+        }
+
         /// <summary>
         /// Reagieren auf File Drop
         /// </summary>
@@ -183,29 +192,32 @@ namespace EDIViewer
             }
         }
         #endregion
-        
+
         /// <summary>
         /// Laden der Datei Ansicht
         /// </summary>
         private void File_LoadView()
         {
+            //Ausfall Felder aktivieren
             cbFileFormat.IsEnabled = true;
             cbCharacterSet.IsEnabled = true;
 
+            //Bereinigen der alten Werte
+            ClearParsedInformations();
+
+            //Laden der Datei in Fenster
             try
             {
                 originalFile = new(Path.Combine(filePath, fileName), fileEncodingSelected);
 
                 fileOriginalView.Document.Blocks.Add(new Paragraph(new Run(originalFile.ReadToEnd())));
-
-               //StartParsingFile();
             }
             catch (Exception ex)
             {
                 ShowMessageBox("Datei öffnen", "Fehler: " + ex.Message);
             }
         }
-        
+
         /// <summary>
         /// Starten des Parsen der Datei
         /// </summary>
@@ -218,31 +230,55 @@ namespace EDIViewer
             //DataContext -> RawInformations
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
             DataContext = contentInformationViewModel;
+
+            //TODO -> Test Auftrags Tabellen
             test_entity();
         }
-        
+
         /// <summary>
         /// Reagieren auf File Format Änderung
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CbFileFormat_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CbFileFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //TODO -> Alle Felder in der Ansicht leeren -> Neu Zuordnung der Felder
+            if (cbFileFormat.SelectedItem != null)
+            {
+                //Aktuelle Werte FormatName und Pfad
+                KeyValuePair<string, string> value = (KeyValuePair<string, string>)cbFileFormat.SelectedItem;
+                currentFileFormat = value.Value;
 
-            //Aktuelle Werte FormatName und Pfad            
-            KeyValuePair<string, string> value = (KeyValuePair<string, string>)cbFileFormat.SelectedItem;
-            currentFileFormat = value.Value;
-
-            StartParsingFile();
+                StartParsingFile();
+            }
         }
-        
+
+        /// <summary>
+        /// Leeren der Informations Felder
+        /// </summary>
+        private void ClearParsedInformations()
+        {
+            //Bereinigen Text Box
+            fileOriginalView.Document.Blocks.Clear();
+
+            //Formatauswahl leer
+            cbFileFormat.SelectedItem = null;
+
+            //Auftrags Tabellen leeren
+            test.Items.Clear();
+
+            if (contentInformationViewModel != null)
+            {
+                contentInformationViewModel = new();
+                DataContext = contentInformationViewModel;
+            }
+        }
+
         /// <summary>
         /// Reagieren auf Änderung des Zeichensatzes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CbCharacterSet_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CbCharacterSet_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             EncodingInfo fileEncodingChanged = (EncodingInfo)cbCharacterSet.SelectedItem;
             fileEncodingSelected = Encoding.GetEncoding(fileEncodingChanged.Name);
@@ -253,7 +289,7 @@ namespace EDIViewer
                 File_LoadView();
             }
         }
-        
+
         /// <summary>
         /// Suche Starten und Text markieren
         /// </summary>
@@ -275,18 +311,18 @@ namespace EDIViewer
 
                 //get search text
                 string searchText = searchTextBox.Text;
-           
+
                 int Index = textRange.Text.IndexOf(searchText, SearchStart + 1);
                 if (Index != -1)
                 {
                     TextPointer text = fileOriginalView.Document.ContentStart;
-                    
+
                     if (Index >= 0) //present
                     {
                         //setting up the pointer here at this matched index
-                        TextPointer startPointerMark = text.GetPositionAtOffset(Index + 2 );
-                        TextPointer nextPointerMark = startPointerMark.GetPositionAtOffset(searchText.Length);         
-                        
+                        TextPointer startPointerMark = text.GetPositionAtOffset(Index + 2);
+                        TextPointer nextPointerMark = startPointerMark.GetPositionAtOffset(searchText.Length);
+
                         //Suchtext einfärben
                         TextRange searchedTextRange = new(startPointerMark, nextPointerMark);
                         searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.OrangeRed));
@@ -307,7 +343,7 @@ namespace EDIViewer
             }
         }
         private void txtOriginalMarkText(string searchText)
-        { 
+        {
             for (TextPointer startPointer = fileOriginalView.Document.ContentStart;
                         startPointer.CompareTo(fileOriginalView.Document.ContentEnd) <= 0;
                             startPointer = startPointer.GetNextContextPosition(LogicalDirection.Forward))

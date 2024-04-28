@@ -136,7 +136,7 @@
 
                     </TabControl>
                 </TabItem>
-                <TabItem Header="Übertragung" IsEnabled="False">
+                <TabItem Header="Übertragung" IsEnabled="True">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>

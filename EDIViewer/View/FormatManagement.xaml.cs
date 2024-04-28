@@ -176,9 +176,12 @@ namespace EDIViewer
                 ShowMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
             }
         }
+
+        #region Actions Buttons
+
         /// <summary>
-        /// Öffnen des Fensters zur Anlage einer neuen Datei
-        /// </summary>
+        /// Öffnen des Fensters zur Anlage einer neuen Format Definition
+        /// </summary>  
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void NewFile_Click(object sender, RoutedEventArgs e)
@@ -196,6 +199,7 @@ namespace EDIViewer
                 LoadFormatFiles();
             }
         }
+
         /// <summary>
         /// Öffnen Dialog -> Erstellen neuen Format Typ
         /// </summary>
@@ -207,6 +211,10 @@ namespace EDIViewer
             DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurViewModel)this.DataContext).FormatTypNewViewModel);
             dialogBoxNewFormatTyp.ShowDialog();
         }
+
+        #endregion
+
+
         /// <summary>
         /// Felder aktivieren wenn ein FormatTyp ausgewählt wird
         /// </summary>

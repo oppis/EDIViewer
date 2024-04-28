@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Automation;
 
 using EDIViewer.Models;
 using EDIViewer.Parser;
@@ -17,13 +18,24 @@ namespace EDIViewer.ViewModel
 
             contentInformation = parseFile.contentInformation;
         }
+        public ContentInformationViewModel() 
+        {
+            RawInformations = null;
+            RawInformationEntity = null;
+            TransferInformation = null;
+        }
 
         public ObservableCollection<RawInformation> RawInformations
         {
             get
             {
                 return contentInformation.RawInformations;
-            } 
+            }
+            set
+            {
+                contentInformation.RawInformations = value;
+                OnPropertyChanged(nameof(RawInformations));
+            }
         }
         public List<List<RawInformation>> RawInformationEntity
         {
@@ -31,12 +43,22 @@ namespace EDIViewer.ViewModel
             {
                 return contentInformation.RawInformationEntity;
             }
+            set
+            {
+                contentInformation.RawInformationEntity = value;
+                OnPropertyChanged(nameof(RawInformationEntity));
+            }
         }
         public TransferInformation TransferInformation 
         { 
             get
             {
                 return contentInformation.TransferInformation;
+            }
+            set
+            {
+                contentInformation.TransferInformation = value;
+                OnPropertyChanged(nameof(TransferInformation));
             }
         }
 

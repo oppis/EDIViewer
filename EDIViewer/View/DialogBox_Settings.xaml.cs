@@ -47,7 +47,7 @@ namespace EDIViewer
             this.Close();
         }
         
-        // <summary>
+        /// <summary>
         /// Fenster schließen ohne Speichern
         /// </summary>
         /// <param name="sender"></param>

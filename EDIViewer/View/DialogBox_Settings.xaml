@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:EDIViewer"
         Title="EDI-Viewer - Einstellungen"
-        MinHeight="225"
-        MinWidth="450"
+        MinHeight="225" MinWidth="450"
+        Height="110"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
-        ShowInTaskbar="False" Height="110">
-    <!--Closing="Window_Closing"-->
+        ShowInTaskbar="False" >
+
     <Grid Margin="10">
         <Grid.Resources>
             <!-- Default settings for controls -->
@@ -83,8 +83,6 @@
                  Margin="5,5,5,5"
                  IsReadOnly="True"/>
 
-        
-        
         <!-- Accept or Cancel -->
         <StackPanel Grid.Column="0" Grid.Row="6" 
                     Grid.ColumnSpan="2" 

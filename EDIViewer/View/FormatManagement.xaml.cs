@@ -6,6 +6,7 @@ using System.Windows.Input;
 using EDIViewer.Models;
 using EDIViewer.Helper;
 using EDIViewer.ViewModel;
+using EDIViewer.View;
 
 
 namespace EDIViewer
@@ -197,7 +198,6 @@ namespace EDIViewer
 
         #endregion
 
-
         /// <summary>
         /// Felder aktivieren wenn ein FormatTyp ausgewählt wird
         /// </summary>
@@ -210,6 +210,18 @@ namespace EDIViewer
             formatTypeDescription.IsEnabled = true;
             formatTypeEntitySeparatorStart.IsEnabled = true;
             formatTypeEntitySeparatorLength.IsEnabled = true;
+        }
+
+        /// <summary>
+        /// Öffnen Dialog -> TEST ART
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TestArtDefiniation(object sender, RoutedEventArgs e)
+        {
+            //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
+            DialogBox_ArtDefiniation dialogBox_ArtDefiniation = new();
+            dialogBox_ArtDefiniation.ShowDialog();
         }
     }
 }

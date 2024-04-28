@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
+using Microsoft.Win32;
 
 using EDIViewer.Helper;
 
-using Microsoft.Win32;
 
 namespace EDIViewer
 {
@@ -16,10 +17,22 @@ namespace EDIViewer
         {           
             InitializeComponent();
 
+            //Aktuelle Informationen laden
+            GetInformations();
+
             //Laden der Aktuellen Einstellung für den Formats Pfad
             LoadCurrentFormatFilePath();
         }
         
+        /// <summary>
+        /// Aktuelle Informationen zur Anwendung abrufen
+        /// </summary>
+        private void GetInformations()
+        {
+            dotNetVersion.Content = Environment.Version.ToString();
+            ediViewerVersion.Content = Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
+        }
+
         /// <summary>
         /// Fenster schließen beim Speichern 
         /// </summary>

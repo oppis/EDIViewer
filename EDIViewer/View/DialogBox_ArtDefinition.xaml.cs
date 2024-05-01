@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using EDIViewer.ViewModel;
+
 namespace EDIViewer.View
 {
     /// <summary>
@@ -11,16 +13,18 @@ namespace EDIViewer.View
         {
             InitializeComponent();
         }
-
+        public DialogBox_ArtDefiniation(ArtDefinationViewModel viewModel):this()
+        {
+            this.DataContext = viewModel;
+            viewModel.Save += Save;
+        }
         /// <summary>
         /// Fenster schließen beim Speichern 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void Save(object sender, EventArgs e)
         {
-            DialogResult = true;
-
             this.Close();
         }
 

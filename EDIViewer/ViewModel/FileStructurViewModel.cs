@@ -12,6 +12,7 @@ namespace EDIViewer.ViewModel
     {
         private static FileStructur fileStructurModel;
         public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
+        public ArtDefinationViewModel ArtDefinationViewModel { get; set; }
         public FileStructurViewModel(string currentFileFormat)
         {
             //string currentFileFormat = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", "Fortras100.JSON"));
@@ -22,7 +23,16 @@ namespace EDIViewer.ViewModel
             //Anlage neuer Format Typ
             FormatTypNewViewModel = new FormatTypNewViewModel();
             FormatTypNewViewModel.Save += FormatTypeNewOnSave;
+
+            //Verwaltung ArtDefinitionen
+            ArtDefinationViewModel = new ArtDefinationViewModel();
+            ArtDefinationViewModel.Save += ArtDefinitionOnSave;
         }
+        /// <summary>
+        /// Speichern der Informationen aus der Maske in das Format File View Model
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void FormatTypeNewOnSave(object sender, EventArgs eventArgs)
         {
             //Neuen Format Typ in Liste hinzufügen
@@ -32,11 +42,24 @@ namespace EDIViewer.ViewModel
                 Description = FormatTypNewViewModel.Description,
                 Detection = FormatTypNewViewModel.Detection
             });
-
+            
             //Leeren der Felder in der View zur Anlage vom Format Typ
             FormatTypNewViewModel.Reset();
         }
-        //Speichern der Anpassungen ins JSON Datei
+
+        /// <summary>
+        /// Speichern der Informationen aus der Maske in das Format File View Model
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void ArtDefinitionOnSave(object sender, EventArgs eventArgs)
+        {
+            SelectedFieldDefination.ArtDefinations = ArtDefinationViewModel.ArtDefinations;
+        }
+
+        /// <summary>
+        /// Speichern der Anpassungen ins JSON Datei
+        /// </summary>
         public void SaveFile()
         {
             string output = JsonConvert.SerializeObject(fileStructurModel);
@@ -180,6 +203,32 @@ namespace EDIViewer.ViewModel
             {
                 selectedRecordType.FieldDefinations = value;
                 OnPropertyChanged(nameof(FieldDefinations));
+            }
+        }
+        private FieldDefination selectedFieldDefination;
+        public FieldDefination SelectedFieldDefination
+        {
+            get
+            {
+                return selectedFieldDefination;
+            }
+            set
+            {
+                selectedFieldDefination = value;
+
+                ArtDefinationViewModel.currentFieldDefinition = selectedFieldDefination.Name;
+
+                if (selectedFieldDefination.ArtDefinations is null)
+                {
+                    ArtDefinationViewModel.ArtDefinations = [];
+                }
+                else
+                {
+                    ArtDefinationViewModel.ArtDefinations = selectedFieldDefination.ArtDefinations;
+                }
+
+                
+                OnPropertyChanged(nameof(SelectedFieldDefination));
             }
         }
 

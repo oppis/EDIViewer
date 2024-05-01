@@ -213,14 +213,14 @@ namespace EDIViewer
         }
 
         /// <summary>
-        /// Öffnen Dialog -> TEST ART
+        /// Öffnen Dialog Art Definitionen
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TestArtDefiniation(object sender, RoutedEventArgs e)
+        private void DgFieldDefinations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
-            DialogBox_ArtDefiniation dialogBox_ArtDefiniation = new();
+            DialogBox_ArtDefiniation dialogBox_ArtDefiniation = new(((FileStructurViewModel)this.DataContext).ArtDefinationViewModel); //TODO -> Auswahl Field Def -> Button
             dialogBox_ArtDefiniation.ShowDialog();
         }
     }

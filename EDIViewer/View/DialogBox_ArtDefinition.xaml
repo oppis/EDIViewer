@@ -39,11 +39,11 @@
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
 
-        <Label  Content="Aktuelle ART: " 
+        <Label  Content="Aktuelles Feld: " 
                 Grid.Column="0" Grid.Row="0"
                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label  Name="currentArt"
-                Content="No Value!" 
+                Content="{Binding currentFieldDefinition}"
                 Grid.Column="1" Grid.Row="0"
                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
@@ -51,7 +51,7 @@
                     Grid.Column="0" Grid.Row="1" 
                     Grid.ColumnSpan="2"
                     Margin="5,5,5,5"
-                    ItemsSource="{Binding Path=FieldDefinations}"
+                    ItemsSource="{Binding Path=ArtDefinations}"
                     AutoGenerateColumns="True"
                     ClipboardCopyMode="IncludeHeader" />
                     <!--KeyUp="DataGridView1_KeyUp"-->
@@ -64,7 +64,7 @@
             <Button Name="saveButton" 
                     IsDefault="True"
                     Content="OK"
-                    Click="SaveButton_Click"/>
+                    Command="{Binding SaveCommand}" />
             <Button Name="cancelButton"
                     Content="Abbrechen"
                     Click="CancelButtonClick" 

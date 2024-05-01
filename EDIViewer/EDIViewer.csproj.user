@@ -7,7 +7,7 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="View\DialogBox_ArtDefiniation.xaml.cs">
+    <Compile Update="View\DialogBox_ArtDefinition.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\DialogBox_NewFormatFile.xaml.cs">
@@ -18,7 +18,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="View\DialogBox_ArtDefiniation.xaml">
+    <Page Update="View\DialogBox_ArtDefinition.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\DialogBox_Settings.xaml">

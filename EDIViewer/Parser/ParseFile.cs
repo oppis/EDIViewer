@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
-using System.Security.RightsManagement;
 using EDIViewer.Helper;
 
 namespace EDIViewer.Parser

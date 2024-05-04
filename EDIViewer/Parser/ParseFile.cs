@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
+using System.Reflection.Metadata;
 
 namespace EDIViewer.Parser
 {
@@ -144,25 +145,46 @@ namespace EDIViewer.Parser
 
                                 try
                                 {
+                                    //Alle Felder durchgehen
                                     for (int i = 0; i < (currentFileRowArray.Length - 1); i++)
                                     {
                                         currentFieldContent = currentFileRowArray[i];
 
+                                        //Länge bestimmen für Parsing bis Ende der Zeile
                                         string oldAufNr = currentAufNr;
-                                        //Ermitteln der aktuellen Auftragsnummer
                                         currentAufNr = currentFileRowArray[currentFormatType.EntitySeparatorStart];
 
-                                        //Neue Liste erstellen wenn neue Einheit kommt
+                                        //Prüfen ob neuer Auftrag gebinnt und neue Einheit anlegen
                                         if (oldAufNr != currentAufNr)
                                         {
                                             rawInformationEntityTmp = [];
                                         }
+                                         
+                                        //Interpretation der Feld Informationen
+                                        string fileContent = currentFileRowArray[i];
 
+                                        //Variable für Erweiterte Informationen
+                                        string fieldContentExtended = string.Empty;
+
+                                        //ArtDefinitionen einfügen
+                                        if (currentFieldDefiniations[i].ArtDefinations is not null)
+                                        {
+                                            foreach (ArtDefination artDefination in currentFieldDefiniations[i].ArtDefinations)
+                                            {
+                                                if (fileContent == artDefination.Id)
+                                                {
+                                                    fieldContentExtended = artDefination.Name;
+                                                }
+                                            }
+                                        }
+
+                                        //Ausgabe Objekt erstellen
                                         RawInformation currentRawInformation = new()
                                         {
                                             RecordTyp = currentRecordType.Name,
                                             Field = currentFieldDefiniations[i].Name,
-                                            FieldContent = currentFileRowArray[i],
+                                            FieldContent = fileContent,
+                                            FieldContentExtended = fieldContentExtended,
                                             FileRow = fileRowIndex,
                                             AufNr = currentAufNr,
                                         };
@@ -211,40 +233,53 @@ namespace EDIViewer.Parser
                                     //Prüfen ob Feld noch in der Zeile vorhanden ist
                                     if ((fieldDefination.Start - 1) <= fileRow.Length)
                                     {
-                                        //Aktuelle Länge speichern
+                                        //Länge bestimmen für Parsing bis Ende der Zeile
                                         int end = fieldDefination.Length;
-
-                                        //Position vom Ende bestimmen
                                         int position = (fieldDefination.Start - 1) + fieldDefination.Length;
-
-                                        //Prüfen ob die End Position über die Zeile hinaus geht
                                         if (position >= fileRow.Length)
                                         {
                                             //Bis zum Zeilen Ende gehen   
                                             end = fileRow.Length - (fieldDefination.Start - 1);
                                         }
 
-                                        string oldAufNr = currentAufNr;
-                                        //Ermitteln der aktuellen Auftragsnummer
+                                        //Prüfen ob neuer Auftrag beginnt und neue Einheit anlegen
+                                        string oldAufNr = currentAufNr;                                      
                                         currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
-
-                                        //Neue Liste erstellen wenn neue Einheit kommt
                                         if (oldAufNr != currentAufNr)
                                         {
                                             rawInformationEntityTmp = [];
                                         }
 
-                                        //Ausgabe in Rein Form erstellen
+                                        //Interpretation der Feld Informationen
+                                        string fileContent = fileRow.Substring(fieldDefination.Start - 1, end);
+
+                                        //Variable für Erweiterte Informationen
+                                        string fieldContentExtended = string.Empty;
+
+                                        //ArtDefinitionen einfügen
+                                        if (fieldDefination.ArtDefinations is not null)
+                                        {
+                                            foreach (ArtDefination artDefination in fieldDefination.ArtDefinations)
+                                            {
+                                                if (fileContent == artDefination.Id)
+                                                {
+                                                    fieldContentExtended = artDefination.Name;
+                                                }
+                                            }
+                                        }
+
+                                        //Ausgabe in Objekt erstellen
                                         RawInformation currentRawInformation = new()
                                         {
                                             RecordTyp = currentRecordType.Name,
                                             Field = fieldDefination.Name,
-                                            FieldContent = fileRow.Substring(fieldDefination.Start - 1, end),
+                                            FieldContent = fileContent,
+                                            FieldContentExtended = fieldContentExtended,
                                             FileRow = fileRowIndex,
                                             AufNr = currentAufNr,
                                         };
 
-                                        //Alle Informationen sammeln
+                                        //Objekt in Liste sammlen
                                         rawInformations.Add(currentRawInformation);
 
                                         //Listen mit Gruppierung nach AufNr erstellen

@@ -45,7 +45,7 @@ namespace EDIViewer.Models
     }
     public class ArtDefination //Angabe von Nummern Zuordnungen (DFÜ-Texte, TextArt)
     { 
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

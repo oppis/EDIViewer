@@ -10,7 +10,7 @@
         Height="110"
         SizeToContent="WidthAndHeight"
         ResizeMode="CanResizeWithGrip"
-        ShowInTaskbar="False" >
+        ShowInTaskbar="True" >
 
     <Grid Margin="10">
         <Grid.Resources>
@@ -53,8 +53,8 @@
                     Margin="5,5,5,5"
                     ItemsSource="{Binding Path=ArtDefinations}"
                     AutoGenerateColumns="True"
-                    ClipboardCopyMode="IncludeHeader" />
-                    <!--KeyUp="DataGridView1_KeyUp"-->
+                    ClipboardCopyMode="IncludeHeader"
+                    KeyUp="DgArtDefination_KeyUp"/>
 
         <!-- Accept or Cancel -->
         <StackPanel Grid.Column="0" Grid.Row="6" 

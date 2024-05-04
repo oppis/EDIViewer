@@ -216,18 +216,20 @@ namespace EDIViewer.ViewModel
             {
                 selectedFieldDefination = value;
 
-                ArtDefinationViewModel.currentFieldDefinition = selectedFieldDefination.Name;
-
-                if (selectedFieldDefination.ArtDefinations is null)
+                if (selectedFieldDefination is not null)
                 {
-                    ArtDefinationViewModel.ArtDefinations = [];
-                }
-                else
-                {
-                    ArtDefinationViewModel.ArtDefinations = selectedFieldDefination.ArtDefinations;
-                }
+                    ArtDefinationViewModel.currentFieldDefinition = selectedFieldDefination.Name;
 
-                
+                    if (selectedFieldDefination.ArtDefinations is null)
+                    {
+                        ArtDefinationViewModel.ArtDefinations = [];
+                    }
+                    else
+                    {
+                        ArtDefinationViewModel.ArtDefinations = selectedFieldDefination.ArtDefinations;
+                    }
+                }
+            
                 OnPropertyChanged(nameof(SelectedFieldDefination));
             }
         }

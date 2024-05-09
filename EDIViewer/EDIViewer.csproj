@@ -8,9 +8,19 @@
     <UseWPF>true</UseWPF>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
+    <PackageIcon>Logo.png</PackageIcon>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\..\OneDrive\Projekte\EDIViewer\Logo\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="ViewModel\Common\SimpleRelayCommand.cs" />
   </ItemGroup>
 

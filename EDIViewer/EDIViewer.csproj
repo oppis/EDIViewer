@@ -38,9 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Formate\Fortras100_old.JSON">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Formate\" />
   </ItemGroup>
 
 </Project>

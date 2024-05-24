@@ -15,7 +15,6 @@ namespace EDIViewer.ViewModel
         public ArtDefinationViewModel ArtDefinationViewModel { get; set; }
         public FileStructurViewModel(string currentFileFormat)
         {
-            //string currentFileFormat = Path.Combine(Environment.CurrentDirectory, Path.Combine("Formate", "Fortras100.JSON"));
             string json = File.ReadAllText(currentFileFormat);
 
             fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(json);

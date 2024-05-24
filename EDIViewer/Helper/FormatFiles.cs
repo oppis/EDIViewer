@@ -5,7 +5,7 @@ namespace EDIViewer.Helper
     class FormatFiles
     {
         /// <summary>
-        /// Ermitteln der aktuell Vefügbaren Format Datien
+        /// Determine the currently available format files
         /// </summary>
         public static Dictionary<string, string> GetCurrentFormatFiles()
         {
@@ -34,7 +34,7 @@ namespace EDIViewer.Helper
         }
 
         /// <summary>
-        /// Ordner Pfad mit Fallback ermitteln
+        /// Determine folder path with fallback
         /// </summary>
         public static string LoadCurrentFormatFolderPath()
         {

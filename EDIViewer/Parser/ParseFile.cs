@@ -124,7 +124,6 @@ namespace EDIViewer.Parser
 
             try
             {
-
                 if (status)
                 {
                     //Berücksichtigen ob Trennzeichen oder Feldlänge
@@ -243,8 +242,14 @@ namespace EDIViewer.Parser
                                         }
 
                                         //Prüfen ob neuer Auftrag beginnt und neue Einheit anlegen
-                                        string oldAufNr = currentAufNr;                                      
-                                        currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
+                                        string oldAufNr = currentAufNr;
+
+                                        //Prüfen ob Zeile lang genug für Objekt Trennung
+                                        if (fileRow.Length > (currentFormatType.EntitySeparatorStart - 1 + currentFormatType.EntitySeparatorLength))
+                                        {
+                                            currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
+                                        }
+                                        
                                         if (oldAufNr != currentAufNr)
                                         {
                                             rawInformationEntityTmp = [];
@@ -298,7 +303,6 @@ namespace EDIViewer.Parser
 
                     BuildInfoObject();
                 }
-
             }
             catch (Exception ex)
             {

@@ -223,5 +223,6 @@ namespace EDIViewer
             DialogBox_ArtDefiniation dialogBox_ArtDefiniation = new(((FileStructurViewModel)this.DataContext).ArtDefinationViewModel); //TODO -> Auswahl Field Def -> Button
             dialogBox_ArtDefiniation.ShowDialog();
         }
+
     }
 }

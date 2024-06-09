@@ -10,9 +10,10 @@ namespace EDIViewer.Models
         //Für Tabelle mit allen Informationen -> Satzart, Feld, Inhalt -> Mehere Tabellen nach Satzart getrennt -> foreach -> Flexibel
         public ObservableCollection<RawInformation> RawInformations { get; set; }
         public List<List<RawInformation>> RawInformationEntity { get; set; }
-        public TransferInformation TransferInformation { get; set; }
-        public ObservableCollection<OrderInformation> OrderInformations { get; set; }
-        public ObservableCollection<StatusInformation> StatusInformations { get; set; }
+        public Dictionary<string,string> TransferInformation { get; set; }
+        public ObservableCollection<Dictionary<string, string>> OrderInformations { get; set; }
+        public ObservableCollection<Dictionary<string, string>> StatusInformations { get; set; }
+        public ObservableCollection<Dictionary<string, string>> PositionInformation { get; set; }
     }
     /// <summary>
     /// Information welche Tabs aktiviert werden
@@ -24,30 +25,31 @@ namespace EDIViewer.Models
     /// <summary>
     /// Informationen zur Übertragung
     /// </summary>
-    public class TransferInformation
+    public static class TransferInformation
     {
-        public string DataType { get; set; }
-        public DateTime DateTime { get; set; }
-        public string DataReference { get; set; }
-        public string SenderID { get; set; }
-        public string RecipientID { get; set; }
+        public static string DataType { get; set; }
+        public static DateTime DateTime { get; set; }
+        public static string DataReference { get; set; }
+        public static string SenderID { get; set; }
+        public static string RecipientID { get; set; }
     }
     /// <summary>
     /// Informationen zum Auftrag
     /// </summary>
     public class OrderInformation
     {
+        public string IdOrder { get; set; }
         public string Reference { get; set; }
         public DateTime DateTimeLoadDat { get; set; }
         public DateTime DateTimeUnloadDat { get; set; }
-        public List<Item> Items { get; set; }
     }
     /// <summary>
     /// Informationen zur Position
     /// </summary>
-    public class Item
+    public class PositionInformation
     {
-        public int Position { get; set; }
+        public string IdOrder { get; set; }
+        public int IdPosition { get; set; }
         public string PackagingUnit { get; set; }
         public int PackageCount { get; set; }
         public string SSCC { get; set; }

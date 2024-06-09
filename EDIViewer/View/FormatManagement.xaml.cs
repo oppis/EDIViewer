@@ -148,7 +148,7 @@ namespace EDIViewer
                                 Description = line[4],
                                 DataType = line[5],
                                 Mandatory = Convert.ToBoolean(line[6]),
-                                MappingField = line[7]
+                                //MappingField = line[7]
                             };
                             fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
                         }

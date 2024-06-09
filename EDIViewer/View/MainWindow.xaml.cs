@@ -230,7 +230,7 @@ namespace EDIViewer
                 //Aktuelle Werte FormatName und Pfad
                 KeyValuePair<string, string> value = (KeyValuePair<string, string>)cbFileFormat.SelectedItem;
                 currentFileFormat = value.Value;
-
+                
                 StartParsingFile();
             }
         }

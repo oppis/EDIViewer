@@ -233,6 +233,47 @@ namespace EDIViewer.ViewModel
             }
         }
 
+        public static ObservableCollection<string> TransferInformationNames
+        {
+            get
+            {
+                List<string> values = typeof(TransferInformation).GetProperties().Select(p => p.Name).ToList();
+                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+
+                return collection;
+            }
+        }
+        public static ObservableCollection<string> OrderInformationNames
+        {
+            get
+            {
+                List<string> values = typeof(OrderInformation).GetProperties().Select(p => p.Name).ToList();
+                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+
+                return collection;
+            }
+        }
+        public static ObservableCollection<string> PositionInformationNames
+        {
+            get
+            {
+                List<string> values = typeof(PositionInformation).GetProperties().Select(p => p.Name).ToList();
+                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+
+                return collection;
+            }
+        }
+        public static ObservableCollection<string> StatusInformationNames
+        {
+            get
+            {
+                List<string> values = typeof(StatusInformation).GetProperties().Select(p => p.Name).ToList();
+                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+
+                return collection;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {

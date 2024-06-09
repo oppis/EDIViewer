@@ -40,7 +40,10 @@ namespace EDIViewer.Models
         public string Description { get; set; }
         public string DataType { get; set; }
         public bool Mandatory { get; set; }
-        public string MappingField {  get; set; }
+        public string TransferInformation {  get; set; }
+        public string OrderInformation {  get; set; }
+        public string PositionInformation {  get; set; }
+        public string StatusInformation {  get; set; }
         public ObservableCollection<ArtDefination> ArtDefinations { get; set; }
     }
     public class ArtDefination //Angabe von Nummern Zuordnungen (DFÜ-Texte, TextArt)

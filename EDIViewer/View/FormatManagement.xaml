@@ -10,11 +10,6 @@
         WindowStyle="ThreeDBorderWindow" 
         ResizeMode="CanResizeWithGrip">
 
-    <!--<Window.DataContext>
-        <vm:FileStructurVM />
-    </Window.DataContext>-->
-
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100px"></RowDefinition>
@@ -218,10 +213,50 @@
                         Margin="5,5,5,5"
                         ItemsSource="{Binding Path=FieldDefinations}"
                         SelectedItem="{Binding Path=SelectedFieldDefination}"
+                        AutoGenerateColumns="False"  
                         MouseDoubleClick="DgFieldDefinations_MouseDoubleClick"
-                        AutoGenerateColumns="True"
                         ClipboardCopyMode="IncludeHeader"
-                        KeyUp="DataGridView1_KeyUp"/>
+                        KeyUp="DataGridView1_KeyUp">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Start" Binding="{Binding Start}"/>
+                    <DataGridTextColumn Header="Length" Binding="{Binding Length}"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                    <DataGridTextColumn Header="DataType" Binding="{Binding DataType}"/>
+                    <DataGridCheckBoxColumn Header="Mandatory" Binding="{Binding Mandatory}"/>
+
+                    <DataGridTemplateColumn Header="TransferInformation">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.TransferInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=TransferInformation, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="OrderInformation">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.OrderInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding OrderInformation}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="PositionInformation">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.PositionInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=PositionInformation, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="StatusInformation">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.StatusInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding StatusInformation}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
         <!--Close Buttons-->
         <StackPanel Grid.Row="3" Grid.Column="0" 

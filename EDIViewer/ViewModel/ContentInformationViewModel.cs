@@ -21,7 +21,7 @@ namespace EDIViewer.ViewModel
         {
             RawInformations = null;
             RawInformationEntity = null;
-            TransferInformation = null;
+            //TransferInformation = null;
         }
 
         public ObservableCollection<RawInformation> RawInformations
@@ -48,18 +48,18 @@ namespace EDIViewer.ViewModel
                 OnPropertyChanged(nameof(RawInformationEntity));
             }
         }
-        public TransferInformation TransferInformation 
-        { 
-            get
-            {
-                return contentInformation.TransferInformation;
-            }
-            set
-            {
-                contentInformation.TransferInformation = value;
-                OnPropertyChanged(nameof(TransferInformation));
-            }
-        }
+        //public TransferInformation TransferInformation 
+        //{ 
+        //    get
+        //    {
+        //        return contentInformation.TransferInformation;
+        //    }
+        //    set
+        //    {
+        //        contentInformation.TransferInformation = value;
+        //        OnPropertyChanged(nameof(TransferInformation));
+        //    }
+        //}
 
         //Event 
         public event PropertyChangedEventHandler PropertyChanged;

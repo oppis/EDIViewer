@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
-using System.Reflection.Metadata;
+using System.Windows.Media.Media3D;
 
 namespace EDIViewer.Parser
 {
@@ -25,10 +25,18 @@ namespace EDIViewer.Parser
 
         //Ausgabe Objekte
         public ContentInformation contentInformation;
-        readonly TransferInformation transferInformation = new();
+        
         readonly ObservableCollection<RawInformation> rawInformations = [];
         readonly List<List<RawInformation>> rawInformationEntity = [];
         List<RawInformation> rawInformationEntityTmp = [];
+
+        Dictionary<string, string> transferInformation = [];
+        ObservableCollection<Dictionary<string, string>> orderInformations = [];
+        Dictionary<string, string> orderInformation = [];
+        ObservableCollection<Dictionary<string, string>> positionInformations = [];
+        Dictionary<string, string> positionInformation = [];
+        ObservableCollection<Dictionary<string, string>> statusInformations = [];
+        Dictionary<string, string> statusInformation = [];
 
         /// <summary>
         /// Aktuelle File Struktur als Objekt laden aus JSON Datei
@@ -60,7 +68,7 @@ namespace EDIViewer.Parser
                     currentRecordTypes = formatType.RecordTypes;
 
                     //Speichern der Übertragung Informationen
-                    transferInformation.DataType = formatType.Description;
+                    transferInformation.Add("DataType", formatType.Description);
 
                     status = true;
                 }
@@ -177,6 +185,28 @@ namespace EDIViewer.Parser
                                             }
                                         }
 
+                                        //Mapping Felder
+                                        //Transfer Informationen                           
+                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].TransferInformation))
+                                        {
+                                            transferInformation.Add(currentFieldDefiniations[i].TransferInformation, fileContent);
+                                        }
+                                        //Auftragsinformationen
+                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].OrderInformation))
+                                        {
+                                            orderInformation.Add(currentFieldDefiniations[i].OrderInformation, fileContent);
+                                        }
+                                        //Positionsinformationen
+                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation))
+                                        {
+                                            positionInformation.Add(currentFieldDefiniations[i].PositionInformation, fileContent);
+                                        }
+                                        //Statusinformationen
+                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].StatusInformation))
+                                        {
+                                            statusInformation.Add(currentFieldDefiniations[i].StatusInformation, fileContent);
+                                        }
+
                                         //Ausgabe Objekt erstellen
                                         RawInformation currentRawInformation = new()
                                         {
@@ -199,6 +229,27 @@ namespace EDIViewer.Parser
                                         {
                                             rawInformationEntity.Add(rawInformationEntityTmp);
                                         }
+                                    }
+
+                                    //Mapping Auftrag in Liste schreiben
+                                    if (orderInformation.Count > 0)
+                                    {
+                                        orderInformations.Add(orderInformation);
+                                        orderInformation.Clear();
+                                    }
+
+                                    //Mapping Postion in Liste schreiben
+                                    if (positionInformation.Count > 0)
+                                    {
+                                        positionInformations.Add(positionInformation);
+                                        positionInformation.Clear();
+                                    }
+
+                                    //Mapping Satus in Liste schreiben
+                                    if (statusInformation.Count > 0)
+                                    {
+                                        statusInformations.Add(statusInformation);
+                                        statusInformation.Clear();
                                     }
                                 }
                                 catch (ArgumentOutOfRangeException ex)
@@ -273,6 +324,28 @@ namespace EDIViewer.Parser
                                             }
                                         }
 
+                                        //Mapping Felder
+                                        //Transfer Informationen                           
+                                        if (!String.IsNullOrEmpty(fieldDefination.TransferInformation))
+                                        {
+                                            transferInformation.Add(fieldDefination.TransferInformation, fileContent);
+                                        }
+                                        //Auftragsinformationen
+                                        if (!String.IsNullOrEmpty(fieldDefination.OrderInformation))
+                                        {
+                                            orderInformation.Add(fieldDefination.OrderInformation, fileContent);
+                                        }
+                                        //Positionsinformationen
+                                        if (!String.IsNullOrEmpty(fieldDefination.PositionInformation))
+                                        {
+                                            positionInformation.Add(fieldDefination.PositionInformation, fileContent);
+                                        }
+                                        //Statusinformationen
+                                        if (!String.IsNullOrEmpty(fieldDefination.StatusInformation))
+                                        {
+                                            statusInformation.Add(fieldDefination.StatusInformation, fileContent);
+                                        }
+
                                         //Ausgabe in Objekt erstellen
                                         RawInformation currentRawInformation = new()
                                         {
@@ -297,6 +370,27 @@ namespace EDIViewer.Parser
                                         }
                                     }
                                 }
+
+                                //Mapping Auftrag in Liste schreiben
+                                if (orderInformation.Count > 0)
+                                {
+                                    orderInformations.Add(orderInformation);
+                                    orderInformation.Clear();
+                                }
+
+                                //Mapping Postion in Liste schreiben
+                                if (positionInformation.Count > 0)
+                                {
+                                    positionInformations.Add(positionInformation);
+                                    positionInformation.Clear();
+                                }
+
+                                //Mapping Satus in Liste schreiben
+                                if (statusInformation.Count > 0)
+                                {
+                                    statusInformations.Add(statusInformation);
+                                    statusInformation.Clear();
+                                }
                             }
                         }
                     }
@@ -318,9 +412,12 @@ namespace EDIViewer.Parser
             //Gefundene Informationen in übergabe Objekt speichern
             contentInformation = new()
             {
-                TransferInformation = transferInformation,
                 RawInformations = rawInformations,
-                RawInformationEntity = rawInformationEntity
+                RawInformationEntity = rawInformationEntity,
+                TransferInformation = transferInformation,
+                OrderInformations = orderInformations,
+                PositionInformation = positionInformations,
+                StatusInformations = statusInformations,
             };
         }
     }

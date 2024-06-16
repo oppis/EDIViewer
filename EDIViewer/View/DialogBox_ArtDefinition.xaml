@@ -6,9 +6,8 @@
         xmlns:local="clr-namespace:EDIViewer.View"
         mc:Ignorable="d"
         Title="EDI-Viewer - Art Definition" 
-        MinHeight="500" MinWidth="600"
+        MinHeight="500" MinWidth="400"
         Height="110"
-        SizeToContent="WidthAndHeight"
         ResizeMode="CanResizeWithGrip"
         ShowInTaskbar="True" >
 

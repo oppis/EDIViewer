@@ -21,7 +21,7 @@ namespace EDIViewer.ViewModel
         {
             RawInformations = null;
             RawInformationEntity = null;
-            //TransferInformation = null;
+            TransferInformation = null;
         }
 
         public ObservableCollection<RawInformation> RawInformations
@@ -48,18 +48,45 @@ namespace EDIViewer.ViewModel
                 OnPropertyChanged(nameof(RawInformationEntity));
             }
         }
-        //public TransferInformation TransferInformation 
-        //{ 
-        //    get
-        //    {
-        //        return contentInformation.TransferInformation;
-        //    }
-        //    set
-        //    {
-        //        contentInformation.TransferInformation = value;
-        //        OnPropertyChanged(nameof(TransferInformation));
-        //    }
-        //}
+        public TransferInformation TransferInformation
+        {
+            get
+            {
+                TransferInformation transferInformation = new();
+
+                if (contentInformation != null)
+                {
+                    //Parsen des Dictionary in Model
+                    foreach (var item in contentInformation.TransferInformation)
+                    {
+                        switch (item.Key)
+                        {
+                            case "DataType":
+                                transferInformation.DataType = item.Value;
+                                break;
+                            case "DateTime":
+                                transferInformation.DateTime = item.Value;
+                                break;
+                            case "SenderID":
+                                transferInformation.SenderID = item.Value;
+                                break;
+                            case "RecipientID":
+                                transferInformation.RecipientID = item.Value;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                
+                return transferInformation;
+            }
+            set
+            {
+                contentInformation.TransferInformation = null;
+                OnPropertyChanged(nameof(TransferInformation));
+            }
+        }
 
         //Event 
         public event PropertyChangedEventHandler PropertyChanged;

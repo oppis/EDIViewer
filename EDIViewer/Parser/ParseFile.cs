@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
-using System.Windows.Media.Media3D;
 
 namespace EDIViewer.Parser
 {

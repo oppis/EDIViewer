@@ -25,13 +25,13 @@ namespace EDIViewer.Models
     /// <summary>
     /// Informationen zur Übertragung
     /// </summary>
-    public static class TransferInformation
+    public class TransferInformation
     {
-        public static string DataType { get; set; }
-        public static DateTime DateTime { get; set; }
-        public static string DataReference { get; set; }
-        public static string SenderID { get; set; }
-        public static string RecipientID { get; set; }
+        public string DataType { get; set; }
+        public string DateTime { get; set; }
+        public string DataReference { get; set; }
+        public string SenderID { get; set; }
+        public string RecipientID { get; set; }
     }
     /// <summary>
     /// Informationen zum Auftrag

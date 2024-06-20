@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -215,7 +216,7 @@ namespace EDIViewer
             DataContext = contentInformationViewModel;
 
             //TODO -> Test Auftrags Tabellen
-            test_entity();
+            //test_entity();
         }
 
         /// <summary>
@@ -365,7 +366,7 @@ namespace EDIViewer
         private void test_entity()
         {
             int test_no = 0;
-            foreach (List<RawInformation> item in contentInformationViewModel.RawInformationEntity)
+            foreach (ObservableCollection<RawInformation> item in contentInformationViewModel.RawInformationEntity)
             {
                 DataGrid dataGridEntity = new()
                 {

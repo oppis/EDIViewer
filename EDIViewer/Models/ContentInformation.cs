@@ -9,11 +9,11 @@ namespace EDIViewer.Models
     {
         //Für Tabelle mit allen Informationen -> Satzart, Feld, Inhalt -> Mehere Tabellen nach Satzart getrennt -> foreach -> Flexibel
         public ObservableCollection<RawInformation> RawInformations { get; set; }
-        public List<List<RawInformation>> RawInformationEntity { get; set; }
+        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationEntity { get; set; }
         public Dictionary<string,string> TransferInformation { get; set; }
         public ObservableCollection<Dictionary<string, string>> OrderInformations { get; set; }
         public ObservableCollection<Dictionary<string, string>> StatusInformations { get; set; }
-        public ObservableCollection<Dictionary<string, string>> PositionInformation { get; set; }
+        public ObservableCollection<Dictionary<string, string>> PositionInformations { get; set; }
     }
     /// <summary>
     /// Information welche Tabs aktiviert werden
@@ -23,7 +23,7 @@ namespace EDIViewer.Models
 
     }
     /// <summary>
-    /// Informationen zur Übertragung
+    /// Informationen zur Übertragung  -> Auch bei ContentInformationViewModel anpassen
     /// </summary>
     public class TransferInformation
     {
@@ -34,17 +34,17 @@ namespace EDIViewer.Models
         public string RecipientID { get; set; }
     }
     /// <summary>
-    /// Informationen zum Auftrag
+    /// Informationen zum Auftrag  -> Auch bei ContentInformationViewModel anpassen
     /// </summary>
     public class OrderInformation
     {
         public string IdOrder { get; set; }
         public string Reference { get; set; }
-        public DateTime DateTimeLoadDat { get; set; }
-        public DateTime DateTimeUnloadDat { get; set; }
+        public string DateTimeLoadDat { get; set; }
+        public string DateTimeUnloadDat { get; set; }
     }
     /// <summary>
-    /// Informationen zur Position
+    /// Informationen zur Position -> Auch bei ContentInformationViewModel anpassen
     /// </summary>
     public class PositionInformation
     {
@@ -58,12 +58,12 @@ namespace EDIViewer.Models
         public double Width { get; set; }
     }
     /// <summary>
-    /// Informationen zum Satus
+    /// Informationen zum Satus  -> Auch bei ContentInformationViewModel anpassen
     /// </summary>
     public class StatusInformation
     {
         public int StatusID { get; set; }
-        public DateTime StatusDateTime { get; set; }
+        public string StatusDateTime { get; set; }
         public string StatusNotes {  get; set; }
     }
     /// <summary>

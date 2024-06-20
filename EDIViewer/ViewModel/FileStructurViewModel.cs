@@ -238,7 +238,9 @@ namespace EDIViewer.ViewModel
             get
             {
                 List<string> values = typeof(TransferInformation).GetProperties().Select(p => p.Name).ToList();
-                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+                values.Add("");
+                values.Sort();
+                ObservableCollection<string> collection = new(values);
 
                 return collection;
             }
@@ -248,7 +250,9 @@ namespace EDIViewer.ViewModel
             get
             {
                 List<string> values = typeof(OrderInformation).GetProperties().Select(p => p.Name).ToList();
-                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+                values.Add("");
+                values.Sort();
+                ObservableCollection<string> collection = new(values);
 
                 return collection;
             }
@@ -258,7 +262,9 @@ namespace EDIViewer.ViewModel
             get
             {
                 List<string> values = typeof(PositionInformation).GetProperties().Select(p => p.Name).ToList();
-                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+                values.Add("");
+                values.Sort();
+                ObservableCollection<string> collection = new(values);
 
                 return collection;
             }
@@ -268,7 +274,9 @@ namespace EDIViewer.ViewModel
             get
             {
                 List<string> values = typeof(StatusInformation).GetProperties().Select(p => p.Name).ToList();
-                ObservableCollection<string> collection = new ObservableCollection<string>(values);
+                values.Add("");
+                values.Sort();
+                ObservableCollection<string> collection = new(values);
 
                 return collection;
             }

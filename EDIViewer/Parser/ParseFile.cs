@@ -26,8 +26,8 @@ namespace EDIViewer.Parser
         public ContentInformation contentInformation;
         
         readonly ObservableCollection<RawInformation> rawInformations = [];
-        readonly List<List<RawInformation>> rawInformationEntity = [];
-        List<RawInformation> rawInformationEntityTmp = [];
+        readonly ObservableCollection<ObservableCollection<RawInformation>> rawInformationEntity = [];
+        ObservableCollection<RawInformation> rawInformationEntityTmp = [];
 
         Dictionary<string, string> transferInformation = [];
         ObservableCollection<Dictionary<string, string>> orderInformations = [];
@@ -381,7 +381,8 @@ namespace EDIViewer.Parser
                                 if (positionInformation.Count > 0)
                                 {
                                     positionInformations.Add(positionInformation);
-                                    positionInformation.Clear();
+                                    //positionInformation.Clear();
+                                    positionInformation = new();
                                 }
 
                                 //Mapping Satus in Liste schreiben
@@ -415,7 +416,7 @@ namespace EDIViewer.Parser
                 RawInformationEntity = rawInformationEntity,
                 TransferInformation = transferInformation,
                 OrderInformations = orderInformations,
-                PositionInformation = positionInformations,
+                PositionInformations = positionInformations,
                 StatusInformations = statusInformations,
             };
         }

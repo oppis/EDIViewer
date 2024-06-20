@@ -186,7 +186,70 @@
                                 />
                     </Grid>
                 </TabItem>
-                <TabItem Header="Sendung" IsEnabled="False">
+                <TabItem Header="Position" IsEnabled="True">
+                    <TabControl ItemsSource="{Binding PositionInformations}">
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Content="Positions ID"
+                                           Grid.Row="0" Grid.Column="0"/>
+                                    <TextBox Text="{Binding IdPosition}"
+                                             Grid.Row="0" Grid.Column="1"/>
+                                    
+                                    <Label Content="NVE"
+                                            Grid.Row="1" Grid.Column="0"/>
+                                    <TextBox Text="{Binding SSCC}"
+                                            Grid.Row="1" Grid.Column="1"/>
+
+                                    <Label Content="Anzahl"
+                                            Grid.Row="2" Grid.Column="0"/>
+                                    <TextBox Text="{Binding PackageCount}"
+                                            Grid.Row="2" Grid.Column="1"/>
+
+                                    <Label Content="Einheit"
+                                            Grid.Row="3" Grid.Column="0"/>
+                                    <TextBox Text="{Binding PackagingUnit}"
+                                            Grid.Row="3" Grid.Column="1"/>
+
+                                    <Label Content="Höhe"
+                                            Grid.Row="4" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Height}"
+                                            Grid.Row="4" Grid.Column="1"/>
+
+                                    <Label Content="Breites"
+                                            Grid.Row="5" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Width}"
+                                            Grid.Row="5" Grid.Column="1"/>
+
+                                    <Label Content="Länge"
+                                            Grid.Row="6" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Length}"
+                                            Grid.Row="6" Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding IdOrder}"/>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="Entwurf">
                     <TabControl>
                         <TabItem Header="Sendung">
                             <Grid>
@@ -202,14 +265,14 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Label Content=""
-                                       Grid.Row="0" Grid.Column="0"
-                                       />
+                               Grid.Row="0" Grid.Column="0"
+                               />
                                 <Label Content="TEST"
-                                       Grid.Row="0" Grid.Column="1"
-                                       />
+                                   Grid.Row="0" Grid.Column="1"
+                                   />
                                 <Label Content="TEST"
-                                       Grid.Row="0" Grid.Column="2"
-                                       />
+                                   Grid.Row="0" Grid.Column="2"
+                                   />
                             </Grid>
                         </TabItem>
                         <TabItem Header="Adresse"></TabItem>

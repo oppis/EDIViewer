@@ -26,8 +26,6 @@ namespace EDIViewer.Helper
             catch (Exception ex)
             {
                 UserMessageHelper.ShowMessageBox("Fehler bei Format Dateien", "Folgender Fehler ist beim öffnen der Format Dateien aufgetreten: " + ex.Message);
-
-                throw;
             }
 
             return currentFormatFiles;

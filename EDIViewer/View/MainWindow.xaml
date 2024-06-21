@@ -181,7 +181,7 @@
                                 />
                     </Grid>
                 </TabItem>
-                <TabItem Header="Position" IsEnabled="True">
+                <TabItem Name="PositionTab" Header="Position" IsEnabled="True">
                     <TabControl ItemsSource="{Binding PositionInformations}">
                         <TabControl.ContentTemplate>
                             <DataTemplate>

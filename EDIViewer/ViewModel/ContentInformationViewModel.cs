@@ -22,16 +22,22 @@ namespace EDIViewer.ViewModel
         public ContentInformationViewModel() 
         {
             contentInformation = null;
-            RawInformations = null;
-            RawInformationEntity = null;
-            TransferInformation = null;
+            //RawInformations = null;
+            //RawInformationEntity = null;
+            //TransferInformation = null;
         }
 
         public ObservableCollection<RawInformation> RawInformations
         {
             get
             {
-                return contentInformation.RawInformations;
+                ObservableCollection <RawInformation> rawInformations = new();
+                if (contentInformation is not null)
+                {
+                    rawInformations = contentInformation.RawInformations;
+                }
+
+                return rawInformations;
             }
             set
             {

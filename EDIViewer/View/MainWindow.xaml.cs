@@ -244,9 +244,6 @@ namespace EDIViewer
             //Formatauswahl leer
             cbFileFormat.SelectedItem = null;
 
-            //Auftrags Tabellen leeren
-            test.Items.Clear();
-
             if (contentInformationViewModel != null)
             {
                 contentInformationViewModel = new();

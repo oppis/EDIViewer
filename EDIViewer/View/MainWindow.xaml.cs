@@ -214,9 +214,6 @@ namespace EDIViewer
             //DataContext -> RawInformations
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
             DataContext = contentInformationViewModel;
-
-            //TODO -> Test Auftrags Tabellen
-            //test_entity();
         }
 
         /// <summary>
@@ -361,26 +358,6 @@ namespace EDIViewer
                         searchedTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Yellow));
                     }
                 }
-            }
-        }
-        private void test_entity()
-        {
-            int test_no = 0;
-            foreach (ObservableCollection<RawInformation> item in contentInformationViewModel.RawInformationEntity)
-            {
-                DataGrid dataGridEntity = new()
-                {
-                    ItemsSource = item
-                };
-
-                TabItem newTabItem = new()
-                {
-                    Header = test_no,
-                    Content = dataGridEntity,
-                };
-                test.Items.Add(newTabItem);
-
-                test_no++;
             }
         }
     }

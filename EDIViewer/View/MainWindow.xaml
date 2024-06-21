@@ -131,11 +131,6 @@
                           Width="2" Background="Black"/>
 
             <TabControl Grid.Row="0" Grid.Column="2">
-                <TabItem Header="Test">
-                    <TabControl x:Name="test">
-
-                    </TabControl>
-                </TabItem>
                 <TabItem Header="Übertragung" IsEnabled="True">
                     <Grid>
                         <Grid.RowDefinitions>

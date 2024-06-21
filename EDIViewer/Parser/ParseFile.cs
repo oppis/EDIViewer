@@ -193,17 +193,17 @@ namespace EDIViewer.Parser
                                         //Auftragsinformationen
                                         if (!String.IsNullOrEmpty(currentFieldDefiniations[i].OrderInformation))
                                         {
-                                            orderInformation.Add(currentFieldDefiniations[i].OrderInformation, fileContent);
+                                            orderInformation.TryAdd(currentFieldDefiniations[i].OrderInformation, fileContent);
                                         }
                                         //Positionsinformationen
-                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation))
+                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation)) //TODO -> Trennen nach Position -> Anpassung in FormatManagement
                                         {
-                                            positionInformation.Add(currentFieldDefiniations[i].PositionInformation, fileContent);
+                                            positionInformation.TryAdd(currentFieldDefiniations[i].PositionInformation, fileContent);
                                         }
                                         //Statusinformationen
                                         if (!String.IsNullOrEmpty(currentFieldDefiniations[i].StatusInformation))
                                         {
-                                            statusInformation.Add(currentFieldDefiniations[i].StatusInformation, fileContent);
+                                            statusInformation.TryAdd(currentFieldDefiniations[i].StatusInformation, fileContent);
                                         }
 
                                         //Ausgabe Objekt erstellen
@@ -227,29 +227,31 @@ namespace EDIViewer.Parser
                                         if (oldAufNr != currentAufNr)
                                         {
                                             rawInformationEntity.Add(rawInformationEntityTmp);
+
+                                            //Mapping Auftrag in Liste schreiben
+                                            if (orderInformation.Count > 0)
+                                            {
+                                                orderInformations.Add(orderInformation);
+                                                orderInformation = [];
+                                            }
+
+                                            //Mapping Postion in Liste schreiben
+                                            if (positionInformation.Count > 0)
+                                            {
+                                                positionInformations.Add(positionInformation);
+                                                positionInformation = [];
+                                            }
+
+                                            //Mapping Satus in Liste schreiben
+                                            if (statusInformation.Count > 0)
+                                            {
+                                                statusInformations.Add(statusInformation);
+                                                statusInformation = [];
+                                            }
                                         }
                                     }
 
-                                    //Mapping Auftrag in Liste schreiben
-                                    if (orderInformation.Count > 0)
-                                    {
-                                        orderInformations.Add(orderInformation);
-                                        orderInformation.Clear();
-                                    }
-
-                                    //Mapping Postion in Liste schreiben
-                                    if (positionInformation.Count > 0)
-                                    {
-                                        positionInformations.Add(positionInformation);
-                                        positionInformation.Clear();
-                                    }
-
-                                    //Mapping Satus in Liste schreiben
-                                    if (statusInformation.Count > 0)
-                                    {
-                                        statusInformations.Add(statusInformation);
-                                        statusInformation.Clear();
-                                    }
+ 
                                 }
                                 catch (ArgumentOutOfRangeException ex)
                                 {
@@ -257,7 +259,7 @@ namespace EDIViewer.Parser
                                 }
                                 catch (Exception ex)
                                 {
-                                    UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: " + ex.Message);
+                                    UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);
                                 }
                             }
                         }
@@ -332,17 +334,17 @@ namespace EDIViewer.Parser
                                         //Auftragsinformationen
                                         if (!String.IsNullOrEmpty(fieldDefination.OrderInformation))
                                         {
-                                            orderInformation.Add(fieldDefination.OrderInformation, fileContent);
+                                            orderInformation.TryAdd(fieldDefination.OrderInformation, fileContent);
                                         }
                                         //Positionsinformationen
                                         if (!String.IsNullOrEmpty(fieldDefination.PositionInformation))
                                         {
-                                            positionInformation.Add(fieldDefination.PositionInformation, fileContent);
+                                            positionInformation.TryAdd(fieldDefination.PositionInformation, fileContent); //TODO -> Trennen nach Position -> Anpassung in FormatManagement
                                         }
                                         //Statusinformationen
                                         if (!String.IsNullOrEmpty(fieldDefination.StatusInformation))
                                         {
-                                            statusInformation.Add(fieldDefination.StatusInformation, fileContent);
+                                            statusInformation.TryAdd(fieldDefination.StatusInformation, fileContent);
                                         }
 
                                         //Ausgabe in Objekt erstellen
@@ -366,30 +368,29 @@ namespace EDIViewer.Parser
                                         if (oldAufNr != currentAufNr)
                                         {
                                             rawInformationEntity.Add(rawInformationEntityTmp);
+
+                                            //Mapping Auftrag in Liste schreiben
+                                            if (orderInformation.Count > 0)
+                                            {
+                                                orderInformations.Add(orderInformation);
+                                                orderInformation = [];
+                                            }
+
+                                            //Mapping Postion in Liste schreiben
+                                            if (positionInformation.Count > 0)
+                                            {
+                                                positionInformations.Add(positionInformation);
+                                                positionInformation = [];
+                                            }
+
+                                            //Mapping Satus in Liste schreiben
+                                            if (statusInformation.Count > 0)
+                                            {
+                                                statusInformations.Add(statusInformation);
+                                                statusInformation = [];
+                                            }
                                         }
                                     }
-                                }
-
-                                //Mapping Auftrag in Liste schreiben
-                                if (orderInformation.Count > 0)
-                                {
-                                    orderInformations.Add(orderInformation);
-                                    orderInformation.Clear();
-                                }
-
-                                //Mapping Postion in Liste schreiben
-                                if (positionInformation.Count > 0)
-                                {
-                                    positionInformations.Add(positionInformation);
-                                    //positionInformation.Clear();
-                                    positionInformation = new();
-                                }
-
-                                //Mapping Satus in Liste schreiben
-                                if (statusInformation.Count > 0)
-                                {
-                                    statusInformations.Add(statusInformation);
-                                    statusInformation.Clear();
                                 }
                             }
                         }
@@ -397,12 +398,12 @@ namespace EDIViewer.Parser
 
                     BuildInfoObject();
                 }
-            }
+        }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: " + ex.Message);    
+                UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);    
             }
-        }
+}
 
         /// <summary>
         /// Erstellen des Rückgabe Objekt

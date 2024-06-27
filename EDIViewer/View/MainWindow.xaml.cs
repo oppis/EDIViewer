@@ -95,7 +95,7 @@ namespace EDIViewer
             //Prüfen wie Fenster geschlossen wurde
             if ((bool)windowStatus)
             {
-                //Neu Laden der Field Definitionen wenn Änderung bei FieldDefinitionenen vorgenommen wurde
+                //Neu Laden der Field Definitionen wenn Änderung bei FieldDefinitionen vorgenommen wurde
                 if (cbFileFormat.SelectedIndex != -1)
                 {
                     StartParsingFile();

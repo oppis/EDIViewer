@@ -245,7 +245,7 @@ namespace EDIViewer.ViewModel
                 return collection;
             }
         }
-        public static ObservableCollection<string> OrderInformationNames
+        public ObservableCollection<string> OrderInformationNames
         {
             get
             {

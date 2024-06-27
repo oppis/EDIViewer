@@ -237,7 +237,7 @@
                     <DataGridTemplateColumn Header="OrderInformation">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox ItemsSource="{Binding Path=DataContext.OrderInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding OrderInformation}"/>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.OrderInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=OrderInformation, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -251,7 +251,7 @@
                     <DataGridTemplateColumn Header="StatusInformation">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox ItemsSource="{Binding Path=DataContext.StatusInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding StatusInformation}"/>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.StatusInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=StatusInformation, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -181,6 +181,54 @@
                                 />
                     </Grid>
                 </TabItem>
+                <TabItem Name="OrderTab" Header="Auftrag" IsEnabled="True">
+                    <TabControl ItemsSource="{Binding OrderInformations}">
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Content="Auftrags ID"
+                                           Grid.Row="0" Grid.Column="0"/>
+                                    <TextBox Text="{Binding IdOrder}"
+                                             Grid.Row="0" Grid.Column="1"/>
+
+                                    <Label Content="Referenz"
+                                            Grid.Row="1" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Reference}"
+                                            Grid.Row="1" Grid.Column="1"/>
+
+                                    <Label Content="Beladedatum"
+                                            Grid.Row="2" Grid.Column="0"/>
+                                    <TextBox Text="{Binding DateTimeLoadDat}"
+                                            Grid.Row="2" Grid.Column="1"/>
+
+                                    <Label Content="Entladedatum"
+                                            Grid.Row="3" Grid.Column="0"/>
+                                    <TextBox Text="{Binding DateTimeUnloadDat}"
+                                            Grid.Row="3" Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding IdOrder}"/>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                    </TabControl>
+                </TabItem>
                 <TabItem Name="PositionTab" Header="Position" IsEnabled="True">
                     <TabControl ItemsSource="{Binding PositionInformations}">
                         <TabControl.ContentTemplate>
@@ -204,7 +252,7 @@
                                            Grid.Row="0" Grid.Column="0"/>
                                     <TextBox Text="{Binding IdPosition}"
                                              Grid.Row="0" Grid.Column="1"/>
-                                    
+
                                     <Label Content="NVE"
                                             Grid.Row="1" Grid.Column="0"/>
                                     <TextBox Text="{Binding SSCC}"
@@ -225,7 +273,7 @@
                                     <TextBox Text="{Binding Height}"
                                             Grid.Row="4" Grid.Column="1"/>
 
-                                    <Label Content="Breites"
+                                    <Label Content="Breite"
                                             Grid.Row="5" Grid.Column="0"/>
                                     <TextBox Text="{Binding Width}"
                                             Grid.Row="5" Grid.Column="1"/>
@@ -239,10 +287,58 @@
                         </TabControl.ContentTemplate>
                         <TabControl.ItemTemplate>
                             <DataTemplate>
+                                <TextBlock Text="{Binding IdPosition}"/>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="Status" IsEnabled="True">
+                    <TabControl ItemsSource="{Binding StatusInformations}">
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Content="Status ID"
+                                            Grid.Row="0" Grid.Column="0"/>
+                                    <TextBox Text="{Binding StatusID}"
+                                        Grid.Row="0" Grid.Column="1"/>
+
+                                    <Label Content="Status Zeit"
+                                        Grid.Row="1" Grid.Column="0"/>
+                                    <TextBox Text="{Binding StatusDateTime}"
+                                        Grid.Row="1" Grid.Column="1"/>
+
+                                    <Label Content="Status Hinweis"
+                                        Grid.Row="2" Grid.Column="0"/>
+                                    <TextBox Text="{Binding StatusNotes}"
+                                        Grid.Row="2" Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
                                 <TextBlock Text="{Binding IdOrder}"/>
                             </DataTemplate>
                         </TabControl.ItemTemplate>
                     </TabControl>
+                </TabItem>
+                <TabItem Header="RAW Informationen">
+                    <DataGrid x:Name="dgRawInformation"
+                                Grid.Row="2" Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Margin="5,5,5,5"
+                                AutoGenerateColumns="True"
+                                ItemsSource="{Binding RawInformations}">
+                    </DataGrid>
                 </TabItem>
                 <TabItem Header="Entwurf">
                     <TabControl>
@@ -260,35 +356,20 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Label Content=""
-                               Grid.Row="0" Grid.Column="0"
-                               />
+               Grid.Row="0" Grid.Column="0"
+               />
                                 <Label Content="TEST"
-                                   Grid.Row="0" Grid.Column="1"
-                                   />
+                   Grid.Row="0" Grid.Column="1"
+                   />
                                 <Label Content="TEST"
-                                   Grid.Row="0" Grid.Column="2"
-                                   />
+                   Grid.Row="0" Grid.Column="2"
+                   />
                             </Grid>
                         </TabItem>
                         <TabItem Header="Adresse"></TabItem>
                         <TabItem Header="Position"></TabItem>
                         <TabItem Header="Sonder"></TabItem>
                     </TabControl>
-                </TabItem>
-                <TabItem Header="Status" IsEnabled="False">
-                    <TabControl>
-                        <TabItem Header="Sendung"></TabItem>
-                        <TabItem Header="Position"></TabItem>
-                    </TabControl>
-                </TabItem>
-                <TabItem Header="RAW Informationen">
-                    <DataGrid x:Name="dgRawInformation"
-                                Grid.Row="2" Grid.Column="0"
-                                Grid.ColumnSpan="3"
-                                Margin="5,5,5,5"
-                                AutoGenerateColumns="True"
-                                ItemsSource="{Binding RawInformations}">
-                    </DataGrid>
                 </TabItem>
             </TabControl>
         </Grid>

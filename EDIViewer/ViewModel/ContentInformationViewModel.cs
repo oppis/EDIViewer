@@ -78,6 +78,9 @@ namespace EDIViewer.ViewModel
                                 case "DateTime":
                                     transferInformation.DateTime = item.Value;
                                     break;
+                                case "DataReference":
+                                    transferInformation.DataReference = item.Value;
+                                    break;
                                 case "SenderID":
                                     transferInformation.SenderID = item.Value;
                                     break;
@@ -178,7 +181,7 @@ namespace EDIViewer.ViewModel
                                         currentPositionInformation.IdOrder = item.Value;
                                         break;
                                     case "IdPosition":
-                                        currentPositionInformation.IdPosition = Convert.ToInt16(item.Value);
+                                        currentPositionInformation.IdPosition = Convert.ToInt32(item.Value);
                                         break;
                                     case "SSCC":
                                         currentPositionInformation.SSCC = item.Value;

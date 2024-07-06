@@ -180,7 +180,6 @@ namespace EDIViewer.Parser
                                             {
                                                 rawInformationPositionTmp = [];
                                             }
-
                                         }
 
                                         //Interpretation der Feld Informationen
@@ -337,7 +336,7 @@ namespace EDIViewer.Parser
                                         {
                                             currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, currentFormatType.OrderSeparatorLength);
                                         }
-                                        else //TODO -> Anpassung für jede Zeile bei Status -> aktivierbar in Format Management
+                                        else
                                         {
                                             currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, fileRow.Length - currentFormatType.OrderSeparatorStart);
                                         }
@@ -358,11 +357,11 @@ namespace EDIViewer.Parser
                                             {
                                                 currentPosNr = fileRow.Substring(currentFormatType.PostionSeparatorStart - 1, currentFormatType.PostionSeparatorLength);
                                             }
-                                            else //TODO -> Anpassung für jede Zeile bei Status -> aktivierbar in Format Management
+                                            else
                                             {
                                                 if (file.Length >= currentFormatType.PostionSeparatorStart)
                                                 {
-                                                    currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, fileRow.Length - currentFormatType.OrderSeparatorStart);
+                                                    currentPosNr = fileRow.Substring(currentFormatType.PostionSeparatorStart - 1, fileRow.Length - currentFormatType.PostionSeparatorStart);
                                                 }
                                             }
 

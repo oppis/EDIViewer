@@ -9,7 +9,8 @@ namespace EDIViewer.Models
     {
         //Für Tabelle mit allen Informationen -> Satzart, Feld, Inhalt -> Mehere Tabellen nach Satzart getrennt -> foreach -> Flexibel
         public ObservableCollection<RawInformation> RawInformations { get; set; }
-        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationEntity { get; set; }
+        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationOrder { get; set; }
+        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationPosition { get; set; }
         public Dictionary<string,string> TransferInformation { get; set; }
         public ObservableCollection<Dictionary<string, string>> OrderInformations { get; set; }
         public ObservableCollection<Dictionary<string, string>> StatusInformations { get; set; }
@@ -62,7 +63,8 @@ namespace EDIViewer.Models
     /// </summary>
     public class StatusInformation
     {
-        public int StatusID { get; set; }
+        public int IdStatus { get; set; }
+        public int StatusCode { get; set; }
         public string StatusDateTime { get; set; }
         public string StatusNotes {  get; set; }
     }

@@ -12,6 +12,7 @@ namespace EDIViewer.Parser
         string[] origFile;
         string[] currentFileRowArray;
         string currentAufNr = string.Empty;
+        string currentPosNr = string.Empty;
 
         //Datei Struktur für ausgewähltes Format
         FileStructur fileStructur;
@@ -26,8 +27,10 @@ namespace EDIViewer.Parser
         public ContentInformation contentInformation;
         
         readonly ObservableCollection<RawInformation> rawInformations = [];
-        readonly ObservableCollection<ObservableCollection<RawInformation>> rawInformationEntity = [];
-        ObservableCollection<RawInformation> rawInformationEntityTmp = [];
+        readonly ObservableCollection<ObservableCollection<RawInformation>> rawInformationOrder = [];
+        readonly ObservableCollection<ObservableCollection<RawInformation>> rawInformationPosition = [];
+        ObservableCollection<RawInformation> rawInformationOrderTmp = [];
+        ObservableCollection<RawInformation> rawInformationPositionTmp = [];
 
         Dictionary<string, string> transferInformation = [];
         ObservableCollection<Dictionary<string, string>> orderInformations = [];
@@ -158,14 +161,28 @@ namespace EDIViewer.Parser
 
                                         //Länge bestimmen für Parsing bis Ende der Zeile
                                         string oldAufNr = currentAufNr;
-                                        currentAufNr = currentFileRowArray[currentFormatType.EntitySeparatorStart];
+                                        currentAufNr = currentFileRowArray[currentFormatType.OrderSeparatorStart];
 
-                                        //Prüfen ob neuer Auftrag gebinnt und neue Einheit anlegen
+                                        string oldPosNr = currentPosNr;
+
+                                        //Prüfen ob neuer Auftrag vorliegt und neue Einheit anlegen
                                         if (oldAufNr != currentAufNr)
                                         {
-                                            rawInformationEntityTmp = [];
+                                            rawInformationOrderTmp = [];
+                                            oldPosNr = string.Empty;
                                         }
-                                         
+
+                                        if (currentRecordType.PositionTyp)
+                                        {
+                                            currentPosNr = currentFileRowArray[currentFormatType.PostionSeparatorStart];
+
+                                            if (oldPosNr != currentPosNr)
+                                            {
+                                                rawInformationPositionTmp = [];
+                                            }
+
+                                        }
+
                                         //Interpretation der Feld Informationen
                                         string fileContent = currentFileRowArray[i];
 
@@ -188,22 +205,34 @@ namespace EDIViewer.Parser
                                         //Transfer Informationen                           
                                         if (!String.IsNullOrEmpty(currentFieldDefiniations[i].TransferInformation))
                                         {
-                                            transferInformation.Add(currentFieldDefiniations[i].TransferInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                transferInformation.Add(currentFieldDefiniations[i].TransferInformation, fileContent);
+                                            }
                                         }
                                         //Auftragsinformationen
                                         if (!String.IsNullOrEmpty(currentFieldDefiniations[i].OrderInformation))
                                         {
-                                            orderInformation.TryAdd(currentFieldDefiniations[i].OrderInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                orderInformation.TryAdd(currentFieldDefiniations[i].OrderInformation, fileContent);
+                                            }
                                         }
                                         //Positionsinformationen
-                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation)) //TODO -> Trennen nach Position -> Anpassung in FormatManagement
+                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation))
                                         {
-                                            positionInformation.TryAdd(currentFieldDefiniations[i].PositionInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                positionInformation.TryAdd(currentFieldDefiniations[i].PositionInformation, fileContent);
+                                            }
                                         }
                                         //Statusinformationen
                                         if (!String.IsNullOrEmpty(currentFieldDefiniations[i].StatusInformation))
                                         {
-                                            statusInformation.TryAdd(currentFieldDefiniations[i].StatusInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                statusInformation.TryAdd(currentFieldDefiniations[i].StatusInformation, fileContent);
+                                            }
                                         }
 
                                         //Ausgabe Objekt erstellen
@@ -221,25 +250,18 @@ namespace EDIViewer.Parser
                                         rawInformations.Add(currentRawInformation);
 
                                         //Listen mit Gruppierung nach AufNr erstellen
-                                        rawInformationEntityTmp.Add(currentRawInformation);
+                                        rawInformationOrderTmp.Add(currentRawInformation);
 
                                         //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
                                         if (oldAufNr != currentAufNr)
                                         {
-                                            rawInformationEntity.Add(rawInformationEntityTmp);
+                                            rawInformationOrder.Add(rawInformationOrderTmp);
 
                                             //Mapping Auftrag in Liste schreiben
                                             if (orderInformation.Count > 0)
                                             {
                                                 orderInformations.Add(orderInformation);
                                                 orderInformation = [];
-                                            }
-
-                                            //Mapping Postion in Liste schreiben
-                                            if (positionInformation.Count > 0)
-                                            {
-                                                positionInformations.Add(positionInformation);
-                                                positionInformation = [];
                                             }
 
                                             //Mapping Satus in Liste schreiben
@@ -249,9 +271,23 @@ namespace EDIViewer.Parser
                                                 statusInformation = [];
                                             }
                                         }
-                                    }
 
- 
+                                        if (currentRecordType.PositionTyp)
+                                        {
+                                            rawInformationPositionTmp.Add(currentRawInformation);        
+                                        }
+
+                                        if (oldPosNr != currentPosNr)
+                                        {
+                                            if (positionInformation.Count > 0)
+                                            {
+                                                positionInformations.Add(positionInformation);
+                                                positionInformation = [];
+                                            }
+
+                                            rawInformationPosition.Add(rawInformationPositionTmp);
+                                        }
+                                    }
                                 }
                                 catch (ArgumentOutOfRangeException ex)
                                 {
@@ -297,14 +333,43 @@ namespace EDIViewer.Parser
                                         string oldAufNr = currentAufNr;
 
                                         //Prüfen ob Zeile lang genug für Objekt Trennung
-                                        if (fileRow.Length > (currentFormatType.EntitySeparatorStart - 1 + currentFormatType.EntitySeparatorLength))
+                                        if (fileRow.Length > (currentFormatType.OrderSeparatorStart - 1 + currentFormatType.OrderSeparatorLength))
                                         {
-                                            currentAufNr = fileRow.Substring(currentFormatType.EntitySeparatorStart - 1, currentFormatType.EntitySeparatorLength);
+                                            currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, currentFormatType.OrderSeparatorLength);
                                         }
-                                        
+                                        else //TODO -> Anpassung für jede Zeile bei Status -> aktivierbar in Format Management
+                                        {
+                                            currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, fileRow.Length - currentFormatType.OrderSeparatorStart);
+                                        }
+
+                                        //Prüfen ob neue Position beginnt und neue Einheit anlegen
+                                        string oldPosNr = currentPosNr;
+
                                         if (oldAufNr != currentAufNr)
                                         {
-                                            rawInformationEntityTmp = [];
+                                            rawInformationOrderTmp = [];
+                                            oldPosNr = string.Empty;
+                                        }
+
+                                        if (currentRecordType.PositionTyp)
+                                        {
+                                            //Prüfen ob Zeile lang genug für Objekt Trennung
+                                            if (fileRow.Length > (currentFormatType.PostionSeparatorStart - 1 + currentFormatType.PostionSeparatorLength))
+                                            {
+                                                currentPosNr = fileRow.Substring(currentFormatType.PostionSeparatorStart - 1, currentFormatType.PostionSeparatorLength);
+                                            }
+                                            else //TODO -> Anpassung für jede Zeile bei Status -> aktivierbar in Format Management
+                                            {
+                                                if (file.Length >= currentFormatType.PostionSeparatorStart)
+                                                {
+                                                    currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, fileRow.Length - currentFormatType.OrderSeparatorStart);
+                                                }
+                                            }
+
+                                            if (oldPosNr != currentPosNr)
+                                            {
+                                                rawInformationPositionTmp = [];
+                                            }
                                         }
 
                                         //Interpretation der Feld Informationen
@@ -329,22 +394,34 @@ namespace EDIViewer.Parser
                                         //Transfer Informationen                           
                                         if (!String.IsNullOrEmpty(fieldDefination.TransferInformation))
                                         {
-                                            transferInformation.Add(fieldDefination.TransferInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                transferInformation.Add(fieldDefination.TransferInformation, fileContent);
+                                            }
                                         }
                                         //Auftragsinformationen
                                         if (!String.IsNullOrEmpty(fieldDefination.OrderInformation))
                                         {
-                                            orderInformation.TryAdd(fieldDefination.OrderInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                orderInformation.TryAdd(fieldDefination.OrderInformation, fileContent);
+                                            }
                                         }
                                         //Positionsinformationen
                                         if (!String.IsNullOrEmpty(fieldDefination.PositionInformation))
                                         {
-                                            positionInformation.TryAdd(fieldDefination.PositionInformation, fileContent); //TODO -> Trennen nach Position -> Anpassung in FormatManagement
+                                            if (fileContent.Length > 0)
+                                            {
+                                                positionInformation.TryAdd(fieldDefination.PositionInformation, fileContent);
+                                            }
                                         }
                                         //Statusinformationen
                                         if (!String.IsNullOrEmpty(fieldDefination.StatusInformation))
                                         {
-                                            statusInformation.TryAdd(fieldDefination.StatusInformation, fileContent);
+                                            if (fileContent.Length > 0)
+                                            {
+                                                statusInformation.TryAdd(fieldDefination.StatusInformation, fileContent);
+                                            }
                                         }
 
                                         //Ausgabe in Objekt erstellen
@@ -362,25 +439,18 @@ namespace EDIViewer.Parser
                                         rawInformations.Add(currentRawInformation);
 
                                         //Listen mit Gruppierung nach AufNr erstellen
-                                        rawInformationEntityTmp.Add(currentRawInformation);
+                                        rawInformationOrderTmp.Add(currentRawInformation);
 
                                         //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
                                         if (oldAufNr != currentAufNr)
                                         {
-                                            rawInformationEntity.Add(rawInformationEntityTmp);
+                                            rawInformationOrder.Add(rawInformationOrderTmp);
 
                                             //Mapping Auftrag in Liste schreiben
                                             if (orderInformation.Count > 0)
                                             {
                                                 orderInformations.Add(orderInformation);
                                                 orderInformation = [];
-                                            }
-
-                                            //Mapping Postion in Liste schreiben
-                                            if (positionInformation.Count > 0)
-                                            {
-                                                positionInformations.Add(positionInformation);
-                                                positionInformation = [];
                                             }
 
                                             //Mapping Satus in Liste schreiben
@@ -390,6 +460,22 @@ namespace EDIViewer.Parser
                                                 statusInformation = [];
                                             }
                                         }
+
+                                        if (currentRecordType.PositionTyp)
+                                        {
+                                            rawInformationPositionTmp.Add(currentRawInformation);
+                                        }
+
+                                        if (oldPosNr != currentPosNr)
+                                        {
+                                            if (positionInformation.Count > 0)
+                                            {
+                                                positionInformations.Add(positionInformation);
+                                                positionInformation = [];
+                                            }
+
+                                            rawInformationPosition.Add(rawInformationPositionTmp);
+                                        }
                                     }
                                 }
                             }
@@ -398,12 +484,12 @@ namespace EDIViewer.Parser
 
                     BuildInfoObject();
                 }
-        }
+            }
             catch (Exception ex)
             {
                 UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);    
             }
-}
+        }
 
         /// <summary>
         /// Erstellen des Rückgabe Objekt
@@ -414,7 +500,8 @@ namespace EDIViewer.Parser
             contentInformation = new()
             {
                 RawInformations = rawInformations,
-                RawInformationEntity = rawInformationEntity,
+                RawInformationOrder = rawInformationOrder,
+                RawInformationPosition = rawInformationPosition,
                 TransferInformation = transferInformation,
                 OrderInformations = orderInformations,
                 PositionInformations = positionInformations,

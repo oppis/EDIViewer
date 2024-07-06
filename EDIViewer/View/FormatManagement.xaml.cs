@@ -103,8 +103,10 @@ namespace EDIViewer
             //FormatType Felder deaktivieren
             formatTypeDetection.IsEnabled = false;
             formatTypeDescription.IsEnabled = false;
-            formatTypeEntitySeparatorStart.IsEnabled = false;
-            formatTypeEntitySeparatorLength.IsEnabled = false;
+            formatTypeOrderSeparatorStart.IsEnabled = false;
+            formatTypeOrderSeparatorLength.IsEnabled = false;
+            formatTypePositionSeparatorStart.IsEnabled = false;
+            formatTypePositionSeparatorLength.IsEnabled = false;
         }
 
         /// <summary>
@@ -208,8 +210,10 @@ namespace EDIViewer
             //Felder aktivieren
             formatTypeDetection.IsEnabled = true;
             formatTypeDescription.IsEnabled = true;
-            formatTypeEntitySeparatorStart.IsEnabled = true;
-            formatTypeEntitySeparatorLength.IsEnabled = true;
+            formatTypeOrderSeparatorStart.IsEnabled = true;
+            formatTypeOrderSeparatorLength.IsEnabled = true;
+            formatTypePositionSeparatorStart.IsEnabled = true;
+            formatTypePositionSeparatorLength.IsEnabled = true;
         }
 
         /// <summary>

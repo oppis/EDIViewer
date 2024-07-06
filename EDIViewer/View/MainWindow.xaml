@@ -242,46 +242,52 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                         <RowDefinition/>
+                                        <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Content="Positions ID"
+                                    <Label Content="Order ID"
                                            Grid.Row="0" Grid.Column="0"/>
-                                    <TextBox Text="{Binding IdPosition}"
+                                    <TextBox Text="{Binding IdOrder}"
                                              Grid.Row="0" Grid.Column="1"/>
 
-                                    <Label Content="NVE"
-                                            Grid.Row="1" Grid.Column="0"/>
-                                    <TextBox Text="{Binding SSCC}"
-                                            Grid.Row="1" Grid.Column="1"/>
+                                    <Label Content="Positions ID"
+                                           Grid.Row="1" Grid.Column="0"/>
+                                    <TextBox Text="{Binding IdPosition}"
+                                             Grid.Row="1" Grid.Column="1"/>
 
-                                    <Label Content="Anzahl"
+                                    <Label Content="NVE"
                                             Grid.Row="2" Grid.Column="0"/>
-                                    <TextBox Text="{Binding PackageCount}"
+                                    <TextBox Text="{Binding SSCC}"
                                             Grid.Row="2" Grid.Column="1"/>
 
-                                    <Label Content="Einheit"
+                                    <Label Content="Anzahl"
                                             Grid.Row="3" Grid.Column="0"/>
-                                    <TextBox Text="{Binding PackagingUnit}"
+                                    <TextBox Text="{Binding PackageCount}"
                                             Grid.Row="3" Grid.Column="1"/>
 
-                                    <Label Content="Höhe"
+                                    <Label Content="Einheit"
                                             Grid.Row="4" Grid.Column="0"/>
-                                    <TextBox Text="{Binding Height}"
+                                    <TextBox Text="{Binding PackagingUnit}"
                                             Grid.Row="4" Grid.Column="1"/>
 
-                                    <Label Content="Breite"
+                                    <Label Content="Höhe"
                                             Grid.Row="5" Grid.Column="0"/>
-                                    <TextBox Text="{Binding Width}"
+                                    <TextBox Text="{Binding Height}"
                                             Grid.Row="5" Grid.Column="1"/>
 
-                                    <Label Content="Länge"
+                                    <Label Content="Breite"
                                             Grid.Row="6" Grid.Column="0"/>
-                                    <TextBox Text="{Binding Length}"
+                                    <TextBox Text="{Binding Width}"
                                             Grid.Row="6" Grid.Column="1"/>
+
+                                    <Label Content="Länge"
+                                            Grid.Row="7" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Length}"
+                                            Grid.Row="7" Grid.Column="1"/>
                                 </Grid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
@@ -307,9 +313,9 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Content="Status ID"
+                                    <Label Content="Status Code"
                                             Grid.Row="0" Grid.Column="0"/>
-                                    <TextBox Text="{Binding StatusID}"
+                                    <TextBox Text="{Binding StatusCode}"
                                         Grid.Row="0" Grid.Column="1"/>
 
                                     <Label Content="Status Zeit"
@@ -326,7 +332,7 @@
                         </TabControl.ContentTemplate>
                         <TabControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding IdOrder}"/>
+                                <TextBlock Text="{Binding IdStatus}"/>
                             </DataTemplate>
                         </TabControl.ItemTemplate>
                     </TabControl>

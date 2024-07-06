@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,7 +7,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 using EDIViewer.Helper;
-using EDIViewer.Models;
 using EDIViewer.ViewModel;
 
 using Microsoft.Win32;

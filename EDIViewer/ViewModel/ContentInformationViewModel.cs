@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Configuration;
 
 using EDIViewer.Helper;
 using EDIViewer.Models;
@@ -45,16 +44,29 @@ namespace EDIViewer.ViewModel
                 OnPropertyChanged(nameof(RawInformations));
             }
         }
-        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationEntity
+        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationOrder
         {
             get
             {
-                return contentInformation.RawInformationEntity;
+                return contentInformation.RawInformationOrder;
             }
             set
             {
-                contentInformation.RawInformationEntity = value;
-                OnPropertyChanged(nameof(RawInformationEntity));
+                contentInformation.RawInformationOrder = value;
+                OnPropertyChanged(nameof(RawInformationOrder));
+            }
+        }
+
+        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationPosition //TODO Zuordnen
+        {
+            get
+            {
+                return contentInformation.RawInformationPosition;
+            }
+            set
+            {
+                contentInformation.RawInformationPosition = value;
+                OnPropertyChanged(nameof(RawInformationPosition));
             }
         }
         public TransferInformation TransferInformation
@@ -239,8 +251,11 @@ namespace EDIViewer.ViewModel
                             {
                                 switch (item.Key)
                                 {
-                                    case "StatusID":
-                                        currentStatusInformation.StatusID = Convert.ToInt16(item.Value);
+                                    case "IdStatus":
+                                        currentStatusInformation.IdStatus = Convert.ToInt32(item.Value);
+                                        break;
+                                    case "StatusCode":
+                                        currentStatusInformation.StatusCode = Convert.ToInt16(item.Value);
                                         break;
                                     case "StatusDateTime":
                                         currentStatusInformation.StatusDateTime = item.Value;

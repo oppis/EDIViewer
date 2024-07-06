@@ -17,8 +17,10 @@ namespace EDIViewer.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Detection { get; set; }
-        public int EntitySeparatorStart { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Anfang in Zeile
-        public int EntitySeparatorLength { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Länge
+        public int OrderSeparatorStart { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Anfang in Zeile
+        public int OrderSeparatorLength { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Länge
+        public int PostionSeparatorStart { get; set; } //Trennung Einheit -> z.B. mehrer Positionen -> Anfang in Zeile
+        public int PostionSeparatorLength { get; set; } //Trennung Einheit -> z.B. mehrer Positionen -> Länge
         public ObservableCollection<RecordType> RecordTypes { get; set; }
         
     }
@@ -29,6 +31,7 @@ namespace EDIViewer.Models
         public bool Mandatory { get; set; }
         public string RecordDetection { get; set; }
         public string Description { get; set; }
+        public bool PositionTyp { get; set; } //Markierung ob Positions Information
         public ObservableCollection<FieldDefination> FieldDefinations { get; set; }
     }
     public class FieldDefination //Felder im Satz

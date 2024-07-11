@@ -13,8 +13,10 @@ namespace EDIViewer.ViewModel
         private static FileStructur fileStructurModel;
         public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
         public ArtDefinationViewModel ArtDefinationViewModel { get; set; }
+        public string currentFileFormatFile;
         public FileStructurViewModel(string currentFileFormat)
         {
+            currentFileFormatFile = currentFileFormat;
             string json = File.ReadAllText(currentFileFormat);
 
             fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(json);
@@ -65,6 +67,16 @@ namespace EDIViewer.ViewModel
 
             string formatFilePath = Path.Combine(FormatFiles.LoadCurrentFormatFolderPath(), fileStructurModel.FormatName + "_" +  fileStructurModel.FormatVariation + ".JSON");
             File.WriteAllText(formatFilePath, output);
+        }
+        /// <summary>
+        /// Letztes Änderungsdatum der Datei Anzeigen
+        /// </summary>
+        public string LastChange
+        {
+            get 
+            {
+                return File.GetLastWriteTime(currentFileFormatFile).ToString();
+            }
         }
         public int FormatVersion
         {

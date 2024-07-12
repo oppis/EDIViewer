@@ -63,6 +63,8 @@ namespace EDIViewer
             fileStructurViewModel.SaveFile();
 
             DialogResult = true;
+
+
             this.Close();
         }
 

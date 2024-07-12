@@ -14,12 +14,14 @@ namespace EDIViewer.ViewModel
         public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
         public ArtDefinationViewModel ArtDefinationViewModel { get; set; }
         public string currentFileFormatFile;
+        private StreamReader textStream;
         public FileStructurViewModel(string currentFileFormat)
         {
             currentFileFormatFile = currentFileFormat;
-            string json = File.ReadAllText(currentFileFormat);
 
-            fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(json);
+            textStream = File.OpenText(currentFileFormatFile);
+
+            fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(textStream.ReadToEnd());
 
             //Anlage neuer Format Typ
             FormatTypNewViewModel = new FormatTypNewViewModel();
@@ -63,6 +65,7 @@ namespace EDIViewer.ViewModel
         /// </summary>
         public void SaveFile()
         {
+            textStream.Close();   
             string output = JsonConvert.SerializeObject(fileStructurModel);
 
             string formatFilePath = Path.Combine(FormatFiles.LoadCurrentFormatFolderPath(), fileStructurModel.FormatName + "_" +  fileStructurModel.FormatVariation + ".JSON");

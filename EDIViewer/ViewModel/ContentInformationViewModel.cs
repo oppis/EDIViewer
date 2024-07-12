@@ -269,7 +269,7 @@ namespace EDIViewer.ViewModel
                             }
                             catch (Exception ex)
                             {
-                                UserMessageHelper.ShowMessageBox("Read StatusInformations", "Es ist folgender Fehelr aufgetreten: \n" + ex.Message);
+                                UserMessageHelper.ShowMessageBox("Read StatusInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
                                 throw;
                             }
                         }

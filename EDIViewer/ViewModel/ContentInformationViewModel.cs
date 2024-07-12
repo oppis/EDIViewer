@@ -252,7 +252,7 @@ namespace EDIViewer.ViewModel
                                 switch (item.Key)
                                 {
                                     case "IdStatus":
-                                        currentStatusInformation.IdStatus = Convert.ToInt32(item.Value);
+                                        currentStatusInformation.IdStatus = Convert.ToDouble(item.Value);
                                         break;
                                     case "StatusCode":
                                         currentStatusInformation.StatusCode = Convert.ToInt16(item.Value);

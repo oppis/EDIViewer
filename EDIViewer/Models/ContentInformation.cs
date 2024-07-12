@@ -63,7 +63,7 @@ namespace EDIViewer.Models
     /// </summary>
     public class StatusInformation
     {
-        public int IdStatus { get; set; }
+        public double IdStatus { get; set; }
         public int StatusCode { get; set; }
         public string StatusDateTime { get; set; }
         public string StatusNotes {  get; set; }

@@ -470,12 +470,12 @@ namespace EDIViewer.Parser
 
                     BuildInfoObject();
                 }
-        }
+            }
             catch (Exception ex)
             {
                 UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);
             }
-}
+        }
 
         /// <summary>
         /// Erstellen des Rückgabe Objekt

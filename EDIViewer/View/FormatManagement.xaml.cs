@@ -101,6 +101,8 @@ namespace EDIViewer
             FormatDetectionValue.IsEnabled = true;
             SeparatorValue.IsEnabled = true;
             FormatVariationValue.IsEnabled = true;
+            SaveButton.IsEnabled = true;
+            CloseSaveButton.IsEnabled = true;
 
             //FormatType Felder deaktivieren
             formatTypeDetection.IsEnabled = false;

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.ComponentModel;
 using Newtonsoft.Json;
 
 using EDIViewer.Helper;
@@ -7,7 +8,7 @@ using EDIViewer.ViewModel.Common;
 
 namespace EDIViewer.ViewModel
 {
-    public class FileStructurNewViewModel
+    public class FileStructurNewViewModel: IDataErrorInfo
     {
         public string FormatName { get; set; }
         public int FormatVersion { get; set; }
@@ -16,10 +17,60 @@ namespace EDIViewer.ViewModel
         public string FormatVariation { get; set; }
         public FileStructur fileStructur { get; set; }
         public SimpleRelayCommand SaveCommand { get; set; }
+        public static bool checkSaveStatus = false;
         public FileStructurNewViewModel() 
         {
             this.SaveCommand = new SimpleRelayCommand(x => this.SaveFile());
         }
+
+        public string Error {  get; }
+        public string this[string propertyName]
+        {
+            get 
+            {
+                string msg = null;
+                switch (propertyName)
+                {
+                    case "FormatName":
+                        if (String.IsNullOrEmpty(FormatName))
+                        {
+                            msg = "Format Name ist erforderlich";
+                            checkSaveStatus = false;
+                        }
+                        else
+                        {
+                            checkSaveStatus = true;
+                        }
+                        break;
+                    case "FormatDetection":
+                        if (String.IsNullOrEmpty(FormatDetection))
+                        {
+                            msg = "Format Erkennung ist erforderlich";
+                            checkSaveStatus = false;
+                        }
+                        else
+                        { 
+                            checkSaveStatus = true;
+                        }
+                        break;
+                    case "FormatVariation":
+                        if (String.IsNullOrEmpty(FormatVariation))
+                        {
+                            msg = "Format Variation ist erforderlich";
+                            checkSaveStatus = false;
+                        }
+                        else
+                        {
+                            checkSaveStatus = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return msg;
+            }
+        }
+           
         public void SaveFile()
         {
             //Aus den Informationen das Objekt für die Neue Datei erstellen

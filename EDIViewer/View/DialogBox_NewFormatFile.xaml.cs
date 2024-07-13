@@ -1,5 +1,8 @@
 ﻿using System.Windows;
 
+using EDIViewer.Helper;
+using EDIViewer.ViewModel;
+
 namespace EDIViewer
 { 
     /// <summary>
@@ -19,8 +22,15 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
-            this.Close();
+            if (FileStructurNewViewModel.checkSaveStatus)
+            {
+                DialogResult = true;
+                this.Close();
+            }
+            else 
+            {
+                UserMessageHelper.ShowMessageBox("Anlegen Format Datei", "Angaben bitte prüfen!");
+            }
         }
 
         /// <summary>

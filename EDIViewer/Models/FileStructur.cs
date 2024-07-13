@@ -1,22 +1,21 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace EDIViewer.Models
 {
     public class FileStructur //Format Informationen
     {
-        public int FormatVersion {  get; set; }
-        public string FormatName { get; set; }
+        public required int FormatVersion {  get; set; }
+        public required string FormatName { get; set; }
         public string FormatSeparator { get; set; } //Trennzeichen
-        public string FormatDetection { get; set; }
+        public required string FormatDetection { get; set; }
         public string FormatVariation { get; set; } //Abwandelungen
-        public ObservableCollection<FormatType> FormatTypes { get; set; }
+        public required ObservableCollection<FormatType> FormatTypes { get; set; }
     }
     public class FormatType //Format Typ -> Entl, Status, Sendung
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Detection { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required string Detection { get; set; }
         public int OrderSeparatorStart { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Anfang in Zeile
         public int OrderSeparatorLength { get ; set; } //Trennung Einheit -> z.B. mehrer Aufträge -> Länge
         public int PostionSeparatorStart { get; set; } //Trennung Einheit -> z.B. mehrer Positionen -> Anfang in Zeile
@@ -26,10 +25,10 @@ namespace EDIViewer.Models
     }
     public class RecordType //Satzarten
     {
-        public int Position { get; set; } //Satzart Name
-        public string Name { get; set; } //Satzart Name
+        public required int Position { get; set; } //Reihenfolge der Sartarten
+        public required string Name { get; set; } //Satzart Name
         public bool Mandatory { get; set; }
-        public string RecordDetection { get; set; }
+        public required string RecordDetection { get; set; }
         public string Description { get; set; }
         public bool PositionTyp { get; set; } //Markierung ob Positions Information
         public ObservableCollection<FieldDefination> FieldDefinations { get; set; }
@@ -37,9 +36,9 @@ namespace EDIViewer.Models
     public class FieldDefination //Felder im Satz
     {
         public int Position { get; set; }
-        public string Name { get; set; }
-        public int Start { get; set; }
-        public int Length { get; set; }
+        public required string Name { get; set; }
+        public required int Start { get; set; }
+        public required int Length { get; set; }
         public string Description { get; set; }
         public string DataType { get; set; }
         public bool Mandatory { get; set; }
@@ -51,8 +50,8 @@ namespace EDIViewer.Models
     }
     public class ArtDefination //Angabe von Nummern Zuordnungen (DFÜ-Texte, TextArt)
     { 
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public required string Id { get; set; }
+        public required string Name { get; set; }
         public string Description { get; set; }
     }
 }

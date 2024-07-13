@@ -21,16 +21,13 @@ namespace EDIViewer.ViewModel
         public ContentInformationViewModel() 
         {
             contentInformation = null;
-            //RawInformations = null;
-            //RawInformationEntity = null;
-            //TransferInformation = null;
         }
 
         public ObservableCollection<RawInformation> RawInformations
         {
             get
             {
-                ObservableCollection <RawInformation> rawInformations = new();
+                ObservableCollection <RawInformation> rawInformations = [];
                 if (contentInformation is not null)
                 {
                     rawInformations = contentInformation.RawInformations;
@@ -57,7 +54,7 @@ namespace EDIViewer.ViewModel
             }
         }
 
-        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationPosition //TODO Zuordnen
+        public ObservableCollection<ObservableCollection<RawInformation>> RawInformationPosition
         {
             get
             {
@@ -123,7 +120,7 @@ namespace EDIViewer.ViewModel
         {
             get
             {
-                ObservableCollection<OrderInformation> orderInformations = new();
+                ObservableCollection<OrderInformation> orderInformations = [];
 
                 if (contentInformation != null)
                 {
@@ -173,7 +170,7 @@ namespace EDIViewer.ViewModel
         {
             get
             {
-                ObservableCollection<PositionInformation> positionInformations = new();
+                ObservableCollection<PositionInformation> positionInformations = [];
 
                 if (contentInformation != null)
                 {
@@ -235,7 +232,7 @@ namespace EDIViewer.ViewModel
         {
             get
             {
-                ObservableCollection<StatusInformation> statusInformations = new();
+                ObservableCollection<StatusInformation> statusInformations = [];
 
                 if (contentInformation != null)
                 {

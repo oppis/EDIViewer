@@ -8,20 +8,13 @@ namespace EDIViewer.Models
     public class ContentInformation
     {
         //Für Tabelle mit allen Informationen -> Satzart, Feld, Inhalt -> Mehere Tabellen nach Satzart getrennt -> foreach -> Flexibel
-        public ObservableCollection<RawInformation> RawInformations { get; set; }
+        public required ObservableCollection<RawInformation> RawInformations { get; set; }
         public ObservableCollection<ObservableCollection<RawInformation>> RawInformationOrder { get; set; }
         public ObservableCollection<ObservableCollection<RawInformation>> RawInformationPosition { get; set; }
         public Dictionary<string,string> TransferInformation { get; set; }
         public ObservableCollection<Dictionary<string, string>> OrderInformations { get; set; }
         public ObservableCollection<Dictionary<string, string>> StatusInformations { get; set; }
         public ObservableCollection<Dictionary<string, string>> PositionInformations { get; set; }
-    }
-    /// <summary>
-    /// Information welche Tabs aktiviert werden
-    /// </summary>
-    public class TabConfig
-    {
-
     }
     /// <summary>
     /// Informationen zur Übertragung  -> Auch bei ContentInformationViewModel anpassen

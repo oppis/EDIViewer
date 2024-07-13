@@ -217,7 +217,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="415px"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -228,9 +228,18 @@
             <DataGrid x:Name="dgRecordType"
                         Grid.Row="1" Grid.Column="0"
                         Margin="5,5,5,5"
-                        AutoGenerateColumns="True"
                         ItemsSource="{Binding Path=RecordTypes}"
-                        SelectedItem="{Binding Path=SelectedRecordType}">
+                        SelectedItem="{Binding Path=SelectedRecordType}"  
+                        AutoGenerateColumns="False"
+                        ClipboardCopyMode="IncludeHeader">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridCheckBoxColumn Header="Pflichtfeld" Binding="{Binding Mandatory}"/>
+                    <DataGridTextColumn Header="Satz Erkennung" Binding="{Binding RecordDetection}"/>
+                    <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}"/>
+                    <DataGridCheckBoxColumn Header="Positionsart" Binding="{Binding PositionTyp}"/>
+                </DataGrid.Columns>
             </DataGrid>
 
             <GridSplitter HorizontalAlignment="Stretch"
@@ -257,33 +266,33 @@
                     <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                     <DataGridTextColumn Header="Start" Binding="{Binding Start}"/>
-                    <DataGridTextColumn Header="Length" Binding="{Binding Length}"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                    <DataGridTextColumn Header="DataType" Binding="{Binding DataType}"/>
-                    <DataGridCheckBoxColumn Header="Mandatory" Binding="{Binding Mandatory}"/>
+                    <DataGridTextColumn Header="Länge" Binding="{Binding Length}"/>
+                    <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}"/>
+                    <DataGridTextColumn Header="Daten Typ" Binding="{Binding DataType}"/>
+                    <DataGridCheckBoxColumn Header="Pflichtfeld" Binding="{Binding Mandatory}"/>
 
-                    <DataGridTemplateColumn Header="TransferInformation">
+                    <DataGridTemplateColumn Header="Transfer Information">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding Path=DataContext.TransferInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=TransferInformation, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="OrderInformation">
+                    <DataGridTemplateColumn Header="Auftragsinformation">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding Path=DataContext.OrderInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=OrderInformation, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="PositionInformation">
+                    <DataGridTemplateColumn Header="Positionsinformation">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding Path=DataContext.PositionInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=PositionInformation, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="StatusInformation">
+                    <DataGridTemplateColumn Header="Statusinformation">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding Path=DataContext.StatusInformationNames, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding Path=StatusInformation, UpdateSourceTrigger=PropertyChanged}"/>

@@ -4,12 +4,12 @@ namespace EDIViewer.Models
 {
     public class FileStructur //Format Informationen
     {
-        public required int FormatVersion {  get; set; }
         public required string FormatName { get; set; }
+        public required int FormatVersion {  get; set; }
         public string FormatSeparator { get; set; } //Trennzeichen
         public required string FormatDetection { get; set; }
         public string FormatVariation { get; set; } //Abwandelungen
-        public required ObservableCollection<FormatType> FormatTypes { get; set; }
+        public ObservableCollection<FormatType> FormatTypes { get; set; }
     }
     public class FormatType //Format Typ -> Entl, Status, Sendung
     {

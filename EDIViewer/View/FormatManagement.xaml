@@ -99,8 +99,15 @@
                     Text="{Binding FormatVaritaion}"
                     IsEnabled="False"
                     HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+            <Button x:Name="OpenFolder"
+                    Grid.Row="0" Grid.Column="6" 
+                    Margin="5,5,5,5" 
+                    Content="Format Ordner öffnen"
+                    Click="OpenFormatFolder"/>
+
             <Separator Grid.Row="3" Grid.Column="0"
-                       Grid.ColumnSpan="5"/>
+                       Grid.ColumnSpan="6"/>
         </Grid>
         <!--Format Typen-->
         <Grid Grid.Row="1" Grid.Column="0" x:Name="gridFormatTyp">

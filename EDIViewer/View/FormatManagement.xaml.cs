@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.IO;
+using System.Data;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,7 +9,6 @@ using EDIViewer.Models;
 using EDIViewer.Helper;
 using EDIViewer.ViewModel;
 using EDIViewer.View;
-
 
 namespace EDIViewer
 {
@@ -200,6 +201,25 @@ namespace EDIViewer
             //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
             DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurViewModel)this.DataContext).FormatTypNewViewModel);
             dialogBoxNewFormatTyp.ShowDialog();
+        }
+        
+        /// <summary>
+        /// Öffnen des aktuellen Format Ordner
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenFormatFolder(object sender, RoutedEventArgs e)
+        {
+            string currentFormatFolderPath = FormatFiles.LoadCurrentFormatFolderPath();
+
+            if (Directory.Exists(currentFormatFolderPath))
+            {
+                Process.Start("explorer.exe", currentFormatFolderPath);
+            }
+            else
+            {
+                UserMessageHelper.ShowMessageBox("Öffnen Format Ordner", "Das Verzeichnis exsisitiert nicht: " + currentFormatFolderPath);
+            }
         }
 
         #endregion

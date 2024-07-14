@@ -61,11 +61,21 @@ namespace EDIViewer.ViewModel
         }
 
         /// <summary>
+        /// Aktuelle Datei schließen
+        /// </summary>
+        public void CloseCurrentFile()
+        {
+            if (textStream is not null)
+            {
+                textStream.Close();
+            }
+        }
+        /// <summary>
         /// Speichern der Anpassungen ins JSON Datei
         /// </summary>
         public void SaveFile()
         {
-            textStream.Close();   
+            CloseCurrentFile();   
             string output = JsonConvert.SerializeObject(fileStructurModel);
 
             string formatFilePath = Path.Combine(FormatFiles.LoadCurrentFormatFolderPath(), fileStructurModel.FormatName + "_" +  fileStructurModel.FormatVariation + ".JSON");

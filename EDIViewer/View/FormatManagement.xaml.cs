@@ -92,6 +92,10 @@ namespace EDIViewer
             KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
 
             //Datei Infos in JSON lesen
+            if (fileStructurViewModel is not null)
+            {
+                fileStructurViewModel.CloseCurrentFile();
+            }
             fileStructurViewModel = new FileStructurViewModel(selectedPath.Value);
             DataContext = fileStructurViewModel;
 
@@ -214,7 +218,19 @@ namespace EDIViewer
 
             if (Directory.Exists(currentFormatFolderPath))
             {
-                Process.Start("explorer.exe", currentFormatFolderPath);
+                //File Dialog -> Dateien bearbeiten und warte Möglichkeit zum neu laden der Format Definitionen
+                var dialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    InitialDirectory = currentFormatFolderPath,
+                    FileName = "Document", // Default file name
+                    DefaultExt = ".json", // Default file extension
+                    Filter = "Format Definitionen |*.json" // Filter files by extension
+                };
+
+                // Show open file dialog box
+                bool? result = dialog.ShowDialog();
+
+                LoadFormatFiles();
             }
             else
             {

@@ -307,32 +307,50 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                         <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Content="Status Code"
+                                    <Label Content="Auftrags Nr"
                                             Grid.Row="0" Grid.Column="0"/>
-                                    <TextBox Text="{Binding StatusCode}"
+                                    <TextBox Text="{Binding OrderNo}"
                                         Grid.Row="0" Grid.Column="1"/>
 
-                                    <Label Content="Status Zeit"
-                                        Grid.Row="1" Grid.Column="0"/>
-                                    <TextBox Text="{Binding StatusDateTime}"
-                                        Grid.Row="1" Grid.Column="1"/>
+                                    <Label Content="NVE"
+                                            Grid.Row="1" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Nve}"
+                                            Grid.Row="1" Grid.Column="1"/>
 
-                                    <Label Content="Status Hinweis"
-                                        Grid.Row="2" Grid.Column="0"/>
-                                    <TextBox Text="{Binding StatusNotes}"
-                                        Grid.Row="2" Grid.Column="1"/>
+                                    <Label Content="Status Code"
+                                            Grid.Row="2" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Code}"
+                                            Grid.Row="2" Grid.Column="1"/>
+
+                                    <Label Content="Datum"
+                                            Grid.Row="3" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Date}"
+                                            Grid.Row="3" Grid.Column="1"/>
+
+                                    <Label Content="Zeit"
+                                            Grid.Row="4" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Time}"
+                                            Grid.Row="4" Grid.Column="1"/>
+
+                                    <Label Content="Hinweis"
+                                            Grid.Row="5" Grid.Column="0"/>
+                                    <TextBox Text="{Binding Notes}"
+                                            Grid.Row="5" Grid.Column="1"/>
                                 </Grid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
                         <TabControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding IdStatus}"/>
+                                <TextBlock Text="{Binding OrderNo}"/>
                             </DataTemplate>
                         </TabControl.ItemTemplate>
                     </TabControl>

@@ -248,17 +248,23 @@ namespace EDIViewer.ViewModel
                             {
                                 switch (item.Key)
                                 {
-                                    case "IdStatus":
-                                        currentStatusInformation.IdStatus = Convert.ToDouble(item.Value);
+                                    case "OrderNo":
+                                        currentStatusInformation.OrderNo = Convert.ToDouble(item.Value);
                                         break;
-                                    case "StatusCode":
-                                        currentStatusInformation.StatusCode = Convert.ToInt16(item.Value);
+                                    case "Nve":
+                                        currentStatusInformation.Nve = Convert.ToDouble(item.Value);
                                         break;
-                                    case "StatusDateTime":
-                                        currentStatusInformation.StatusDateTime = item.Value;
+                                    case "Code":
+                                        currentStatusInformation.Code = Convert.ToInt16(item.Value);
                                         break;
-                                    case "StatusNotes":
-                                        currentStatusInformation.StatusNotes = item.Value;
+                                    case "Date":
+                                        currentStatusInformation.Date = item.Value;
+                                        break;
+                                    case "Time":
+                                        currentStatusInformation.Time = item.Value;
+                                        break;
+                                    case "Notes":
+                                        currentStatusInformation.Notes = item.Value;
                                         break;
                                     default:
                                         break;

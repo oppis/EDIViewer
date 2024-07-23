@@ -433,7 +433,7 @@ namespace EDIViewer.Parser
                                         }
                                     }
                                 }
-
+                                
                                 //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
                                 if (oldAufNr != currentAufNr)
                                 {
@@ -443,9 +443,9 @@ namespace EDIViewer.Parser
                                     if (orderInformation.Count > 0)
                                     {
                                         orderInformations.Add(orderInformation);
+                                 
                                         orderInformation = [];
                                     }
-
                                     //Mapping Satus in Liste schreiben
                                     if (statusInformation.Count > 0)
                                     {
@@ -456,13 +456,13 @@ namespace EDIViewer.Parser
 
                                 if (oldPosNr != currentPosNr)
                                 {
+                                    rawInformationPosition.Add(rawInformationPositionTmp);
+
                                     if (positionInformation.Count > 0)
                                     {
                                         positionInformations.Add(positionInformation);
                                         positionInformation = [];
                                     }
-
-                                    rawInformationPosition.Add(rawInformationPositionTmp);
                                 }
                             }
                         }

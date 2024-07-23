@@ -56,10 +56,12 @@ namespace EDIViewer.Models
     /// </summary>
     public class StatusInformation
     {
-        public double IdStatus { get; set; }
-        public int StatusCode { get; set; }
-        public string StatusDateTime { get; set; }
-        public string StatusNotes {  get; set; }
+        public double OrderNo { get; set; }
+        public double Nve { get; set; }
+        public int Code { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public string Notes {  get; set; }
     }
     /// <summary>
     /// Alle Informationen aus der Datei gesamt

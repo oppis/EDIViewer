@@ -58,7 +58,7 @@ namespace EDIViewer.View
                 {
                     if (!Clipboard.ContainsText())
                     {
-                        UserMessageHelper.ShowMessageBox("Einfügen", "Die Zwischen ablage enthält keinen Text zum einfügen");
+                        UserMessageHelper.ShowErrorMessageBox("Einfügen", "Die Zwischen ablage enthält keinen Text zum einfügen");
                         return;
                     }
 
@@ -90,7 +90,7 @@ namespace EDIViewer.View
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
             }
         }
     }

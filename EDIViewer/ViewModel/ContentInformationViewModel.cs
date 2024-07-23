@@ -102,7 +102,7 @@ namespace EDIViewer.ViewModel
                         }
                         catch (Exception ex)
                         {
-                            UserMessageHelper.ShowMessageBox("Read TransferInformation", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
+                            UserMessageHelper.ShowErrorMessageBox("Read TransferInformation", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
                             throw;
                         }
                     }
@@ -154,7 +154,7 @@ namespace EDIViewer.ViewModel
                             }
                             catch (Exception ex)
                             {
-                                UserMessageHelper.ShowMessageBox("Read OrderInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
+                                UserMessageHelper.ShowErrorMessageBox("Read OrderInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
                                 throw;
                             }
                         }
@@ -216,7 +216,7 @@ namespace EDIViewer.ViewModel
                             }
                             catch (Exception ex)
                             {
-                                UserMessageHelper.ShowMessageBox("Read PositionInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
+                                UserMessageHelper.ShowErrorMessageBox("Read PositionInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
                                 throw;
                             }
                         }
@@ -266,7 +266,7 @@ namespace EDIViewer.ViewModel
                             }
                             catch (Exception ex)
                             {
-                                UserMessageHelper.ShowMessageBox("Read StatusInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
+                                UserMessageHelper.ShowErrorMessageBox("Read StatusInformations", "Es ist folgender Fehler aufgetreten: \n" + ex.Message);
                                 throw;
                             }
                         }

@@ -257,11 +257,11 @@ namespace EDIViewer.Parser
                                 }
                                 catch (ArgumentOutOfRangeException ex)
                                 {
-                                    UserMessageHelper.ShowMessageBox("Parsen", $"Es wurde die Feld Definition nicht gefunden! \nAktueller Record: {currentRecordType.Name} \nFeld Inhalt: {currentFieldContent}");
+                                    UserMessageHelper.ShowErrorMessageBox("Parsen", $"Es wurde die Feld Definition nicht gefunden! \nAktueller Record: {currentRecordType.Name} \nFeld Inhalt: {currentFieldContent}");
                                 }
                                 catch (Exception ex)
                                 {
-                                    UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);
+                                    UserMessageHelper.ShowErrorMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);
                                 }
 
                                 //Informationen in Gruppen Liste speichern wenn sich Einheit ändert
@@ -473,7 +473,7 @@ namespace EDIViewer.Parser
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Parsen", "Folgender Fehler ist beim Lesen der Datei aufgetreten: \n" + ex.Message);
             }
         }
 

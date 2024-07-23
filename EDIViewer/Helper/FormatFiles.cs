@@ -25,7 +25,7 @@ namespace EDIViewer.Helper
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Fehler bei Format Dateien", "Folgender Fehler ist beim öffnen der Format Dateien aufgetreten: " + ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Fehler bei Format Dateien", "Folgender Fehler ist beim öffnen der Format Dateien aufgetreten: " + ex.Message);
             }
 
             return currentFormatFiles;
@@ -55,7 +55,7 @@ namespace EDIViewer.Helper
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Einstellungen Fehler", ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Einstellungen Fehler", ex.Message);
             }
 
             return folderPath;

@@ -29,7 +29,7 @@ namespace EDIViewer
             }
             else 
             {
-                UserMessageHelper.ShowMessageBox("Anlegen Format Datei", "Angaben bitte prüfen!");
+                UserMessageHelper.ShowErrorMessageBox("Anlegen Format Datei", "Angaben bitte prüfen!");
             }
         }
 

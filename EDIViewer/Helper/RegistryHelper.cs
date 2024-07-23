@@ -30,7 +30,7 @@ namespace EDIViewer.Helper
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Einstellungen Fehler", ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Einstellungen Fehler", ex.Message);
             }
 
             return folderPath;
@@ -52,7 +52,7 @@ namespace EDIViewer.Helper
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Einstellungen - Fehler", ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Einstellungen - Fehler", ex.Message);
                 throw;
             }
 

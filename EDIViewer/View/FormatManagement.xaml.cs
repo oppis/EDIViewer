@@ -51,7 +51,15 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void SaveWindow(object sender, RoutedEventArgs e)
         {
-            fileStructurViewModel.SaveFile();
+            try
+            {
+                fileStructurViewModel.SaveFile();
+            }
+            catch (Exception ex)
+            {
+                UserMessageHelper.ShowErrorMessageBox("Format Management","Folgender Fehler ist beim Speichern aufgetreten:\n" + ex.Message);
+            }
+            UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erolfgreich gespeichert!");
         }
 
         /// <summary>
@@ -61,10 +69,17 @@ namespace EDIViewer
         /// <param name="e"></param>
         private void CloseWindow(object sender, RoutedEventArgs e)
         {
-            fileStructurViewModel.SaveFile();
+            try
+            {
+                fileStructurViewModel.SaveFile();
+            }
+            catch (Exception ex)
+            {
+                UserMessageHelper.ShowErrorMessageBox("Format Management", "Folgender Fehler ist beim Speichern aufgetreten:\n" + ex.Message);
+            }
+            UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erfolgreich gespeichert!");
 
             DialogResult = true;
-
 
             this.Close();
         }
@@ -168,7 +183,7 @@ namespace EDIViewer
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
             }
         }
 
@@ -234,7 +249,7 @@ namespace EDIViewer
             }
             else
             {
-                UserMessageHelper.ShowMessageBox("Öffnen Format Ordner", "Das Verzeichnis exsisitiert nicht: " + currentFormatFolderPath);
+                UserMessageHelper.ShowErrorMessageBox("Öffnen Format Ordner", "Das Verzeichnis exsisitiert nicht: " + currentFormatFolderPath);
             }
         }
 

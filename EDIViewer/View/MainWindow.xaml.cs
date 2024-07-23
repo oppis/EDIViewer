@@ -196,7 +196,7 @@ namespace EDIViewer
             }
             catch (Exception ex)
             {
-                UserMessageHelper.ShowMessageBox("Datei öffnen", "Fehler: " + ex.Message);
+                UserMessageHelper.ShowErrorMessageBox("Datei öffnen", "Fehler: " + ex.Message);
             }
         }
 

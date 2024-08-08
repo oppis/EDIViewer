@@ -80,7 +80,7 @@ namespace EDIViewer.Parser
         }
         
         /// <summary>
-        /// Aktuelle Feld Defition zum aktuellen Record Typ erhalten
+        /// Aktuelle Feld Definition zum aktuellen Record Typ erhalten
         /// </summary>
         /// <param name="currentFileRow">Aktuelle Zeile</param>
         private bool GetCurrentFieldDefinations(string currentFileRow)

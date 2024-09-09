@@ -54,12 +54,13 @@ namespace EDIViewer
             try
             {
                 fileStructurViewModel.SaveFile();
+                UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erfolgreich gespeichert!");
             }
             catch (Exception ex)
             {
                 UserMessageHelper.ShowErrorMessageBox("Format Management","Folgender Fehler ist beim Speichern aufgetreten:\n" + ex.Message);
             }
-            UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erfolgreich gespeichert!");
+            
         }
 
         /// <summary>
@@ -72,16 +73,17 @@ namespace EDIViewer
             try
             {
                 fileStructurViewModel.SaveFile();
+
+                UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erfolgreich gespeichert!");
+
+                DialogResult = true;
+
+                this.Close();
             }
             catch (Exception ex)
             {
                 UserMessageHelper.ShowErrorMessageBox("Format Management", "Folgender Fehler ist beim Speichern aufgetreten:\n" + ex.Message);
             }
-            UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erfolgreich gespeichert!");
-
-            DialogResult = true;
-
-            this.Close();
         }
 
         /// <summary>

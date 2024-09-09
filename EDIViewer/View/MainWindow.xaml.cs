@@ -153,7 +153,7 @@ namespace EDIViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void File_Drop(object sender, DragEventArgs e)
+        private void FileDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {

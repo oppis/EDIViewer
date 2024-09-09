@@ -59,7 +59,7 @@ namespace EDIViewer
             {
                 UserMessageHelper.ShowErrorMessageBox("Format Management","Folgender Fehler ist beim Speichern aufgetreten:\n" + ex.Message);
             }
-            UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erolfgreich gespeichert!");
+            UserMessageHelper.ShowInfoMessageBox("Format Management", "Das Format wurde erfolgreich gespeichert!");
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace EDIViewer
 
         #endregion
         /// <summary>
-        /// Reagieren auf auswahl der Datei Struktur
+        /// Reagieren auf Auswahl der Datei Struktur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -249,7 +249,7 @@ namespace EDIViewer
             }
             else
             {
-                UserMessageHelper.ShowErrorMessageBox("Öffnen Format Ordner", "Das Verzeichnis exsisitiert nicht: " + currentFormatFolderPath);
+                UserMessageHelper.ShowErrorMessageBox("Öffnen Format Ordner", "Das Verzeichnis existiert nicht: " + currentFormatFolderPath);
             }
         }
 
@@ -279,8 +279,8 @@ namespace EDIViewer
         private void DgFieldDefinations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
-            DialogBox_ArtDefiniation dialogBox_ArtDefiniation = new(((FileStructurViewModel)this.DataContext).ArtDefinationViewModel); //TODO -> Auswahl Field Def -> Button
-            dialogBox_ArtDefiniation.ShowDialog();
+            DialogBox_ArtDefiniation dialogBox_ArtDefinition = new(((FileStructurViewModel)this.DataContext).ArtDefinationViewModel); //TODO -> Auswahl Field Def -> Button
+            dialogBox_ArtDefinition.ShowDialog();
         }
 
     }

@@ -18,9 +18,7 @@
         <!--#region Datei Auswahl-->
         <Grid Grid.Column="0" Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75"></ColumnDefinition>
                 <ColumnDefinition Width="85"></ColumnDefinition>
-                <ColumnDefinition Width="65"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="80"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -31,30 +29,29 @@
                 <RowDefinition Height="55"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Rectangle Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Fill="BlueViolet" AllowDrop="True" Drop="File_Drop"/>
             <Button Name="LoadFile" 
                     Content="Datei Laden"
-                    Grid.Column="1" Grid.Row="0" 
+                    Grid.Column="0" Grid.Row="0" 
                     Height="20" 
                     Margin="5,5,5,5"
                     Click="LoadFile_Click"></Button>
             <Label Content="Dateipfad: "
-                   Grid.Column="2" Grid.Row="0" 
+                   Grid.Column="1" Grid.Row="0" 
                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
             <TextBlock Name="txtFilePath" 
                        Text="Dateipfad" 
-                       Grid.Column="3" Grid.Row="0" 
+                       Grid.Column="2" Grid.Row="0" 
                        VerticalAlignment="Center"/>
             <Label Content="Dateiname: "
-                   Grid.Column="4" Grid.Row="0" 
+                   Grid.Column="3" Grid.Row="0" 
                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
             <TextBlock Name="txtFileName" 
                        Text="Dateiname" 
                        VerticalAlignment="Center"
-                       Grid.Column="5" Grid.Row="0"/>
+                       Grid.Column="4" Grid.Row="0"/>
 
             <Button Content="Einstellungen"
-                    Grid.Row="0" Grid.Column="6"
+                    Grid.Row="0" Grid.Column="5"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Height="20" 
                     Margin="5,5,5,5"
@@ -65,24 +62,23 @@
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
             <ComboBox x:Name="cbFileFormat"
                     Grid.Row="1" Grid.Column="1" 
-                    Grid.ColumnSpan="2"
-                    Margin="10,10,10,10"
+                    Margin="10,23,10,-3"
                     IsEnabled="False"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                     SelectionChanged="CbFileFormat_SelectionChanged"/>
 
             <Label Content="Zeichensatz: "
-                    Grid.Row="1" Grid.Column="4" 
+                    Grid.Row="1" Grid.Column="2" 
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
             <ComboBox x:Name="cbCharacterSet"
-                        Grid.Row="1" Grid.Column="5" 
+                        Grid.Row="1" Grid.Column="3" 
                         Margin="10,10,10,10"
                         IsEnabled="False"
                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                         SelectionChanged="CbCharacterSet_SelectionChanged"/>
 
             <Button Content="Verwaltung Formate" 
-                    Grid.Column="6" Grid.Row="1" 
+                    Grid.Column="4" Grid.Row="1" 
                     VerticalAlignment="Center" HorizontalAlignment="Center" 
                     Click="OpenFormatManagement"/>
 
@@ -112,15 +108,17 @@
                          VerticalContentAlignment="Center"
                          Margin="0,5,5,5"
                          KeyUp="searchTextBox_KeyUp"
+                         AllowDrop="True" Drop="FileDrop" DragLeave="FileDrop" DragDrop.Drop="FileDrop" DragOver="FileDrop"
                 />
-                <ScrollViewer Grid.Row="1" Grid.Column="0"
+                <ScrollViewer   Grid.Row="1" Grid.Column="0"
                                 VerticalScrollBarVisibility="Auto"
                                 HorizontalScrollBarVisibility="Auto">
                     <RichTextBox Name="fileOriginalView"
-                                    Width="1250px" 
-                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                Width="1250px" 
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                 BorderThickness="0"
-                                IsReadOnly="True"/>
+                                IsReadOnly="False"
+                                />
                 </ScrollViewer>
             </Grid>
 

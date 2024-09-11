@@ -16,7 +16,7 @@ namespace EDIViewer.Helper
 
             try
             {
-                string[] contentDirectory = Directory.GetFiles(formatFileLocation);
+                string[] contentDirectory = Directory.GetFiles(formatFileLocation,"*.json");
 
                 foreach (string file in contentDirectory) 
                 {

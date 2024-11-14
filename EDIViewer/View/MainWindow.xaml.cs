@@ -173,6 +173,24 @@ namespace EDIViewer
                 File_LoadView();
             }
         }
+
+        private void RichTextBox_DragOver(object sender, DragEventArgs e)
+        {
+
+            //TODO -> Prüfen warum verbot Zeichen kommt 
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+
+                e.Effects = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = false;
+        }
+
         #endregion
 
         /// <summary>
@@ -265,6 +283,11 @@ namespace EDIViewer
                 File_LoadView();
             }
         }
+
+
+
+        //TODO -> SUCHE VERFEINERN
+
 
         /// <summary>
         /// Suche Starten und Text markieren

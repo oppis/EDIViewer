@@ -62,7 +62,7 @@
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
             <ComboBox x:Name="cbFileFormat"
                     Grid.Row="1" Grid.Column="1" 
-                    Margin="10,23,10,-3"
+                    Margin="10,10,10,10"
                     IsEnabled="False"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                     SelectionChanged="CbFileFormat_SelectionChanged"/>
@@ -81,6 +81,9 @@
                     Grid.Column="4" Grid.Row="1" 
                     VerticalAlignment="Center" HorizontalAlignment="Center" 
                     Click="OpenFormatManagement"/>
+            <TextBox                                 AllowDrop="True" DragEnter="RichTextBox_DragOver">
+                
+            </TextBox>
 
         </Grid>
         <!--#endregion-->
@@ -107,9 +110,7 @@
                          Grid.Row="0" Grid.Column="0" 
                          VerticalContentAlignment="Center"
                          Margin="0,5,5,5"
-                         KeyUp="searchTextBox_KeyUp"
-                         AllowDrop="True" Drop="FileDrop" DragLeave="FileDrop" DragDrop.Drop="FileDrop" DragOver="FileDrop"
-                />
+                         KeyUp="searchTextBox_KeyUp"/>
                 <ScrollViewer   Grid.Row="1" Grid.Column="0"
                                 VerticalScrollBarVisibility="Auto"
                                 HorizontalScrollBarVisibility="Auto">
@@ -118,7 +119,8 @@
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                 BorderThickness="0"
                                 IsReadOnly="False"
-                                />
+                                AllowDrop="True" 
+                                 Drop="FileDrop" DragOver="RichTextBox_DragOver"/>
                 </ScrollViewer>
             </Grid>
 
@@ -361,37 +363,6 @@
                                 AutoGenerateColumns="True"
                                 ItemsSource="{Binding RawInformations}">
                     </DataGrid>
-                </TabItem>
-                <TabItem Header="Entwurf">
-                    <TabControl>
-                        <TabItem Header="Sendung">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Label Content=""
-               Grid.Row="0" Grid.Column="0"
-               />
-                                <Label Content="TEST"
-                   Grid.Row="0" Grid.Column="1"
-                   />
-                                <Label Content="TEST"
-                   Grid.Row="0" Grid.Column="2"
-                   />
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Adresse"></TabItem>
-                        <TabItem Header="Position"></TabItem>
-                        <TabItem Header="Sonder"></TabItem>
-                    </TabControl>
                 </TabItem>
             </TabControl>
         </Grid>

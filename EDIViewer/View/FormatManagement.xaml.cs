@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Data;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -109,10 +108,7 @@ namespace EDIViewer
             KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
 
             //Datei Infos in JSON lesen
-            if (fileStructurViewModel is not null)
-            {
-                fileStructurViewModel.CloseCurrentFile();
-            }
+            fileStructurViewModel?.CloseCurrentFile();
             fileStructurViewModel = new FileStructurViewModel(selectedPath.Value);
             DataContext = fileStructurViewModel;
 

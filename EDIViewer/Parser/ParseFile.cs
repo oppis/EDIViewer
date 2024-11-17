@@ -165,16 +165,6 @@ namespace EDIViewer.Parser
                                     oldPosNr = string.Empty;
                                 }
 
-                                if (currentRecordType.PositionTyp)
-                                {
-                                    currentPosNr = currentFileRowArray[currentFormatType.PostionSeparatorStart];
-
-                                    if (oldPosNr != currentPosNr)
-                                    {
-                                        rawInformationPositionTmp = [];
-                                    }
-                                }
-
                                 try
                                 {
                                     //Alle Felder durchgehen
@@ -220,6 +210,19 @@ namespace EDIViewer.Parser
                                             if (currentFieldContent.Length > 0)
                                             {
                                                 positionInformation.TryAdd(currentFieldDefiniations[i].PositionInformation, currentFieldContent);
+
+                                                if (currentRecordType.PositionTyp)
+                                                {
+                                                    if(currentFieldDefiniations[i].PositionInformation == "IdPosition") //TODO -> Anpassung Positions ID -> Auch in ohne Feldlänge umsetzen und aus UI entfernen -> Aktuell scheinbar noch verschoben
+                                                    {
+                                                        currentPosNr = currentFieldContent;
+
+                                                        if (oldPosNr != currentPosNr)
+                                                        {
+                                                            rawInformationPositionTmp = [];
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                         //Statusinformationen

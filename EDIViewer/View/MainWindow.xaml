@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
-        xmlns:local="clr-namespace:EDIViewer"
+        xmlns:local="clr-namespace:EDIViewer" 
         Title="EDI-Viewer" Height="450" Width="800">
 
-    <Grid>
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
@@ -133,51 +133,45 @@
                 <TabItem Header="Übertragung" IsEnabled="True">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Datenart"
-                                Grid.Row="0" Grid.Column="0"
-                                />
+                                Grid.Row="0" Grid.Column="0"/>
                         <Label  x:Name="DataTypeValue"
                                 Content="{Binding TransferInformation.DataType}"
-                                Grid.Row="0" Grid.Column="1"
-                                />
+                                Grid.Row="0" Grid.Column="1"/>
+                        
                         <Label Content="Datum"
-                                Grid.Row="1" Grid.Column="0"
-                                />
+                                Grid.Row="1" Grid.Column="0"/>
                         <Label x:Name="DataTime"
                                 Content="{Binding TransferInformation.DateTime}"
-                                Grid.Row="1" Grid.Column="1"
-                                />
+                                Grid.Row="1" Grid.Column="1"/>
+                        
                         <Label Content="Dateireferenz"
-                                Grid.Row="2" Grid.Column="0"
-                                />
+                                Grid.Row="2" Grid.Column="0"/>
                         <Label x:Name="DataReferenceValue"
                                 Content="{Binding TransferInformation.DataReference}"
-                               Grid.Row="2" Grid.Column="1"
-                               />
+                               Grid.Row="2" Grid.Column="1"/>
+                        
                         <Label Content="Versender ID"
-                                Grid.Row="3" Grid.Column="0"
-                                />
+                                Grid.Row="3" Grid.Column="0"/>
                         <Label x:Name="SenderIDValue"
                                 Content="{Binding TransferInformation.SenderID}"
-                                Grid.Row="3" Grid.Column="1"
-                                />
+                                Grid.Row="3" Grid.Column="1"/>
+                        
                         <Label Content="Empfänger ID"
-                                Grid.Row="4" Grid.Column="0"
-                                />
+                                Grid.Row="4" Grid.Column="0"/>
                         <Label x:Name="RecipientIDValue"
                                 Content="{Binding TransferInformation.RecipientID}"
-                                Grid.Row="4" Grid.Column="1"
-                                />
+                                Grid.Row="4" Grid.Column="1"/>
                     </Grid>
                 </TabItem>
                 <TabItem Name="OrderTab" Header="Auftrag" IsEnabled="True">

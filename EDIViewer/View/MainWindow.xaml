@@ -4,29 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EDIViewer"
-        mc:Ignorable="d"
         Title="EDI-Viewer" Height="450" Width="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <!--#region Datei Auswahl-->
         <Grid Grid.Column="0" Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="85"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="80"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="85"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="55"></RowDefinition>
-                <RowDefinition Height="55"></RowDefinition>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
             </Grid.RowDefinitions>
 
             <Button Name="LoadFile" 
@@ -81,29 +80,26 @@
                     Grid.Column="4" Grid.Row="1" 
                     VerticalAlignment="Center" HorizontalAlignment="Center" 
                     Click="OpenFormatManagement"/>
-            <TextBox                                 AllowDrop="True" DragEnter="RichTextBox_DragOver">
-                
-            </TextBox>
-
         </Grid>
         <!--#endregion-->
         <!--#region File View-->
         <Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
+                <RowDefinition/>
             </Grid.RowDefinitions>
+            
             <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="35px"></RowDefinition>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="35px"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <TextBox x:Name="searchTextBox" 
@@ -111,16 +107,18 @@
                          VerticalContentAlignment="Center"
                          Margin="0,5,5,5"
                          KeyUp="searchTextBox_KeyUp"/>
-                <ScrollViewer   Grid.Row="1" Grid.Column="0"
+                <ScrollViewer   x:Name="scrollViewerFileContent"
+                                Grid.Row="1" Grid.Column="0"
                                 VerticalScrollBarVisibility="Auto"
-                                HorizontalScrollBarVisibility="Auto">
-                    <RichTextBox Name="fileOriginalView"
-                                Width="1250px" 
-                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                BorderThickness="0"
-                                IsReadOnly="False"
-                                AllowDrop="True" 
-                                 Drop="FileDrop" DragOver="RichTextBox_DragOver"/>
+                                HorizontalScrollBarVisibility="Auto" 
+                                AllowDrop="True" Drop="ScrollViewerFileContent_Drop"
+                                PreviewDragOver="ScrollViewerFileContent_PreviewDragOver" >
+                    <RichTextBox Name="fileOriginalView" 
+                                 Grid.Row="0" Grid.Column="0"
+                                 Width="1250px" 
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                 BorderThickness="0"
+                                 IsReadOnly="True"/>
                 </ScrollViewer>
             </Grid>
 

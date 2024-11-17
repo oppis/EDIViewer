@@ -19,6 +19,7 @@ namespace EDIViewer
     public partial class MainWindow : Window
     {
         //Datei Informationen
+        string filePathName = string.Empty;
         static string filePath = string.Empty;
         static string fileName = string.Empty;
         string currentFileFormat = string.Empty;
@@ -120,6 +121,7 @@ namespace EDIViewer
                 SetFormatCb();
             }
         }
+
         #region Load Files
         /// <summary>
         /// Datei Explorer Starten
@@ -136,16 +138,19 @@ namespace EDIViewer
 
             if (dialog.ShowDialog() == true)
             {
-                filePath = Path.GetDirectoryName(dialog.FileName);
-                fileName = dialog.SafeFileName;
-
-                txtFilePath.Text = filePath;
-                txtFileName.Text = fileName;
-
-                //TODO -> Check File Content -> Text
-
+                filePathName = dialog.FileName;
                 File_LoadView();
             }
+        }
+
+        /// <summary>
+        /// Steuern Maus Zeichen bei eintritt Scroll Viewer für File Drop
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewerFileContent_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
         }
 
         /// <summary>
@@ -153,51 +158,32 @@ namespace EDIViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void FileDrop(object sender, DragEventArgs e)
+        private void ScrollViewerFileContent_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-                //read only the First File                
-                string filePathName = (files[0]);
 
-                if (filePathName != null)//TODO -> Check File Content -> Text
+                if (files.Length > 0)
                 {
-                    filePath = Path.GetDirectoryName(filePathName);
-                    fileName = Path.GetFileName(filePathName);
-                }
-
-                txtFilePath.Text = filePath;
-                txtFileName.Text = fileName;
-
-                File_LoadView();
+                    filePathName = files[0]; 
+                    File_LoadView();
+                }       
             }
         }
-
-        private void RichTextBox_DragOver(object sender, DragEventArgs e)
-        {
-
-            //TODO -> Prüfen warum verbot Zeichen kommt 
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-
-                e.Effects = DragDropEffects.All;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-            }
-            e.Handled = false;
-        }
-
         #endregion
 
         /// <summary>
         /// Laden der Datei Ansicht
         /// </summary>
-        private void File_LoadView()
+        private void File_LoadView()//TODO -> Check File Content -> Text
         {
+            filePath = Path.GetDirectoryName(filePathName);
+            fileName = Path.GetFileName(filePathName);
+
+            txtFilePath.Text = filePath;
+            txtFileName.Text = fileName;
+
             //Ausfall Felder aktivieren
             cbFileFormat.IsEnabled = true;
             cbCharacterSet.IsEnabled = true;

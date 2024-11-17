@@ -11,6 +11,7 @@ namespace EDIViewer.ViewModel
     public class FileStructurNewViewModel: IDataErrorInfo
     {
         public string FormatName { get; set; }
+        public string FormatComment { get; set; }
         public int FormatVersion { get; set; }
         public string FormatSeparator { get; set; }
         public string FormatDetection { get; set; }
@@ -77,6 +78,7 @@ namespace EDIViewer.ViewModel
             fileStructur = new()
             {
                 FormatName = this.FormatName,
+                FormatComment = this.FormatComment,
                 FormatVersion = this.FormatVersion,
                 FormatSeparator = this.FormatSeparator,
                 FormatDetection = this.FormatDetection,

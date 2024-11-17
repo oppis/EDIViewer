@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EDIViewer"
         xmlns:model="clr-namespace:EDIViewer.ViewModel"
         Title="EDI-Viewer - Anlegen Format File"
-        MinHeight="200"
+        MinHeight="225"
         MinWidth="300"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
@@ -25,6 +25,7 @@
             </Style>
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="0,0,0,5" />
+                <Setter Property="Height" Value="25" />
                 <Style.Triggers>
                     <Trigger Property="Validation.HasError" Value="true" >
                         <Setter Property="Foreground" Value="Red"/>
@@ -55,6 +56,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Left,Top,Right,Bottom margins-->
@@ -69,38 +71,45 @@
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <Label Grid.Column="0" Grid.Row="1" Content="Version"/>
-        <TextBox Name="formatVersion" 
+        <Label Grid.Column="0" Grid.Row="1" Content="Bemerkung"/>
+        <TextBox Name="formatComment" 
                  Grid.Column="1" Grid.Row="1"
+                 Text="{Binding FormatComment}"/>
+
+        <Label Grid.Column="0" Grid.Row="2" Content="Version"/>
+        <TextBox Name="formatVersion" 
+                 Grid.Column="1" Grid.Row="2"
                  Text="{Binding FormatVersion}"/>
 
-        <Label Grid.Column="0" Grid.Row="2" Content="Trennzeichen"/>
+        <Label Grid.Column="0" Grid.Row="3" Content="Trennzeichen"/>
         <TextBox Name="formatSeparatorValue" 
-                 Grid.Column="1" Grid.Row="2"
+                 Grid.Column="1" Grid.Row="3"
                  Text="{Binding FormatSeparator}"/>
 
-        <Label Grid.Column="0" Grid.Row="3" Content="Erkennung"/>
+        <Label Grid.Column="0" Grid.Row="4" Content="Erkennung"/>
         <TextBox Name="formatDetectionValue" 
-                 Grid.Column="1" Grid.Row="3"
-                Text="{Binding UpdateSourceTrigger=LostFocus, Mode=TwoWay, Path=FormatDetection,ValidatesOnDataErrors=True}">
+                Grid.Column="1" Grid.Row="4"
+            Text="{Binding UpdateSourceTrigger=LostFocus, Mode=TwoWay, Path=FormatDetection,ValidatesOnDataErrors=True}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                 </ControlTemplate>
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <Label Grid.Column="0" Grid.Row="4" Content="Variation"/>
+
+        <Label Grid.Column="0" Grid.Row="5" Content="Variation"/>
         <TextBox Name="formationVariationValue" 
-                 Grid.Column="1" Grid.Row="4"
-                Text="{Binding UpdateSourceTrigger=LostFocus, Mode=TwoWay, Path=FormatVariation,ValidatesOnDataErrors=True}">
+                Grid.Column="1" Grid.Row="5"
+            Text="{Binding UpdateSourceTrigger=LostFocus, Mode=TwoWay, Path=FormatVariation,ValidatesOnDataErrors=True}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                 </ControlTemplate>
             </Validation.ErrorTemplate>
         </TextBox>
+
         
         <!-- Accept or Cancel -->
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="saveButton" Command="{Binding SaveCommand}" Click="SaveButtonClick" IsDefault="True">OK</Button>
             <Button Name="cancelButton" Click="CancelButtonClick" IsCancel="True">Cancel</Button>
         </StackPanel>

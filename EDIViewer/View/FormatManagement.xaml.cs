@@ -115,6 +115,7 @@ namespace EDIViewer
             //Felder aktivieren
             cbFormatTyp.IsEnabled = true;
             createNewFormatTyp.IsEnabled = true;
+            TbComment.IsEnabled = true;
             VersionValue.IsEnabled = true;
             FormatDetectionValue.IsEnabled = true;
             SeparatorValue.IsEnabled = true;

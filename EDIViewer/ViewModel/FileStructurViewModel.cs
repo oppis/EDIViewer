@@ -17,19 +17,26 @@ namespace EDIViewer.ViewModel
         private StreamReader textStream;
         public FileStructurViewModel(string currentFileFormat)
         {
-            currentFileFormatFile = currentFileFormat;
+            try
+            {
+                currentFileFormatFile = currentFileFormat;
 
-            textStream = File.OpenText(currentFileFormatFile);
+                textStream = File.OpenText(currentFileFormatFile);
 
-            fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(textStream.ReadToEnd());
+                fileStructurModel = JsonConvert.DeserializeObject<FileStructur>(textStream.ReadToEnd());
 
-            //Anlage neuer Format Typ
-            FormatTypNewViewModel = new FormatTypNewViewModel();
-            FormatTypNewViewModel.Save += FormatTypeNewOnSave;
+                //Anlage neuer Format Typ
+                FormatTypNewViewModel = new FormatTypNewViewModel();
+                FormatTypNewViewModel.Save += FormatTypeNewOnSave;
 
-            //Verwaltung ArtDefinitionen
-            ArtDefinationViewModel = new ArtDefinationViewModel();
-            ArtDefinationViewModel.Save += ArtDefinitionOnSave;
+                //Verwaltung ArtDefinitionen
+                ArtDefinationViewModel = new ArtDefinationViewModel();
+                ArtDefinationViewModel.Save += ArtDefinitionOnSave;
+            }
+            catch (Exception ex)
+            {
+                UserMessageHelper.ShowErrorMessageBox("Format Verwaltung", "Beim Laden des Formates ist folgender Fehler aufgetreten:\n" + ex.Message);
+            }
         }
         /// <summary>
         /// Speichern der Informationen aus der Maske in das Format File View Model
@@ -65,10 +72,7 @@ namespace EDIViewer.ViewModel
         /// </summary>
         public void CloseCurrentFile()
         {
-            if (textStream is not null)
-            {
-                textStream.Close();
-            }
+            textStream?.Close();
         }
         /// <summary>
         /// Speichern der Anpassungen ins JSON Datei
@@ -106,6 +110,15 @@ namespace EDIViewer.ViewModel
             set {
                 fileStructurModel.FormatName = value;
                 OnPropertyChanged(nameof(FormatName));
+            }
+        }
+        public string FormatComment
+        {
+            get => fileStructurModel.FormatComment;
+            set
+            {
+                fileStructurModel.FormatComment = value;
+                OnPropertyChanged(nameof(FormatComment));
             }
         }
         public string FormatSeparator

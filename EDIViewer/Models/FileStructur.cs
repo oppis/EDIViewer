@@ -5,6 +5,7 @@ namespace EDIViewer.Models
     public class FileStructur //Format Informationen
     {
         public required string FormatName { get; set; }
+        public string FormatComment { get; set; }
         public required int FormatVersion {  get; set; }
         public string FormatSeparator { get; set; } //Trennzeichen
         public required string FormatDetection { get; set; }

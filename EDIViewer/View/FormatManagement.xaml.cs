@@ -97,94 +97,6 @@ namespace EDIViewer
         }
 
         #endregion
-        /// <summary>
-        /// Reagieren auf Auswahl der Datei Struktur
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Aktuelle Werte FormatName und Pfad            
-            KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
-
-            //Datei Infos in JSON lesen
-            fileStructurViewModel?.CloseCurrentFile();
-            fileStructurViewModel = new FileStructurViewModel(selectedPath.Value);
-            DataContext = fileStructurViewModel;
-
-            //Felder aktivieren
-            cbFormatTyp.IsEnabled = true;
-            createNewFormatTyp.IsEnabled = true;
-            TbComment.IsEnabled = true;
-            VersionValue.IsEnabled = true;
-            FormatDetectionValue.IsEnabled = true;
-            SeparatorValue.IsEnabled = true;
-            FormatVariationValue.IsEnabled = true;
-            SaveButton.IsEnabled = true;
-            CloseSaveButton.IsEnabled = true;
-
-            //FormatType Felder deaktivieren
-            formatTypeDetection.IsEnabled = false;
-            formatTypeDescription.IsEnabled = false;
-            formatTypeOrderSeparatorStart.IsEnabled = false;
-            formatTypeOrderSeparatorLength.IsEnabled = false;
-            formatTypePositionSeparatorStart.IsEnabled = false;
-            formatTypePositionSeparatorLength.IsEnabled = false;
-        }
-
-        /// <summary>
-        /// Einfügen aus Zwischenablage für Feld Definitionen
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DataGridView1_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
-                {
-                    if (!Clipboard.ContainsText())
-                    {
-                        Console.WriteLine("Clipboard does not containt any text to paste.");
-                        return;
-                    }
-
-                    //Uses tab as the default separator, but if there's no tab, use the system's default
-
-                    String textSeparator = Clipboard.GetText().Contains('\t') ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-
-                    List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
-
-                    List<String[]> cleanLines = clipboardAsList
-                     .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
-                     .ToList<String[]>()
-                     ;
-
-                    foreach (String[] line in cleanLines)
-                    {
-                        if (line.Length == 8)
-                        {
-                            FieldDefination fieldDefination = new()
-                            {
-                                Position = Convert.ToInt16(line[0]),
-                                Name = line[1],
-                                Start = Convert.ToInt16(line[2]),
-                                Length = Convert.ToInt16(line[3]),
-                                Description = line[4],
-                                DataType = line[5],
-                                Mandatory = Convert.ToBoolean(line[6]),
-                                //MappingField = line[7]
-                            };
-                            fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UserMessageHelper.ShowErrorMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
-            }
-        }
 
         #region Actions Buttons
 
@@ -220,7 +132,7 @@ namespace EDIViewer
             DialogBox_NewFormatTyp dialogBoxNewFormatTyp = new(((FileStructurViewModel)this.DataContext).FormatTypNewViewModel);
             dialogBoxNewFormatTyp.ShowDialog();
         }
-        
+
         /// <summary>
         /// Öffnen des aktuellen Format Ordner
         /// </summary>
@@ -255,6 +167,41 @@ namespace EDIViewer
         #endregion
 
         /// <summary>
+        /// Reagieren auf Auswahl der Datei Struktur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Aktuelle Werte FormatName und Pfad            
+            KeyValuePair<string, string> selectedPath = (KeyValuePair<string, string>)cbFormat.SelectedItem;
+
+            //Datei Infos in JSON lesen
+            fileStructurViewModel?.CloseCurrentFile();
+            fileStructurViewModel = new FileStructurViewModel(selectedPath.Value);
+            DataContext = fileStructurViewModel;
+
+            //Felder aktivieren
+            cbFormatTyp.IsEnabled = true;
+            createNewFormatTyp.IsEnabled = true;
+            TbComment.IsEnabled = true;
+            VersionValue.IsEnabled = true;
+            FormatDetectionValue.IsEnabled = true;
+            SeparatorValue.IsEnabled = true;
+            FormatVariationValue.IsEnabled = true;
+            SaveButton.IsEnabled = true;
+            CloseSaveButton.IsEnabled = true;
+
+            //FormatType Felder deaktivieren
+            formatTypeDetection.IsEnabled = false;
+            formatTypeDescription.IsEnabled = false;
+            formatTypeOrderSeparatorStart.IsEnabled = false;
+            formatTypeOrderSeparatorLength.IsEnabled = false;
+            formatTypePositionSeparatorStart.IsEnabled = false;
+            formatTypePositionSeparatorLength.IsEnabled = false;
+        }
+       
+        /// <summary>
         /// Felder aktivieren wenn ein FormatTyp ausgewählt wird
         /// </summary>
         /// <param name="sender"></param>
@@ -282,5 +229,63 @@ namespace EDIViewer
             dialogBox_ArtDefinition.ShowDialog();
         }
 
+        /// <summary>
+        /// Einfügen aus Zwischenablage für Feld Definitionen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridView1_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    if (!Clipboard.ContainsText())
+                    {
+                        UserMessageHelper.ShowErrorMessageBox("Format Verwaltung", "Die Zwischenablage enthält keinen Inhalt zum einfügen!");
+                        return;
+                    }
+
+                    String textSeparator = Clipboard.GetText().Contains('\t') ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+
+                    List<String> clipboardAsList = new(Clipboard.GetText().Split('\n'));
+
+                    List<String[]> cleanLines = clipboardAsList
+                     .Select(s => s.Replace("\n", "").Replace("\r", "").Split(textSeparator.ToCharArray()))
+                     .ToList<String[]>();
+
+                    foreach (String[] line in cleanLines)
+                    {
+                        if (line.Length >= 7 & line.Length <=11)
+                        {
+                            if (string.IsNullOrEmpty(line[1]) | string.IsNullOrEmpty(line[2]) | string.IsNullOrEmpty(line[3]))
+                            {
+                                continue;
+                            }
+
+                            FieldDefination fieldDefination = new()
+                            {
+                                Position = Convert.ToInt16(line[0]),
+                                Name = line[1],
+                                Start = Convert.ToInt16(line[2]),
+                                Length = Convert.ToInt16(line[3]),
+                                Description = line[4],
+                                DataType = line[5],
+                                Mandatory = Convert.ToBoolean(line[6]),
+                                TransferInformation = line[7],
+                                OrderInformation = line[8],
+                                PositionInformation = line[9],
+                                StatusInformation = line[10]
+                            };
+                            fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UserMessageHelper.ShowErrorMessageBox("Fehler Einfügen", "Fehler: " + ex.Message);
+            }
+        }
     }
 }

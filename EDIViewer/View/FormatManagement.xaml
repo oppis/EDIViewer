@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EDIViewer"
+        xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
         xmlns:vm="clr-namespace:EDIViewer.ViewModel"
         Title="EDI-Viewer - Format Management" 
         Height="600" Width="950" 
@@ -249,7 +250,8 @@
                         ItemsSource="{Binding Path=RecordTypes}"
                         SelectedItem="{Binding Path=SelectedRecordType}"  
                         AutoGenerateColumns="False"
-                        ClipboardCopyMode="IncludeHeader">
+                        ClipboardCopyMode="IncludeHeader"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
@@ -278,7 +280,8 @@
                         AutoGenerateColumns="False"  
                         MouseDoubleClick="DgFieldDefinations_MouseDoubleClick"
                         ClipboardCopyMode="IncludeHeader"
-                        KeyUp="DataGridView1_KeyUp">
+                        KeyUp="DataGridView1_KeyUp"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>

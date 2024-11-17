@@ -64,7 +64,7 @@ namespace EDIViewer
         }
 
         /// <summary>
-        /// Befüllen der Ausfall für die Format Typen
+        /// Befüllen der Auswahl für die Format Typen
         /// </summary>
         private void SetFormatCb()
         {
@@ -79,7 +79,7 @@ namespace EDIViewer
         }
 
         /// <summary>
-        /// Öffnen der Verwaltung Formate
+        /// Öffnen der Verwaltung Formate und Neuladen der Formate beim schließen der Format Verwaltung
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -91,10 +91,9 @@ namespace EDIViewer
             };
             bool? windowStatus = windowFormatManagement.ShowDialog();
 
-            //Prüfen wie Fenster geschlossen wurde
             if ((bool)windowStatus)
             {
-                //Neu Laden der Field Definitionen wenn Änderung bei FieldDefinitionen vorgenommen wurde
+                SetFormatCb();
                 if (cbFileFormat.SelectedIndex != -1)
                 {
                     StartParsingFile();

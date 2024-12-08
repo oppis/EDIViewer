@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace EDIViewer.Parser
 {
@@ -84,9 +85,7 @@ namespace EDIViewer.Parser
         /// </summary>
         /// <param name="currentFileRow">Aktuelle Zeile</param>
         private bool GetCurrentFieldDefinations(string currentFileRow)
-        {
-            bool status = false;
-            
+        {          
             if (!string.IsNullOrEmpty(fileStructur.FormatSeparator))// Es handelt sich um eine CSV Datei
             {
                 foreach (RecordType recordType in currentRecordTypes)
@@ -98,7 +97,7 @@ namespace EDIViewer.Parser
                         currentRecordType = recordType;
                         currentFieldDefiniations = recordType.FieldDefinations;
 
-                        status = true;
+                        return true;
                     }
                 }
             }
@@ -113,12 +112,12 @@ namespace EDIViewer.Parser
                         currentRecordType = recordType;
                         currentFieldDefiniations = recordType.FieldDefinations;
                         
-                        status = true;
+                        return true;
                     }
                 }
             }
 
-            return status;
+            return false;
         }
 
         /// <summary>
@@ -154,7 +153,13 @@ namespace EDIViewer.Parser
 
                                 //Länge bestimmen für Parsing bis Ende der Zeile
                                 string oldAufNr = currentAufNr;
-                                currentAufNr = currentFileRowArray[currentFormatType.OrderSeparatorStart];
+
+                                //Prüfen ob Zeile lang genug für Objekt Trennung
+                                if (currentFileRowArray.Length - 1 >= currentFormatType.OrderSeparatorStart)
+                                {
+                                    currentAufNr = currentFileRowArray[currentFormatType.OrderSeparatorStart];
+                                }
+
 
                                 string oldPosNr = currentPosNr;
 
@@ -178,11 +183,11 @@ namespace EDIViewer.Parser
                                         //ArtDefinitionen einfügen
                                         if (currentFieldDefiniations[i].ArtDefinations is not null)
                                         {
-                                            foreach (ArtDefination artDefination in currentFieldDefiniations[i].ArtDefinations)
+                                            foreach (ArtDefination artDefinition in currentFieldDefiniations[i].ArtDefinations)
                                             {
-                                                if (currentFieldContent == artDefination.Id)
+                                                if (currentFieldContent == artDefinition.Id)
                                                 {
-                                                    fieldContentExtended = artDefination.Name;
+                                                    fieldContentExtended = artDefinition.Name;
                                                 }
                                             }
                                         }
@@ -297,6 +302,10 @@ namespace EDIViewer.Parser
 
                                     rawInformationPosition.Add(rawInformationPositionTmp);
                                 }
+                            }
+                            else if (returnStatus & fileRow.Length == 0)
+                            {
+                                UserMessageHelper.ShowErrorMessageBox("Parsen", "Es wurde keine Feld Definition gefunden!\n" + fileRow);
                             }
                         }
                     }

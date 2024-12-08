@@ -258,7 +258,7 @@ namespace EDIViewer
                     {
                         if (line.Length >= 7 & line.Length <=11)
                         {
-                            if (string.IsNullOrEmpty(line[1]) | string.IsNullOrEmpty(line[2]) | string.IsNullOrEmpty(line[3]))
+                            if (string.IsNullOrEmpty(line[0]) | string.IsNullOrEmpty(line[1]) | string.IsNullOrEmpty(line[3]))
                             {
                                 continue;
                             }
@@ -272,11 +272,26 @@ namespace EDIViewer
                                 Description = line[4],
                                 DataType = line[5],
                                 Mandatory = Convert.ToBoolean(line[6]),
-                                TransferInformation = line[7],
-                                OrderInformation = line[8],
-                                PositionInformation = line[9],
-                                StatusInformation = line[10]
                             };
+
+                            if (line.Length > 7)
+                            {
+                                fieldDefination.TransferInformation = line[7];
+                            }
+                            if (line.Length > 8)
+                            {
+                                fieldDefination.OrderInformation = line[8];
+                                
+                            }
+                            if (line.Length > 9)
+                            {
+                                fieldDefination.PositionInformation = line[9];
+                            }
+                            if (line.Length > 10)
+                            {
+                                fieldDefination.StatusInformation = line[10];
+                            }
+
                             fileStructurViewModel.SelectedRecordType.FieldDefinations.Add(fieldDefination);
                         }
                     }

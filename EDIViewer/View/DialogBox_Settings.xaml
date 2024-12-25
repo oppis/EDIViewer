@@ -3,29 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:EDIViewer"
         Title="EDI-Viewer - Einstellungen"
-        MinHeight="225" MinWidth="450"
-        Height="110"
+        MinHeight="175" MinWidth="450"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
         ShowInTaskbar="False" >
 
     <Grid Margin="10">
-        <Grid.Resources>
-            <!-- Default settings for controls -->
-            <Style TargetType="{x:Type Label}">
-                <Setter Property="Margin" Value="0,3,5,5" />
-                <Setter Property="Padding" Value="0,0,0,5" />
-            </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,0,0,5" />
-            </Style>
-            <Style TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="70" />
-                <Setter Property="Height" Value="25" />
-                <Setter Property="Margin" Value="5,0,0,0" />
-            </Style>
-        </Grid.Resources>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
@@ -73,7 +56,7 @@
                 Content="Auswählen Format Ordner"
                 Grid.Column="0" Grid.Row="4"
                 Margin="5,5,5,5"
-                Width="150"
+                Width="175"
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                 HorizontalAlignment="Center" VerticalAlignment="Center" 
                 Click="ClickLoadFileFormatPath"/>
@@ -91,7 +74,8 @@
             <Button Name="saveButton" 
                     IsDefault="True"
                     Content="OK"
-                    Click="SaveButton_Click"/>
+                    Click="SaveButton_Click"
+                    Margin="5,5,5,5"/>
             <Button Name="cancelButton"
                     Content="Abbrechen"
                     Click="CancelButtonClick" 

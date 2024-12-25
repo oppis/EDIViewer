@@ -180,8 +180,7 @@ namespace EDIViewer
             filePath = Path.GetDirectoryName(filePathName);
             fileName = Path.GetFileName(filePathName);
 
-            txtFilePath.Text = filePath;
-            txtFileName.Text = fileName;
+            txtFilePathName.Content = filePathName;
 
             //Ausfall Felder aktivieren
             cbFileFormat.IsEnabled = true;

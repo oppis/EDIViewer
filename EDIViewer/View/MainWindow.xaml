@@ -7,21 +7,19 @@
         xmlns:local="clr-namespace:EDIViewer" 
         Title="EDI-Viewer" Height="450" Width="800">
 
-    <Grid >
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="125"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
         <!--#region Datei Auswahl-->
-        <Grid Grid.Column="0" Grid.Row="0">
+        <Grid Grid.Column="0" Grid.Row="0"
+              Margin="5,5,5,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="85"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -29,58 +27,97 @@
                 <RowDefinition Height="55"/>
             </Grid.RowDefinitions>
 
-            <Button Name="LoadFile" 
-                    Content="Datei Laden"
-                    Grid.Column="0" Grid.Row="0" 
-                    Height="20" 
-                    Margin="5,5,5,5"
-                    Click="LoadFile_Click"></Button>
-            <Label Content="Dateipfad: "
-                   Grid.Column="1" Grid.Row="0" 
-                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-            <TextBlock Name="txtFilePath" 
-                       Text="Dateipfad" 
-                       Grid.Column="2" Grid.Row="0" 
-                       VerticalAlignment="Center"/>
-            <Label Content="Dateiname: "
-                   Grid.Column="3" Grid.Row="0" 
-                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-            <TextBlock Name="txtFileName" 
-                       Text="Dateiname" 
-                       VerticalAlignment="Center"
-                       Grid.Column="4" Grid.Row="0"/>
+            <Grid Grid.Column="0" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Button Content="Einstellungen"
-                    Grid.Row="0" Grid.Column="5"
-                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Height="20" 
-                    Margin="5,5,5,5"
-                    Click="OpenSettings"/>
+                <Button Name="LoadFile" 
+                        Content="Datei Laden"
+                        Grid.Column="0" Grid.Row="0" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Height="AUTO"
+                        Margin="5,5,5,5"
+                        Click="LoadFile_Click"/>
 
-            <Label Content="Dateiformat: "
-                    Grid.Row="1" Grid.Column="0" 
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-            <ComboBox x:Name="cbFileFormat"
-                    Grid.Row="1" Grid.Column="1" 
-                    Margin="10,10,10,10"
-                    IsEnabled="False"
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                    SelectionChanged="CbFileFormat_SelectionChanged"/>
+                <Label Content="Dateiname: "
+                       Grid.Column="1" Grid.Row="0" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label Name="txtFilePathName" 
+                           Content="" 
+                           Grid.Column="2" Grid.Row="0"
+                           VerticalAlignment="Center"/>
 
-            <Label Content="Zeichensatz: "
-                    Grid.Row="1" Grid.Column="2" 
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-            <ComboBox x:Name="cbCharacterSet"
-                        Grid.Row="1" Grid.Column="3" 
-                        Margin="10,10,10,10"
-                        IsEnabled="False"
-                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                        SelectionChanged="CbCharacterSet_SelectionChanged"/>
+                <Button Content="Einstellungen"
+                        Grid.Column="3" Grid.Row="0"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Height="AUTO"
+                        Margin="5,5,5,5"
+                        Click="OpenSettings"/>
+            </Grid>
+            <Grid Grid.Column="0" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Button Content="Verwaltung Formate" 
-                    Grid.Column="4" Grid.Row="1" 
-                    VerticalAlignment="Center" HorizontalAlignment="Center" 
-                    Click="OpenFormatManagement"/>
+                <Grid Grid.Column="0" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Dateiformat: "
+                            Grid.Column="0" Grid.Row="0" 
+                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <ComboBox x:Name="cbFileFormat"
+                            Grid.Column="1" Grid.Row="0"
+                            IsEnabled="False"
+                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                            Height="AUTO"
+                            Margin="5,5,5,5"
+                            SelectionChanged="CbFileFormat_SelectionChanged"/>
+
+                    <Button Content="Verwaltung Formate" 
+                            Grid.Column="2" Grid.Row="0" 
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Height="AUTO"
+                            Margin="5,5,5,5"
+                            Click="OpenFormatManagement"/>
+                </Grid>
+                <Grid Grid.Column="1" Grid.Row="0"
+                      Margin="5,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Zeichensatz: "
+                        Grid.Column="0" Grid.Row="0"
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <ComboBox x:Name="cbCharacterSet"
+                            Grid.Column="1" Grid.Row="0"
+                            IsEnabled="False"
+                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                            Height="AUTO"
+                            Margin="5,5,5,5"
+                            SelectionChanged="CbCharacterSet_SelectionChanged"/>
+                </Grid>
+            </Grid>
         </Grid>
         <!--#endregion-->
         <!--#region File View-->
@@ -93,7 +130,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
+
             <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -140,38 +177,54 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Datenart"
-                                Grid.Row="0" Grid.Column="0"/>
+                               Grid.Row="0" Grid.Column="0"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         <Label  x:Name="DataTypeValue"
                                 Content="{Binding TransferInformation.DataType}"
-                                Grid.Row="0" Grid.Column="1"/>
-                        
+                                Grid.Row="0" Grid.Column="2"
+                                VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
                         <Label Content="Datum"
-                                Grid.Row="1" Grid.Column="0"/>
+                                Grid.Row="1" Grid.Column="0"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         <Label x:Name="DataTime"
                                 Content="{Binding TransferInformation.DateTime}"
-                                Grid.Row="1" Grid.Column="1"/>
-                        
+                                Grid.Row="1" Grid.Column="2"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
                         <Label Content="Dateireferenz"
-                                Grid.Row="2" Grid.Column="0"/>
+                                Grid.Row="2" Grid.Column="0"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         <Label x:Name="DataReferenceValue"
                                 Content="{Binding TransferInformation.DataReference}"
-                               Grid.Row="2" Grid.Column="1"/>
-                        
+                               Grid.Row="2" Grid.Column="2"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
                         <Label Content="Versender ID"
-                                Grid.Row="3" Grid.Column="0"/>
+                                Grid.Row="3" Grid.Column="0"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         <Label x:Name="SenderIDValue"
                                 Content="{Binding TransferInformation.SenderID}"
-                                Grid.Row="3" Grid.Column="1"/>
-                        
+                                Grid.Row="3" Grid.Column="2"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
                         <Label Content="Empfänger ID"
-                                Grid.Row="4" Grid.Column="0"/>
+                                Grid.Row="4" Grid.Column="0"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         <Label x:Name="RecipientIDValue"
                                 Content="{Binding TransferInformation.RecipientID}"
-                                Grid.Row="4" Grid.Column="1"/>
+                                Grid.Row="4" Grid.Column="2"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </Grid>
                 </TabItem>
                 <TabItem Name="OrderTab" Header="Auftrag" IsEnabled="True">
@@ -189,29 +242,38 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label Content="Auftrags ID"
-                                           Grid.Row="0" Grid.Column="0"/>
+                                           Grid.Row="0" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding IdOrder}"
-                                             Grid.Row="0" Grid.Column="1"/>
+                                             Grid.Row="0" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Referenz"
-                                            Grid.Row="1" Grid.Column="0"/>
+                                            Grid.Row="1" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Reference}"
-                                            Grid.Row="1" Grid.Column="1"/>
+                                            Grid.Row="1" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Beladedatum"
-                                            Grid.Row="2" Grid.Column="0"/>
+                                            Grid.Row="2" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding DateTimeLoadDat}"
-                                            Grid.Row="2" Grid.Column="1"/>
+                                            Grid.Row="2" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Entladedatum"
-                                            Grid.Row="3" Grid.Column="0"/>
+                                            Grid.Row="3" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding DateTimeUnloadDat}"
-                                            Grid.Row="3" Grid.Column="1"/>
+                                            Grid.Row="3" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
@@ -238,49 +300,66 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label Content="Order ID"
-                                           Grid.Row="0" Grid.Column="0"/>
+                                           Grid.Row="0" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding IdOrder}"
-                                             Grid.Row="0" Grid.Column="1"/>
+                                             Grid.Row="0" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Positions ID"
-                                           Grid.Row="1" Grid.Column="0"/>
+                                           Grid.Row="1" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding IdPosition}"
-                                             Grid.Row="1" Grid.Column="1"/>
+                                             Grid.Row="1" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="NVE"
-                                            Grid.Row="2" Grid.Column="0"/>
+                                            Grid.Row="2" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding SSCC}"
-                                            Grid.Row="2" Grid.Column="1"/>
+                                            Grid.Row="2" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Anzahl"
-                                            Grid.Row="3" Grid.Column="0"/>
+                                            Grid.Row="3" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding PackageCount}"
-                                            Grid.Row="3" Grid.Column="1"/>
+                                            Grid.Row="3" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Einheit"
-                                            Grid.Row="4" Grid.Column="0"/>
+                                            Grid.Row="4" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding PackagingUnit}"
-                                            Grid.Row="4" Grid.Column="1"/>
+                                            Grid.Row="4" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Höhe"
-                                            Grid.Row="5" Grid.Column="0"/>
+                                            Grid.Row="5" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Height}"
-                                            Grid.Row="5" Grid.Column="1"/>
+                                            Grid.Row="5" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Breite"
-                                            Grid.Row="6" Grid.Column="0"/>
+                                            Grid.Row="6" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Width}"
-                                            Grid.Row="6" Grid.Column="1"/>
+                                            Grid.Row="6" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Länge"
-                                            Grid.Row="7" Grid.Column="0"/>
+                                            Grid.Row="7" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Length}"
-                                            Grid.Row="7" Grid.Column="1"/>
+                                            Grid.Row="7" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
@@ -305,39 +384,52 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label Content="Auftrags Nr"
-                                            Grid.Row="0" Grid.Column="0"/>
+                                            Grid.Row="0" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding OrderNo}"
-                                        Grid.Row="0" Grid.Column="1"/>
+                                            Grid.Row="0" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="NVE"
-                                            Grid.Row="1" Grid.Column="0"/>
+                                            Grid.Row="1" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Nve}"
-                                            Grid.Row="1" Grid.Column="1"/>
+                                            Grid.Row="1" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Status Code"
-                                            Grid.Row="2" Grid.Column="0"/>
+                                            Grid.Row="2" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Code}"
-                                            Grid.Row="2" Grid.Column="1"/>
+                                            Grid.Row="2" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Datum"
-                                            Grid.Row="3" Grid.Column="0"/>
+                                            Grid.Row="3" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Date}"
-                                            Grid.Row="3" Grid.Column="1"/>
+                                            Grid.Row="3" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Zeit"
-                                            Grid.Row="4" Grid.Column="0"/>
+                                            Grid.Row="4" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Time}"
-                                            Grid.Row="4" Grid.Column="1"/>
+                                            Grid.Row="4" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
 
                                     <Label Content="Hinweis"
-                                            Grid.Row="5" Grid.Column="0"/>
+                                            Grid.Row="5" Grid.Column="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     <TextBox Text="{Binding Notes}"
-                                            Grid.Row="5" Grid.Column="1"/>
+                                            Grid.Row="5" Grid.Column="2"
+                                             VerticalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>

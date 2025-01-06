@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "EDIViewer_WinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "EDIViewer_WinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

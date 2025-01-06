@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
 using System.Collections.ObjectModel;
+
+using Newtonsoft.Json;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
-using System.ComponentModel.DataAnnotations;
 
 namespace EDIViewer.Parser
 {
@@ -47,7 +48,7 @@ namespace EDIViewer.Parser
         public void GetFileStructur(string currentFileStructur)
         {
             //aktuelle Format Definition aus JSON laden
-            string json = System.IO.File.ReadAllText(currentFileStructur);
+            string json = File.ReadAllText(currentFileStructur);
 
             fileStructur = JsonConvert.DeserializeObject<FileStructur>(json);
         }

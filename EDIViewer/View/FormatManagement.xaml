@@ -7,16 +7,16 @@
         xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
         xmlns:vm="clr-namespace:EDIViewer.ViewModel"
         Title="EDI-Viewer - Format Management" 
-        Height="600" Width="950" 
+        Height="750" Width="950" 
         WindowStyle="ThreeDBorderWindow" 
         ResizeMode="CanResizeWithGrip">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100px"></RowDefinition>
-            <RowDefinition Height="100px"></RowDefinition>
+            <RowDefinition Height="150px"></RowDefinition>
+            <RowDefinition Height="150px"></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="40px"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -129,8 +129,6 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

@@ -154,7 +154,7 @@ namespace EDIViewer
                 };
 
                 // Show open file dialog box
-                bool? result = dialog.ShowDialog();
+                dialog.ShowDialog();
 
                 LoadFormatFiles();
             }
@@ -197,8 +197,6 @@ namespace EDIViewer
             formatTypeDescription.IsEnabled = false;
             formatTypeOrderSeparatorStart.IsEnabled = false;
             formatTypeOrderSeparatorLength.IsEnabled = false;
-            formatTypePositionSeparatorStart.IsEnabled = false;
-            formatTypePositionSeparatorLength.IsEnabled = false;
         }
        
         /// <summary>
@@ -213,8 +211,6 @@ namespace EDIViewer
             formatTypeDescription.IsEnabled = true;
             formatTypeOrderSeparatorStart.IsEnabled = true;
             formatTypeOrderSeparatorLength.IsEnabled = true;
-            formatTypePositionSeparatorStart.IsEnabled = true;
-            formatTypePositionSeparatorLength.IsEnabled = true;
         }
 
         /// <summary>

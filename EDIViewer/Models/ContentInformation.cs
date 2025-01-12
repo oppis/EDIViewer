@@ -74,5 +74,6 @@ namespace EDIViewer.Models
         public string FieldContentExtended { get; set; }
         public int FileRow { get; set; }
         public string AufNr { get; set; }
+        public string PosNr { get; set; }
     }
 }

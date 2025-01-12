@@ -53,7 +53,7 @@
                 FontWeight="Bold" FontSize="14" />
 
         <Button Name="GetFornatFolder"
-                Content="Auswählen Format Ordner"
+                Content="Ordner ändern"
                 Grid.Column="0" Grid.Row="4"
                 Margin="5,5,5,5"
                 Width="175"

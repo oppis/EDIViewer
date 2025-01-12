@@ -286,6 +286,12 @@
                 </TabItem>
                 <TabItem Name="PositionTab" Header="Position" IsEnabled="True">
                     <TabControl ItemsSource="{Binding PositionInformations}">
+                        <TabControl.Resources>
+                            <Style TargetType="TabItem">
+                                <Setter Property="Width" Value="20">
+                                </Setter>
+                            </Style>
+                        </TabControl.Resources>
                         <TabControl.ContentTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -372,6 +378,11 @@
                 </TabItem>
                 <TabItem Header="Status" IsEnabled="True">
                     <TabControl ItemsSource="{Binding StatusInformations}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OrderNo}"/>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
                         <TabControl.ContentTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -433,11 +444,6 @@
                                 </Grid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
-                        <TabControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding OrderNo}"/>
-                            </DataTemplate>
-                        </TabControl.ItemTemplate>
                     </TabControl>
                 </TabItem>
                 <TabItem Header="RAW Informationen">

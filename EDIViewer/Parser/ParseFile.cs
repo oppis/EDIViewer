@@ -168,7 +168,8 @@ namespace EDIViewer.Parser
                                 if (oldAufNr != currentAufNr)
                                 {
                                     rawInformationOrderTmp = [];
-                                    oldPosNr = string.Empty;
+                                    oldPosNr = "1";
+                                    currentPosNr = "1";
                                 }
 
                                 try
@@ -211,23 +212,15 @@ namespace EDIViewer.Parser
                                             }
                                         }
                                         //Positionsinformationen
-                                        if (!String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation))
+                                        if (currentRecordType.PositionTyp & !String.IsNullOrEmpty(currentFieldDefiniations[i].PositionInformation))
                                         {
                                             if (currentFieldContent.Length > 0)
                                             {
                                                 positionInformation.TryAdd(currentFieldDefiniations[i].PositionInformation, currentFieldContent);
 
-                                                if (currentRecordType.PositionTyp)
+                                                if(currentFieldDefiniations[i].PositionInformation == "IdPosition")
                                                 {
-                                                    if(currentFieldDefiniations[i].PositionInformation == "IdPosition") //TODO -> Anpassung Positions ID -> Auch in ohne Feldlänge umsetzen und aus UI entfernen -> Aktuell scheinbar noch verschoben
-                                                    {
-                                                        currentPosNr = currentFieldContent;
-
-                                                        if (oldPosNr != currentPosNr)
-                                                        {
-                                                            rawInformationPositionTmp = [];
-                                                        }
-                                                    }
+                                                    currentPosNr = currentFieldContent;
                                                 }
                                             }
                                         }
@@ -249,6 +242,7 @@ namespace EDIViewer.Parser
                                             FieldContentExtended = fieldContentExtended,
                                             FileRow = fileRowIndex,
                                             AufNr = currentAufNr,
+                                            PosNr = currentPosNr
                                         };
 
                                         //Alle Einträge hinzufügen
@@ -256,12 +250,6 @@ namespace EDIViewer.Parser
 
                                         //Listen mit Gruppierung nach AufNr erstellen
                                         rawInformationOrderTmp.Add(currentRawInformation);
-
-                                        if (currentRecordType.PositionTyp)
-                                        {
-                                            rawInformationPositionTmp.Add(currentRawInformation);
-                                        }
-
                                     }
                                 }
                                 catch (ArgumentOutOfRangeException ex)
@@ -285,7 +273,7 @@ namespace EDIViewer.Parser
                                         orderInformation = [];
                                     }
 
-                                    //Mapping Satus in Liste schreiben
+                                    //Mapping Status in Liste schreiben
                                     if (statusInformation.Count > 0)
                                     {
                                         statusInformations.Add(statusInformation);
@@ -293,20 +281,41 @@ namespace EDIViewer.Parser
                                     }
                                 }
 
-                                if (oldPosNr != currentPosNr)
+                                if (oldPosNr != currentPosNr | oldAufNr != currentAufNr)
                                 {
                                     if (positionInformation.Count > 0)
                                     {
                                         positionInformations.Add(positionInformation);
                                         positionInformation = [];
                                     }
-
-                                    rawInformationPosition.Add(rawInformationPositionTmp);
                                 }
                             }
                             else if (returnStatus & fileRow.Length == 0)
                             {
                                 UserMessageHelper.ShowErrorMessageBox("Parsen", "Es wurde keine Feld Definition gefunden!\n" + fileRow);
+                            }
+                            else
+                            {
+                                //Letzte Einträge noch Abschließen
+                                if (rawInformationOrderTmp.Count > 0)
+                                {
+                                    rawInformationOrder.Add(rawInformationOrderTmp);
+                                }
+
+                                if (orderInformation.Count > 0)
+                                {
+                                    orderInformations.Add(orderInformation);
+                                }
+
+                                if (positionInformation.Count > 0)
+                                {
+                                    positionInformations.Add(positionInformation);
+                                }
+
+                                if(statusInformation.Count > 0)
+                                {
+                                    statusInformations.Add(statusInformation);
+                                }
                             }
                         }
                     }
@@ -330,7 +339,7 @@ namespace EDIViewer.Parser
                                 //Prüfen ob Zeile lang genug für Objekt Trennung
                                 if (fileRow.Length > (currentFormatType.OrderSeparatorStart - 1 + currentFormatType.OrderSeparatorLength))
                                 {
-                                    currentAufNr = fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, currentFormatType.OrderSeparatorLength);
+                                    currentAufNr = (fileRow.Substring(currentFormatType.OrderSeparatorStart - 1, currentFormatType.OrderSeparatorLength));
                                 }
 
                                 //Prüfen ob neue Position beginnt und neue Einheit anlegen
@@ -339,21 +348,8 @@ namespace EDIViewer.Parser
                                 if (oldAufNr != currentAufNr)
                                 {
                                     rawInformationOrderTmp = [];
-                                    oldPosNr = string.Empty;
-                                }
-
-                                if (currentRecordType.PositionTyp)
-                                {
-                                    //Prüfen ob Zeile lang genug für Objekt Trennung
-                                    if (fileRow.Length > (currentFormatType.PostionSeparatorStart - 1 + currentFormatType.PostionSeparatorLength))
-                                    {
-                                        currentPosNr = fileRow.Substring(currentFormatType.PostionSeparatorStart - 1, currentFormatType.PostionSeparatorLength).Trim();
-                                    }
-
-                                    if (oldPosNr != currentPosNr)
-                                    {
-                                        rawInformationPositionTmp = [];
-                                    }
+                                    oldPosNr = "1";
+                                    currentPosNr = "1";
                                 }
 
                                 //Alle Felder Definitionen durchgehen
@@ -412,6 +408,11 @@ namespace EDIViewer.Parser
                                             if (fileContent.Length > 0)
                                             {
                                                 positionInformation.TryAdd(fieldDefination.PositionInformation, fileContent);
+
+                                                if (fieldDefination.PositionInformation == "IdPosition")
+                                                {
+                                                    currentPosNr = Int16.Parse(fileContent).ToString();
+                                                }
                                             }
                                         }
                                         //Statusinformationen
@@ -432,6 +433,7 @@ namespace EDIViewer.Parser
                                             FieldContentExtended = fieldContentExtended,
                                             FileRow = fileRowIndex,
                                             AufNr = currentAufNr,
+                                            PosNr = currentPosNr,
                                         };
 
                                         //Objekt in Liste sammlen
@@ -439,11 +441,6 @@ namespace EDIViewer.Parser
 
                                         //Listen mit Gruppierung nach AufNr erstellen
                                         rawInformationOrderTmp.Add(currentRawInformation);
-
-                                        if (currentRecordType.PositionTyp)
-                                        {
-                                            rawInformationPositionTmp.Add(currentRawInformation);
-                                        }
                                     }
                                 }
                                 
@@ -455,8 +452,7 @@ namespace EDIViewer.Parser
                                     //Mapping Auftrag in Liste schreiben
                                     if (orderInformation.Count > 0)
                                     {
-                                        orderInformations.Add(orderInformation);
-                                 
+                                        orderInformations.Add(orderInformation);                                
                                         orderInformation = [];
                                     }
                                     //Mapping Satus in Liste schreiben
@@ -467,15 +463,36 @@ namespace EDIViewer.Parser
                                     }
                                 }
 
-                                if (oldPosNr != currentPosNr)
+                                if (oldPosNr != currentPosNr | oldAufNr != currentAufNr)
                                 {
-                                    rawInformationPosition.Add(rawInformationPositionTmp);
-
                                     if (positionInformation.Count > 0)
                                     {
                                         positionInformations.Add(positionInformation);
                                         positionInformation = [];
                                     }
+                                }
+                            }
+                            else
+                            {
+                                //Letzte Einträge noch Abschließen
+                                if (rawInformationOrderTmp.Count > 0)
+                                {
+                                    rawInformationOrder.Add(rawInformationOrderTmp);
+                                }
+
+                                if (orderInformation.Count > 0)
+                                {
+                                    orderInformations.Add(orderInformation);
+                                }
+
+                                if (positionInformation.Count > 0)
+                                {
+                                    positionInformations.Add(positionInformation);
+                                }
+
+                                if (statusInformation.Count > 0)
+                                {
+                                    statusInformations.Add(statusInformation);
                                 }
                             }
                         }
@@ -500,7 +517,6 @@ namespace EDIViewer.Parser
             {
                 RawInformations = rawInformations,
                 RawInformationOrder = rawInformationOrder,
-                RawInformationPosition = rawInformationPosition,
                 TransferInformation = transferInformation,
                 OrderInformations = orderInformations,
                 PositionInformations = positionInformations,

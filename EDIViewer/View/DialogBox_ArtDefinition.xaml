@@ -18,9 +18,6 @@
                 <Setter Property="Margin" Value="0,3,5,5" />
                 <Setter Property="Padding" Value="0,0,0,5" />
             </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,0,0,5" />
-            </Style>
             <Style TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="70" />
                 <Setter Property="Height" Value="25" />
@@ -29,7 +26,7 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="100px"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -42,7 +39,7 @@
                 Grid.Column="0" Grid.Row="0"
                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label  Name="currentArt"
-                Content="{Binding currentFieldDefinition}"
+                Content="{Binding CurrentFieldDefinition}"
                 Grid.Column="1" Grid.Row="0"
                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
@@ -67,7 +64,8 @@
             <Button Name="cancelButton"
                     Content="Abbrechen"
                     Click="CancelButtonClick" 
-                    IsCancel="True"/>
+                    IsCancel="True"
+                    Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

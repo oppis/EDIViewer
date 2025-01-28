@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 
 using EDIViewer.Models;
 using EDIViewer.Helper;
+
 
 namespace EDIViewer.ViewModel
 {
@@ -14,7 +16,7 @@ namespace EDIViewer.ViewModel
         public FormatTypNewViewModel FormatTypNewViewModel { get; set; }
         public ArtDefinationViewModel ArtDefinationViewModel { get; set; }
         public string currentFileFormatFile;
-        private StreamReader textStream;
+        private readonly StreamReader textStream;
         public FileStructurViewModel(string currentFileFormat)
         {
             try
@@ -32,6 +34,7 @@ namespace EDIViewer.ViewModel
                 //Verwaltung ArtDefinitionen
                 ArtDefinationViewModel = new ArtDefinationViewModel();
                 ArtDefinationViewModel.Save += ArtDefinitionOnSave;
+                ArtDefinationViewModel.Cancel += ArtDefinitionOnCancel;
             }
             catch (Exception ex)
             {
@@ -65,6 +68,20 @@ namespace EDIViewer.ViewModel
         private void ArtDefinitionOnSave(object sender, EventArgs eventArgs)
         {
             SelectedFieldDefination.ArtDefinations = ArtDefinationViewModel.ArtDefinations;
+
+            OnPropertyChanged();
+        }
+
+        /// <summary>
+        /// Neu Laden der Daten bei Schließen Art Definition
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void ArtDefinitionOnCancel(object sender, EventArgs eventArgs)
+        {
+            ArtDefinationViewModel.ArtDefinations.Clear();
+
+            OnPropertyChanged();
         }
 
         /// <summary>
@@ -229,6 +246,11 @@ namespace EDIViewer.ViewModel
             {
                 if (selectedRecordType is not null)
                 {
+                    foreach (FieldDefination fieldDefination in selectedRecordType.FieldDefinations)
+                    {
+                        fieldDefination.ArtDefinationAvailable = CheckCurrentArtDefination(fieldDefination.ArtDefinations);
+                    }
+                    
                     return selectedRecordType.FieldDefinations;
                 }
                 else
@@ -255,7 +277,7 @@ namespace EDIViewer.ViewModel
 
                 if (selectedFieldDefination is not null)
                 {
-                    ArtDefinationViewModel.currentFieldDefinition = selectedFieldDefination.Name;
+                    ArtDefinationViewModel.CurrentFieldDefinition = selectedFieldDefination.Name;
 
                     if (selectedFieldDefination.ArtDefinations is null)
                     {
@@ -321,9 +343,21 @@ namespace EDIViewer.ViewModel
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private string  CheckCurrentArtDefination(ObservableCollection<ArtDefination> artDefination)
+        {
+            //Setzen der Artdefinition wenn eine Angegeben wurde
+            if (artDefination is not null)
+            {
+                return "Vorhanden";
+            }
+            else
+            {
+                return "LEER";
+            }
         }
     }
 }

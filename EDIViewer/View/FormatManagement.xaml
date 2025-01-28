@@ -249,8 +249,7 @@
                         Margin="5,5,5,5"
                         ItemsSource="{Binding Path=FieldDefinations}"
                         SelectedItem="{Binding Path=SelectedFieldDefination}"
-                        AutoGenerateColumns="False"  
-                        MouseDoubleClick="DgFieldDefinations_MouseDoubleClick"
+                        AutoGenerateColumns="False"
                         ClipboardCopyMode="IncludeHeader"
                         KeyUp="DataGridView1_KeyUp"
                         dgx:DataGridFilter.IsAutoFilterEnabled="True">
@@ -263,7 +262,15 @@
                     <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}"/>
                     <DataGridTextColumn Header="Daten Typ" Binding="{Binding DataType}"/>
                     <DataGridCheckBoxColumn Header="Pflichtfeld" Binding="{Binding Mandatory}"/>
-
+                    
+                    <DataGridTemplateColumn Header="Art Definitionen">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label x:Name="cbShowArtDefinition" Content="{Binding ArtDefinationAvailable, Mode=OneWay}" MouseDoubleClick="DgArtDefinations_MouseDoubleClick" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="True"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                     <DataGridTemplateColumn Header="Transfer Information">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

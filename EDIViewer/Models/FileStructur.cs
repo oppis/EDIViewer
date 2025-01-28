@@ -41,6 +41,7 @@ namespace EDIViewer.Models
         public string Description { get; set; }
         public string DataType { get; set; }
         public bool Mandatory { get; set; }
+        public string ArtDefinationAvailable { get; set; }
         public string TransferInformation {  get; set; }
         public string OrderInformation {  get; set; }
         public string PositionInformation {  get; set; }

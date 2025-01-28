@@ -8,6 +8,7 @@ using EDIViewer.Models;
 using EDIViewer.Helper;
 using EDIViewer.ViewModel;
 using EDIViewer.View;
+using System.Reflection.Metadata;
 
 namespace EDIViewer
 {
@@ -218,11 +219,11 @@ namespace EDIViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgFieldDefinations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void DgArtDefinations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //Dialog Box erstellen mit Übergabe des aktuellen Kontextes
-            DialogBox_ArtDefiniation dialogBox_ArtDefinition = new(((FileStructurViewModel)this.DataContext).ArtDefinationViewModel); //TODO -> Auswahl Field Def -> Button
-            dialogBox_ArtDefinition.ShowDialog();
+            DialogBox_ArtDefiniation dialogBox_ArtDefinition = new(((FileStructurViewModel)this.DataContext).ArtDefinationViewModel);
+            dialogBox_ArtDefinition.ShowDialog(); //TODO -> Neu laden bei schließen des Fensters es fehlt die Anzeige der neuen ArtDefinition
         }
 
         /// <summary>

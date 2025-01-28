@@ -12,7 +12,7 @@ namespace EDIViewer.View
     /// </summary>
     public partial class DialogBox_ArtDefiniation : Window
     {
-        ArtDefinationViewModel artDefinationViewModel;
+        private readonly ArtDefinationViewModel artDefinationViewModel = new();
         public DialogBox_ArtDefiniation()
         {
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace EDIViewer.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Save(object sender, EventArgs e)
+        private void Save(object? sender, EventArgs e)
         {
             this.Close();
         }
@@ -41,7 +41,6 @@ namespace EDIViewer.View
         /// <param name="e"></param>
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
             this.Close();
         }
 
@@ -61,8 +60,6 @@ namespace EDIViewer.View
                         UserMessageHelper.ShowErrorMessageBox("Einfügen", "Die Zwischen ablage enthält keinen Text zum einfügen");
                         return;
                     }
-
-                    //Uses tab as the default separator, but if there's no tab, use the system's default
 
                     String textSeparator = Clipboard.GetText().Contains('\t') ? "\t" : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 

@@ -6,14 +6,10 @@
 <FluentStack Orientation="Orientation.Vertical" Style="gap: 20px;">
     <FluentCard>
         <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
-            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 10px;">
-                <FluentIcon Icon="Icons.Regular.Size24.Settings" Color="Color.Accent" />
-                <FluentLabel Typography="Typography.Subject">Format Management</FluentLabel>
-            </FluentStack>
-            
-            <FluentText Typography="Typography.Body">
+            <FluentLabel Typography="Typography.Subject">⚙️ Format Management</FluentLabel>
+            <FluentLabel Typography="Typography.Body">
                 Verwalten Sie JSON-Format-Definitionen für verschiedene EDI-Typen.
-            </FluentText>
+            </FluentLabel>
         </FluentStack>
     </FluentCard>
     
@@ -22,14 +18,13 @@
             <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Start" Style="gap: 10px;">
                 <FluentLabel Typography="Typography.BodyStrong">Verfügbare Formate</FluentLabel>
                 <FluentButton OnClick="RefreshFormats" Appearance="Appearance.Outline">
-                    <FluentIcon Icon="Icons.Regular.Size16.ArrowSync" />
-                    Aktualisieren
+                    🔄 Aktualisieren
                 </FluentButton>
             </FluentStack>
             
             @if (availableFormats.Any())
             {
-                <FluentDataGrid Items="availableFormats" ResizableColumns="true" Style="width: 100%;">
+                <FluentDataGrid Items="availableFormats.AsQueryable()" ResizableColumns="true" Style="width: 100%;">
                     <PropertyColumn Property="@(f => f.FormatName)" Title="Format Name" />
                     <PropertyColumn Property="@(f => f.FormatComment)" Title="Kommentar" />
                     <PropertyColumn Property="@(f => f.FormatVersion)" Title="Version" />
@@ -39,8 +34,7 @@
                             <FluentButton OnClick="@(() => ViewFormat(context))" 
                                         Size="Size.Small"
                                         Appearance="Appearance.Outline">
-                                <FluentIcon Icon="Icons.Regular.Size16.Eye" />
-                                Anzeigen
+                                👁️ Anzeigen
                             </FluentButton>
                         </FluentStack>
                     </TemplateColumn>
@@ -48,9 +42,9 @@
             }
             else
             {
-                <FluentText Typography="Typography.Body">
+                <FluentLabel Typography="Typography.Body">
                     Keine Formate gefunden. Stellen Sie sicher, dass Format-Dateien im Formats-Ordner vorhanden sind.
-                </FluentText>
+                </FluentLabel>
             }
         </FluentStack>
     </FluentCard>
@@ -66,19 +60,19 @@
                         <FluentStack Orientation="Orientation.Vertical" Style="gap: 10px; padding: 15px;">
                             <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
                                 <FluentLabel Typography="Typography.BodyStrong">Name:</FluentLabel>
-                                <FluentText>@selectedFormat.FormatName</FluentText>
+                                <FluentLabel>@selectedFormat.FormatName</FluentLabel>
                             </FluentStack>
                             <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
                                 <FluentLabel Typography="Typography.BodyStrong">Kommentar:</FluentLabel>
-                                <FluentText>@selectedFormat.FormatComment</FluentText>
+                                <FluentLabel>@selectedFormat.FormatComment</FluentLabel>
                             </FluentStack>
                             <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
                                 <FluentLabel Typography="Typography.BodyStrong">Version:</FluentLabel>
-                                <FluentText>@selectedFormat.FormatVersion</FluentText>
+                                <FluentLabel>@selectedFormat.FormatVersion</FluentLabel>
                             </FluentStack>
                             <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
                                 <FluentLabel Typography="Typography.BodyStrong">Trennzeichen:</FluentLabel>
-                                <FluentText>@selectedFormat.FormatSeparator</FluentText>
+                                <FluentLabel>@selectedFormat.FormatSeparator</FluentLabel>
                             </FluentStack>
                         </FluentStack>
                     </FluentTab>
@@ -91,13 +85,13 @@
                                 {
                                     <FluentAccordionItem Heading="@formatType.Name">
                                         <FluentStack Orientation="Orientation.Vertical" Style="gap: 10px;">
-                                            <FluentText><strong>Beschreibung:</strong> @formatType.Description</FluentText>
-                                            <FluentText><strong>Detection:</strong> @formatType.Detection</FluentText>
+                                            <FluentLabel><strong>Beschreibung:</strong> @formatType.Description</FluentLabel>
+                                            <FluentLabel><strong>Detection:</strong> @formatType.Detection</FluentLabel>
                                             
                                             @if (formatType.RecordTypes?.Any() == true)
                                             {
                                                 <FluentLabel Typography="Typography.BodyStrong">Record Types:</FluentLabel>
-                                                <FluentDataGrid Items="formatType.RecordTypes" Style="max-height: 300px;">
+                                                <FluentDataGrid Items="formatType.RecordTypes.AsQueryable()" Style="max-height: 300px;">
                                                     <PropertyColumn Property="@(r => r.Position)" Title="Position" />
                                                     <PropertyColumn Property="@(r => r.Name)" Title="Name" />
                                                     <PropertyColumn Property="@(r => r.RecordDetection)" Title="Detection" />
@@ -138,7 +132,7 @@
             {
                 try
                 {
-                    var fullPath = Path.Combine(formatPath, formatFile.FileName);
+                    var fullPath = formatFile.FullPath;
                     if (File.Exists(fullPath))
                     {
                         var json = await File.ReadAllTextAsync(fullPath);

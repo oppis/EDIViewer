@@ -6,14 +6,10 @@
 <FluentStack Orientation="Orientation.Vertical" Style="gap: 20px;">
     <FluentCard>
         <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
-            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 10px;">
-                <FluentIcon Icon="Icons.Regular.Size24.DocumentText" Color="Color.Accent" />
-                <FluentLabel Typography="Typography.Subject">EDI File Viewer</FluentLabel>
-            </FluentStack>
-            
-            <FluentText Typography="Typography.Body">
+            <FluentLabel Typography="Typography.Subject">📄 EDI File Viewer</FluentLabel>
+            <FluentLabel Typography="Typography.Body">
                 Laden Sie eine EDI-Datei und wählen Sie ein Format zur Analyse aus.
-            </FluentText>
+            </FluentLabel>
         </FluentStack>
     </FluentCard>
     
@@ -27,15 +23,14 @@
                                    OnFileChange="OnFileSelected"
                                    Accept=".txt,.edi"
                                    MaxFileSize="10485760">
-                        <FluentIcon Icon="Icons.Regular.Size20.FolderOpen" />
-                        EDI-Datei wählen...
+                        📁 EDI-Datei wählen...
                     </FluentInputFile>
                     
                     @if (!string.IsNullOrEmpty(selectedFileName))
                     {
-                        <FluentText Typography="Typography.Caption">
+                        <FluentLabel Typography="Typography.Caption">
                             Ausgewählte Datei: @selectedFileName
-                        </FluentText>
+                        </FluentLabel>
                     }
                 </FluentStack>
             </FluentCard>
@@ -57,8 +52,7 @@
                     <FluentButton OnClick="ProcessFile" 
                                 Disabled="@(string.IsNullOrEmpty(selectedFileName) || string.IsNullOrEmpty(selectedFormatPath))"
                                 Appearance="Appearance.Accent">
-                        <FluentIcon Icon="Icons.Regular.Size16.Play" />
-                        Datei verarbeiten
+                        ▶️ Datei verarbeiten
                     </FluentButton>
                 </FluentStack>
             </FluentCard>
@@ -73,7 +67,7 @@
                 
                 <FluentTabs>
                     <FluentTab Text="Raw Information">
-                        <FluentDataGrid ItemsProvider="GetRawInformationItems" ResizableColumns="true" Style="height: 400px; overflow: auto;">
+                        <FluentDataGrid Items="@rawInformationItems.AsQueryable()" ResizableColumns="true" Style="height: 400px; overflow: auto;">
                             <PropertyColumn Property="@(r => r.RecordTyp)" Title="Satzart" />
                             <PropertyColumn Property="@(r => r.Field)" Title="Feld" />
                             <PropertyColumn Property="@(r => r.FieldContent)" Title="Inhalt" />
@@ -89,7 +83,7 @@
                                 {
                                     <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
                                         <FluentLabel Typography="Typography.BodyStrong">@item.Key:</FluentLabel>
-                                        <FluentText Typography="Typography.Body">@item.Value</FluentText>
+                                        <FluentLabel Typography="Typography.Body">@item.Value</FluentLabel>
                                     </FluentStack>
                                 }
                             </FluentStack>
@@ -106,6 +100,7 @@
     private string selectedFormatPath = string.Empty;
     private string? fileContent;
     private ContentInformation? contentInformation;
+    private List<RawInformation> rawInformationItems = new();
     
     private readonly List<FormatInfo> availableFormats = new();
     
@@ -119,7 +114,6 @@
     {
         try
         {
-            var formatPath = RegistryHelper.GetFormatFilePath();
             var formatFiles = FormatFiles.GetFormatFiles();
             
             availableFormats.Clear();
@@ -175,26 +169,22 @@
             parser.ProcessCurrentFile(File.ReadAllLines(tempFile));
             contentInformation = parser.contentInformation;
             
+            // Update raw information items for display
+            if (contentInformation?.RawInformations != null)
+            {
+                rawInformationItems = contentInformation.RawInformations.ToList();
+            }
+            
             // Clean up temp file
             File.Delete(tempFile);
+            
+            StateHasChanged();
         }
         catch (Exception ex)
         {
             contentInformation = null;
             Console.WriteLine($"Error processing file: {ex.Message}");
         }
-    }
-    
-    private GridItemsProvider<RawInformation>? GetRawInformationItems()
-    {
-        if (contentInformation?.RawInformations == null)
-            return null;
-            
-        return async req =>
-        {
-            var items = contentInformation.RawInformations.Skip(req.StartIndex).Take(req.Count ?? 50);
-            return GridItemsProviderResult.From(items, contentInformation.RawInformations.Count);
-        };
     }
     
     private class FormatInfo

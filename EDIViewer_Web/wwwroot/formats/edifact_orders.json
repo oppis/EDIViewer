@@ -1,0 +1,110 @@
+{
+  "FormatName": "EDIFACT ORDERS",
+  "FormatComment": "Standard EDIFACT Auftragsdaten",
+  "FormatVersion": 1,
+  "FormatSeparator": "+",
+  "FormatDetection": "UNB",
+  "FormatVariation": "Standard",
+  "FormatTypes": [
+    {
+      "Name": "ORDERS",
+      "Description": "Auftragsdaten",
+      "Detection": "UNH",
+      "OrderSeparatorStart": 0,
+      "OrderSeparatorLength": 0,
+      "RecordTypes": [
+        {
+          "Position": 1,
+          "Name": "UNH",
+          "Mandatory": true,
+          "RecordDetection": "UNH",
+          "Description": "Message Header",
+          "PositionTyp": false,
+          "FieldDefinations": [
+            {
+              "Position": 1,
+              "Name": "Segment Tag",
+              "Start": 0,
+              "Length": 3,
+              "Description": "UNH",
+              "DataType": "String",
+              "Mandatory": true,
+              "ArtDefinationAvailable": "",
+              "TransferInformation": "",
+              "OrderInformation": "",
+              "PositionInformation": "",
+              "StatusInformation": "",
+              "ArtDefinations": []
+            },
+            {
+              "Position": 2,
+              "Name": "Message Reference",
+              "Start": 4,
+              "Length": 20,
+              "Description": "Eindeutige Referenz",
+              "DataType": "String",
+              "Mandatory": true,
+              "ArtDefinationAvailable": "",
+              "TransferInformation": "DataReference",
+              "OrderInformation": "",
+              "PositionInformation": "",
+              "StatusInformation": "",
+              "ArtDefinations": []
+            }
+          ]
+        },
+        {
+          "Position": 2,
+          "Name": "BGM",
+          "Mandatory": true,
+          "RecordDetection": "BGM",
+          "Description": "Beginning of Message",
+          "PositionTyp": false,
+          "FieldDefinations": [
+            {
+              "Position": 1,
+              "Name": "Segment Tag",
+              "Start": 0,
+              "Length": 3,
+              "Description": "BGM",
+              "DataType": "String",
+              "Mandatory": true,
+              "ArtDefinationAvailable": "",
+              "TransferInformation": "",
+              "OrderInformation": "",
+              "PositionInformation": "",
+              "StatusInformation": "",
+              "ArtDefinations": []
+            },
+            {
+              "Position": 2,
+              "Name": "Document Type",
+              "Start": 4,
+              "Length": 10,
+              "Description": "Dokumententyp",
+              "DataType": "String",
+              "Mandatory": true,
+              "ArtDefinationAvailable": "DocumentType",
+              "TransferInformation": "DataType",
+              "OrderInformation": "",
+              "PositionInformation": "",
+              "StatusInformation": "",
+              "ArtDefinations": [
+                {
+                  "Id": "220",
+                  "Name": "Order",
+                  "Description": "Auftrag"
+                },
+                {
+                  "Id": "221",
+                  "Name": "Order Change",
+                  "Description": "Auftragsänderung"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

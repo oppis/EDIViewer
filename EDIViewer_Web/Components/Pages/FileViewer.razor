@@ -1,0 +1,205 @@
+﻿@page "/file-viewer"
+@rendermode InteractiveServer
+
+<PageTitle>EDI Viewer - File Viewer</PageTitle>
+
+<FluentStack Orientation="Orientation.Vertical" Style="gap: 20px;">
+    <FluentCard>
+        <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 10px;">
+                <FluentIcon Icon="Icons.Regular.Size24.DocumentText" Color="Color.Accent" />
+                <FluentLabel Typography="Typography.Subject">EDI File Viewer</FluentLabel>
+            </FluentStack>
+            
+            <FluentText Typography="Typography.Body">
+                Laden Sie eine EDI-Datei und wählen Sie ein Format zur Analyse aus.
+            </FluentText>
+        </FluentStack>
+    </FluentCard>
+    
+    <FluentGrid>
+        <FluentGridItem xs="12" md="6">
+            <FluentCard>
+                <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+                    <FluentLabel Typography="Typography.BodyStrong">EDI-Datei auswählen</FluentLabel>
+                    
+                    <FluentInputFile Id="edi-file-input"
+                                   OnFileChange="OnFileSelected"
+                                   Accept=".txt,.edi"
+                                   MaxFileSize="10485760">
+                        <FluentIcon Icon="Icons.Regular.Size20.FolderOpen" />
+                        EDI-Datei wählen...
+                    </FluentInputFile>
+                    
+                    @if (!string.IsNullOrEmpty(selectedFileName))
+                    {
+                        <FluentText Typography="Typography.Caption">
+                            Ausgewählte Datei: @selectedFileName
+                        </FluentText>
+                    }
+                </FluentStack>
+            </FluentCard>
+        </FluentGridItem>
+        
+        <FluentGridItem xs="12" md="6">
+            <FluentCard>
+                <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+                    <FluentLabel Typography="Typography.BodyStrong">Format auswählen</FluentLabel>
+                    
+                    <FluentSelect @bind-Value="selectedFormatPath" TOption="string">
+                        <FluentOption Value="">-- Format wählen --</FluentOption>
+                        @foreach (var format in availableFormats)
+                        {
+                            <FluentOption Value="@format.Path">@format.Name</FluentOption>
+                        }
+                    </FluentSelect>
+                    
+                    <FluentButton OnClick="ProcessFile" 
+                                Disabled="@(string.IsNullOrEmpty(selectedFileName) || string.IsNullOrEmpty(selectedFormatPath))"
+                                Appearance="Appearance.Accent">
+                        <FluentIcon Icon="Icons.Regular.Size16.Play" />
+                        Datei verarbeiten
+                    </FluentButton>
+                </FluentStack>
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+    
+    @if (contentInformation != null)
+    {
+        <FluentCard>
+            <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+                <FluentLabel Typography="Typography.BodyStrong">Verarbeitete Daten</FluentLabel>
+                
+                <FluentTabs>
+                    <FluentTab Text="Raw Information">
+                        <FluentDataGrid ItemsProvider="GetRawInformationItems" ResizableColumns="true" Style="height: 400px; overflow: auto;">
+                            <PropertyColumn Property="@(r => r.RecordTyp)" Title="Satzart" />
+                            <PropertyColumn Property="@(r => r.Field)" Title="Feld" />
+                            <PropertyColumn Property="@(r => r.FieldContent)" Title="Inhalt" />
+                            <PropertyColumn Property="@(r => r.FileRow)" Title="Zeile" />
+                        </FluentDataGrid>
+                    </FluentTab>
+                    
+                    <FluentTab Text="Transfer Information">
+                        @if (contentInformation.TransferInformation != null)
+                        {
+                            <FluentStack Orientation="Orientation.Vertical" Style="gap: 10px;">
+                                @foreach (var item in contentInformation.TransferInformation)
+                                {
+                                    <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
+                                        <FluentLabel Typography="Typography.BodyStrong">@item.Key:</FluentLabel>
+                                        <FluentText Typography="Typography.Body">@item.Value</FluentText>
+                                    </FluentStack>
+                                }
+                            </FluentStack>
+                        }
+                    </FluentTab>
+                </FluentTabs>
+            </FluentStack>
+        </FluentCard>
+    }
+</FluentStack>
+
+@code {
+    private string selectedFileName = string.Empty;
+    private string selectedFormatPath = string.Empty;
+    private string? fileContent;
+    private ContentInformation? contentInformation;
+    
+    private readonly List<FormatInfo> availableFormats = new();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        LoadAvailableFormats();
+        await base.OnInitializedAsync();
+    }
+    
+    private void LoadAvailableFormats()
+    {
+        try
+        {
+            var formatPath = RegistryHelper.GetFormatFilePath();
+            var formatFiles = FormatFiles.GetFormatFiles();
+            
+            availableFormats.Clear();
+            foreach (var format in formatFiles)
+            {
+                availableFormats.Add(new FormatInfo 
+                { 
+                    Name = format.FormatName, 
+                    Path = format.FullPath 
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log error - in a real app you'd use proper logging
+            Console.WriteLine($"Error loading formats: {ex.Message}");
+        }
+    }
+    
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            selectedFileName = e.File.Name;
+            
+            using var stream = e.File.OpenReadStream(maxAllowedSize: 10485760); // 10MB limit
+            using var reader = new StreamReader(stream);
+            fileContent = await reader.ReadToEndAsync();
+        }
+        catch (Exception ex)
+        {
+            selectedFileName = string.Empty;
+            fileContent = null;
+            // Show error message
+            Console.WriteLine($"Error reading file: {ex.Message}");
+        }
+    }
+    
+    private void ProcessFile()
+    {
+        if (string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(selectedFormatPath))
+            return;
+            
+        try
+        {
+            var parser = new ParseFile();
+            parser.GetFileStructur(selectedFormatPath);
+            
+            // Write content to temporary file for processing
+            var tempFile = Path.GetTempFileName();
+            File.WriteAllText(tempFile, fileContent);
+            
+            parser.ProcessCurrentFile(File.ReadAllLines(tempFile));
+            contentInformation = parser.contentInformation;
+            
+            // Clean up temp file
+            File.Delete(tempFile);
+        }
+        catch (Exception ex)
+        {
+            contentInformation = null;
+            Console.WriteLine($"Error processing file: {ex.Message}");
+        }
+    }
+    
+    private GridItemsProvider<RawInformation>? GetRawInformationItems()
+    {
+        if (contentInformation?.RawInformations == null)
+            return null;
+            
+        return async req =>
+        {
+            var items = contentInformation.RawInformations.Skip(req.StartIndex).Take(req.Count ?? 50);
+            return GridItemsProviderResult.From(items, contentInformation.RawInformations.Count);
+        };
+    }
+    
+    private class FormatInfo
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+    }
+}

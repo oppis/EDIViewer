@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+
+<FluentDesignTheme @rendermode="InteractiveServer" StorageName="theme" />
+
+<FluentStack Orientation="Orientation.Horizontal" Class="main-layout" Style="height: 100vh; width: 100vw;">
+    <FluentNavMenu Style="width: 300px; height: 100vh;" @rendermode="InteractiveServer">
+        <FluentNavGroup Title="📄 EDI Viewer">
+            <FluentNavLink Href="/" Match="NavLinkMatch.All">🏠 Home</FluentNavLink>
+            <FluentNavLink Href="/file-viewer">📊 File Viewer</FluentNavLink>
+            <FluentNavLink Href="/formats">⚙️ Formats</FluentNavLink>
+        </FluentNavGroup>
+    </FluentNavMenu>
+    
+    <FluentStack Orientation="Orientation.Vertical" Style="flex-grow: 1; height: 100vh;">
+        <FluentHeader Style="background: var(--neutral-layer-1); padding: 10px;">
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Right">
+                <FluentLabel>EDI Viewer Web</FluentLabel>
+            </FluentStack>
+        </FluentHeader>
+        
+        <FluentMainLayout Style="flex-grow: 1; padding: 20px; overflow-y: auto;">
+            @Body
+        </FluentMainLayout>
+    </FluentStack>
+</FluentStack>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>

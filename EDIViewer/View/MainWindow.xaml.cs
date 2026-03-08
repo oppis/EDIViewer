@@ -26,6 +26,7 @@ namespace EDIViewer
 
         //Datei Konvertierung
         Encoding fileEncodingSelected;
+        string rawFileContent = string.Empty;
 
         StreamReader originalFile;
 
@@ -45,6 +46,58 @@ namespace EDIViewer
 
             SetFormatCb();
             GetEncodingsCb();
+            GetLineBreaksCb();
+        }
+
+        /// <summary>
+        /// Mögliche Zeilenumbrüche in DropDown laden
+        /// </summary>
+        private void GetLineBreaksCb()
+        {
+            var lineBreakOptions = new Dictionary<string, string>
+            {
+                { "CRLF (\\r\\n)", "\r\n" },
+                { "LF (\\n)", "\n" },
+                { "CR (\\r)", "\r" }
+            };
+            cbLineBreak.DisplayMemberPath = "Key";
+            cbLineBreak.SelectedValuePath = "Value";
+            cbLineBreak.ItemsSource = lineBreakOptions;
+            cbLineBreak.SelectedValue = Environment.NewLine;
+        }
+
+        /// <summary>
+        /// Zeilenumbruch Art in der Datei erkennen
+        /// </summary>
+        /// <param name="content">Datei Inhalt als Text</param>
+        /// <returns>Erkannter Zeilenumbruch</returns>
+        private static string DetectLineBreak(string content)
+        {
+            int crlf = 0, lf = 0, cr = 0;
+            for (int i = 0; i < content.Length; i++)
+            {
+                if (content[i] == '\r')
+                {
+                    if (i + 1 < content.Length && content[i + 1] == '\n')
+                    {
+                        crlf++;
+                        i++;
+                    }
+                    else
+                    {
+                        cr++;
+                    }
+                }
+                else if (content[i] == '\n')
+                {
+                    lf++;
+                }
+            }
+
+            if (crlf > 0 && crlf >= lf && crlf >= cr) return "\r\n";
+            if (lf > 0 && lf >= cr) return "\n";
+            if (cr > 0) return "\r";
+            return Environment.NewLine;
         }
 
         /// <summary>
@@ -185,6 +238,7 @@ namespace EDIViewer
             //Ausfall Felder aktivieren
             cbFileFormat.IsEnabled = true;
             cbCharacterSet.IsEnabled = true;
+            cbLineBreak.IsEnabled = true;
 
             //Bereinigen der alten Werte
             ClearParsedInformations();
@@ -193,8 +247,12 @@ namespace EDIViewer
             try
             {
                 originalFile = new(Path.Combine(filePath, fileName), fileEncodingSelected);
+                rawFileContent = originalFile.ReadToEnd();
 
-                fileOriginalView.Document.Blocks.Add(new Paragraph(new Run(originalFile.ReadToEnd())));
+                //Zeilenumbruch erkennen und setzen
+                cbLineBreak.SelectedValue = DetectLineBreak(rawFileContent);
+
+                fileOriginalView.Document.Blocks.Add(new Paragraph(new Run(rawFileContent)));
             }
             catch (Exception ex)
             {
@@ -207,9 +265,12 @@ namespace EDIViewer
         /// </summary>
         private void StartParsingFile()
         {
-            //Aktuellen Text auf RichTextBox holen
-            TextRange textRange = new(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd);
-            string[] viewLines = textRange.Text.Split(Environment.NewLine);
+            if (string.IsNullOrEmpty(rawFileContent)) return;
+
+            //Ausgewählten Zeilenumbruch holen
+            string lineBreak = cbLineBreak.SelectedValue?.ToString() ?? Environment.NewLine;
+
+            string[] viewLines = rawFileContent.Split(lineBreak, StringSplitOptions.None);
 
             //DataContext -> RawInformations
             contentInformationViewModel = new ContentInformationViewModel(currentFileFormat, viewLines);
@@ -244,6 +305,9 @@ namespace EDIViewer
             //Formatauswahl leer
             cbFileFormat.SelectedItem = null;
 
+            //Rohdaten zurücksetzen
+            rawFileContent = string.Empty;
+
             if (contentInformationViewModel != null)
             {
                 contentInformationViewModel = new();
@@ -262,9 +326,22 @@ namespace EDIViewer
             fileEncodingSelected = Encoding.GetEncoding(fileEncodingChanged.Name);
 
             //Inhalt der Datei neu laden bei Änderung Zeichensatz
-            if (!String.IsNullOrEmpty(new TextRange(fileOriginalView.Document.ContentStart, fileOriginalView.Document.ContentEnd).Text))
+            if (!String.IsNullOrEmpty(rawFileContent))
             {
                 File_LoadView();
+            }
+        }
+
+        /// <summary>
+        /// Reagieren auf Änderung des Zeilenumbruchs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CbLineBreak_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(rawFileContent) && cbFileFormat.SelectedItem != null)
+            {
+                StartParsingFile();
             }
         }
 

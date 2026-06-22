@@ -1,0 +1,170 @@
+﻿@page "/formats"
+@rendermode InteractiveServer
+
+<PageTitle>EDI Viewer - Format Management</PageTitle>
+
+<FluentStack Orientation="Orientation.Vertical" Style="gap: 20px;">
+    <FluentCard>
+        <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+            <FluentLabel Typography="Typography.Subject">⚙️ Format Management</FluentLabel>
+            <FluentLabel Typography="Typography.Body">
+                Verwalten Sie JSON-Format-Definitionen für verschiedene EDI-Typen.
+            </FluentLabel>
+        </FluentStack>
+    </FluentCard>
+    
+    <FluentCard>
+        <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Start" Style="gap: 10px;">
+                <FluentLabel Typography="Typography.BodyStrong">Verfügbare Formate</FluentLabel>
+                <FluentButton OnClick="RefreshFormats" Appearance="Appearance.Outline">
+                    🔄 Aktualisieren
+                </FluentButton>
+            </FluentStack>
+            
+            @if (availableFormats.Any())
+            {
+                <FluentDataGrid Items="availableFormats.AsQueryable()" ResizableColumns="true" Style="width: 100%;">
+                    <PropertyColumn Property="@(f => f.FormatName)" Title="Format Name" />
+                    <PropertyColumn Property="@(f => f.FormatComment)" Title="Kommentar" />
+                    <PropertyColumn Property="@(f => f.FormatVersion)" Title="Version" />
+                    <PropertyColumn Property="@(f => f.FormatDetection)" Title="Detection" />
+                    <TemplateColumn Title="Aktionen">
+                        <FluentStack Orientation="Orientation.Horizontal" Style="gap: 5px;">
+                            <FluentButton OnClick="@(() => ViewFormat(context))" 
+                                        Size="Size.Small"
+                                        Appearance="Appearance.Outline">
+                                👁️ Anzeigen
+                            </FluentButton>
+                        </FluentStack>
+                    </TemplateColumn>
+                </FluentDataGrid>
+            }
+            else
+            {
+                <FluentLabel Typography="Typography.Body">
+                    Keine Formate gefunden. Stellen Sie sicher, dass Format-Dateien im Formats-Ordner vorhanden sind.
+                </FluentLabel>
+            }
+        </FluentStack>
+    </FluentCard>
+    
+    @if (selectedFormat != null)
+    {
+        <FluentCard>
+            <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+                <FluentLabel Typography="Typography.BodyStrong">Format Details: @selectedFormat.FormatName</FluentLabel>
+                
+                <FluentTabs>
+                    <FluentTab Text="Allgemein">
+                        <FluentStack Orientation="Orientation.Vertical" Style="gap: 10px; padding: 15px;">
+                            <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
+                                <FluentLabel Typography="Typography.BodyStrong">Name:</FluentLabel>
+                                <FluentLabel>@selectedFormat.FormatName</FluentLabel>
+                            </FluentStack>
+                            <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
+                                <FluentLabel Typography="Typography.BodyStrong">Kommentar:</FluentLabel>
+                                <FluentLabel>@selectedFormat.FormatComment</FluentLabel>
+                            </FluentStack>
+                            <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
+                                <FluentLabel Typography="Typography.BodyStrong">Version:</FluentLabel>
+                                <FluentLabel>@selectedFormat.FormatVersion</FluentLabel>
+                            </FluentStack>
+                            <FluentStack Orientation="Orientation.Horizontal" Style="gap: 10px;">
+                                <FluentLabel Typography="Typography.BodyStrong">Trennzeichen:</FluentLabel>
+                                <FluentLabel>@selectedFormat.FormatSeparator</FluentLabel>
+                            </FluentStack>
+                        </FluentStack>
+                    </FluentTab>
+                    
+                    <FluentTab Text="Format Types">
+                        @if (selectedFormat.FormatTypes?.Any() == true)
+                        {
+                            <FluentAccordion Style="padding: 15px;">
+                                @foreach (var formatType in selectedFormat.FormatTypes)
+                                {
+                                    <FluentAccordionItem Heading="@formatType.Name">
+                                        <FluentStack Orientation="Orientation.Vertical" Style="gap: 10px;">
+                                            <FluentLabel><strong>Beschreibung:</strong> @formatType.Description</FluentLabel>
+                                            <FluentLabel><strong>Detection:</strong> @formatType.Detection</FluentLabel>
+                                            
+                                            @if (formatType.RecordTypes?.Any() == true)
+                                            {
+                                                <FluentLabel Typography="Typography.BodyStrong">Record Types:</FluentLabel>
+                                                <FluentDataGrid Items="formatType.RecordTypes.AsQueryable()" Style="max-height: 300px;">
+                                                    <PropertyColumn Property="@(r => r.Position)" Title="Position" />
+                                                    <PropertyColumn Property="@(r => r.Name)" Title="Name" />
+                                                    <PropertyColumn Property="@(r => r.RecordDetection)" Title="Detection" />
+                                                    <PropertyColumn Property="@(r => r.Mandatory)" Title="Pflichtfeld" />
+                                                </FluentDataGrid>
+                                            }
+                                        </FluentStack>
+                                    </FluentAccordionItem>
+                                }
+                            </FluentAccordion>
+                        }
+                    </FluentTab>
+                </FluentTabs>
+            </FluentStack>
+        </FluentCard>
+    }
+</FluentStack>
+
+@code {
+    private List<FileStructur> availableFormats = new();
+    private FileStructur? selectedFormat;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAvailableFormats();
+        await base.OnInitializedAsync();
+    }
+    
+    private async Task LoadAvailableFormats()
+    {
+        try
+        {
+            availableFormats.Clear();
+            var formatFiles = FormatFiles.GetFormatFiles();
+            var formatPath = RegistryHelper.GetFormatFilePath();
+            
+            foreach (var formatFile in formatFiles)
+            {
+                try
+                {
+                    var fullPath = formatFile.FullPath;
+                    if (File.Exists(fullPath))
+                    {
+                        var json = await File.ReadAllTextAsync(fullPath);
+                        var format = Newtonsoft.Json.JsonConvert.DeserializeObject<FileStructur>(json);
+                        if (format != null)
+                        {
+                            availableFormats.Add(format);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading format {formatFile.FileName}: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading formats: {ex.Message}");
+        }
+        
+        StateHasChanged();
+    }
+    
+    private async Task RefreshFormats()
+    {
+        await LoadAvailableFormats();
+    }
+    
+    private void ViewFormat(FileStructur format)
+    {
+        selectedFormat = format;
+        StateHasChanged();
+    }
+}

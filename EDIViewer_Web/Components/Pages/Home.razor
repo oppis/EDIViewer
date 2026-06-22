@@ -1,0 +1,78 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>EDI Viewer - Home</PageTitle>
+
+<FluentStack Orientation="Orientation.Vertical" Style="gap: 20px;">
+    <FluentCard>
+        <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 10px;">
+                <FluentLabel Typography="Typography.Subject">📄 EDI Viewer Web</FluentLabel>
+            </FluentStack>
+            
+            <FluentLabel Typography="Typography.Body">
+                Willkommen beim EDI Viewer. Diese Web-Anwendung ermöglicht es Ihnen, EDI-Dateien zu analysieren und darzustellen.
+            </FluentLabel>
+            
+            <FluentDivider />
+            
+            <FluentStack Orientation="Orientation.Vertical" Style="gap: 10px;">
+                <FluentLabel Typography="Typography.BodyStrong">Funktionen:</FluentLabel>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>EDI-Dateien laden und anzeigen</li>
+                    <li>JSON-basierte Format-Definitionen</li>
+                    <li>Strukturierte Darstellung der Daten</li>
+                    <li>Format-Verwaltung</li>
+                </ul>
+            </FluentStack>
+        </FluentStack>
+    </FluentCard>
+    
+    <FluentGrid>
+        <FluentGridItem xs="12" md="6">
+            <FluentCard>
+                <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+                    <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 10px;">
+                        <FluentLabel Typography="Typography.BodyStrong">📤 Datei laden</FluentLabel>
+                    </FluentStack>
+                    <FluentLabel Typography="Typography.Body">
+                        Laden Sie eine EDI-Datei hoch, um mit der Analyse zu beginnen.
+                    </FluentLabel>
+                    <FluentButton OnClick="NavigateToFileViewer" Appearance="Appearance.Accent">
+                        Zur Dateiansicht
+                    </FluentButton>
+                </FluentStack>
+            </FluentCard>
+        </FluentGridItem>
+        
+        <FluentGridItem xs="12" md="6">
+            <FluentCard>
+                <FluentStack Orientation="Orientation.Vertical" Style="gap: 15px;">
+                    <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 10px;">
+                        <FluentLabel Typography="Typography.BodyStrong">⚙️ Format-Verwaltung</FluentLabel>
+                    </FluentStack>
+                    <FluentLabel Typography="Typography.Body">
+                        Verwalten Sie JSON-Format-Definitionen für verschiedene EDI-Typen.
+                    </FluentLabel>
+                    <FluentButton OnClick="NavigateToFormats" Appearance="Appearance.Outline">
+                        Format verwalten
+                    </FluentButton>
+                </FluentStack>
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+</FluentStack>
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private void NavigateToFileViewer()
+    {
+        Navigation.NavigateTo("/file-viewer");
+    }
+    
+    private void NavigateToFormats()
+    {
+        Navigation.NavigateTo("/formats");
+    }
+}
